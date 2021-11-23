@@ -1,7 +1,6 @@
 package com.home.opencarshare.network
 
 import android.content.Context
-import androidx.core.os.BuildCompat
 import okhttp3.*
 import java.lang.IllegalArgumentException
 
@@ -9,7 +8,7 @@ class MockInterceptor(val context: Context): Interceptor {
 
     companion object {
 
-        private val URL_VEHICLE = "/api/VIN"
+        private val URL_TRIP = "/api/trips"
 
         private val URL_MAKES = "/api/Makes"
 
@@ -26,14 +25,14 @@ class MockInterceptor(val context: Context): Interceptor {
         private val URL_SERVICES = "/api/services"
     }
 
-    override fun intercept(chain: Interceptor.Chain): Response {
+    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
         var request = chain.request()
         val url = request.url().uri().toString()
 
         val msg = getMessage(getMockFileName(url, request.method()!!))
         val body = getBody(msg)
 
-        return Response.Builder()
+        return okhttp3.Response.Builder()
             .request(chain.request())
             .code(200)
             .protocol(Protocol.HTTP_2)
@@ -56,8 +55,8 @@ class MockInterceptor(val context: Context): Interceptor {
 
     private fun getMockFileName(url: String, method: String): String {
         lateinit var msg: String
-        if (url.contains(URL_VEHICLE) && method.equals("GET")) {
-            msg = "mock_api_trip_response.json"
+        if (url.contains(URL_TRIP) && method.equals("GET")) {
+            msg = "mock_api_trips_response.json"
         } else if (url.contains(URL_MAKES) && method.equals("GET")) {
             msg = "mock_get_makes_response.json"
         } else if(url.contains(URL_MAKES) && method.equals("POST")) {

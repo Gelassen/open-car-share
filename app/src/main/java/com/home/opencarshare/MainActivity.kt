@@ -15,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.home.opencarshare.network.Repository
 import com.home.opencarshare.ui.theme.OpenCarShareTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.DateFormat
@@ -38,14 +39,15 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-/*        lifecycleScope.launch {
+        lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 repo.getTrips("Moscow", Date("Wed, 4 Jul 2001 12:08:56 -0700").time)
+                    .catch { ex -> Log.e("TAG", "Something went wrong", ex) }
                     .collect { it ->
-                        Log.d("TAG", "Response: " + it.result)
+                        Log.d("TAG", "Response: " + it)
                     }
             }
-        }*/
+        }
     }
 }
 
