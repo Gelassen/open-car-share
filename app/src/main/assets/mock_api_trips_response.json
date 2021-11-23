@@ -1,0 +1,18 @@
+{
+  "code":"200",
+  "result":[
+    {
+      "id":"SUID",
+      "locationFrom":"Kazan",
+      "locationTo":"Moscow",
+      "date":"Wed, 4 Jul 2001 12:08:56 -0700",
+      "availableSeats":"2",
+      "driver":{
+        "id":"email",
+        "name":"Joe Dow",
+        "tripsCount":"31",
+        "cell":"+79101900122"
+      }
+    }
+  ]
+}
