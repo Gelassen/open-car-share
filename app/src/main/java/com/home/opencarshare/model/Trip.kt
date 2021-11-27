@@ -3,7 +3,7 @@ package com.home.opencarshare.model
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
-class Trip {
+class Trip constructor() {
     @SerializedName("id")
     @Expose
     var id: String = ""
@@ -27,4 +27,20 @@ class Trip {
     @SerializedName("driver")
     @Expose
     lateinit var driver: Driver
+
+    constructor(
+        id: String,
+        locationFrom: String,
+        locationTo: String,
+        date: String,
+        availableSeats: String,
+        driver: Driver
+    ) : this() {
+        this.id = id
+        this.locationFrom = locationFrom
+        this.locationTo = locationTo
+        this.date = date
+        this.availableSeats = availableSeats
+        this.driver = driver
+    }
 }

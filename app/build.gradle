@@ -71,6 +71,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$version_lifecycleKtx"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$version_lifecycleKtx"
     kapt "androidx.lifecycle:lifecycle-compiler:$version_lifecycle"
+    implementation "com.google.android.material:material:$version_mdc"
 
     testImplementation 'junit:junit:4.+'
 
