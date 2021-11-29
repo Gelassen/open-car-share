@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,9 +16,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,13 +26,17 @@ import androidx.compose.ui.unit.dp
 import com.home.opencarshare.di.Stubs
 import com.home.opencarshare.model.Trip
 import com.home.opencarshare.network.Repository
+import com.home.opencarshare.screens.TripsViewModel
 import com.home.opencarshare.ui.theme.OpenCarShareTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: TripsViewModel by viewModels()
 
     @Inject
     lateinit var repo : Repository
@@ -45,7 +48,7 @@ class MainActivity : ComponentActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.getDefaultNightMode())
 
         setContent {
-            TripScreen(data = stub)
+            TripScreen(data = stub, viewModel = viewModel)
         }
 
 /*        lifecycleScope.launch {
@@ -69,7 +72,12 @@ fun TripDetails(data: Trip) {
 }
 
 @Composable
-fun TripScreen(data: List<Trip>) {
+fun TripScreen(data: List<Trip>, viewModel: TripsViewModel) {
+    // TODO
+    //  work with a view model was rethink in compose,
+    //  when State is for UI logic view model is for business logic,
+    //  UI operates with state and invokes view model methods as like as a view use presenter,
+    //  the question is how does State is updated and compose is notified about this
     OpenCarShareTheme {
         Surface(color = MaterialTheme.colors.background) {
             TripsComposeList(data = data/*, modifier = Modifier.padding(16.dp)*/)
