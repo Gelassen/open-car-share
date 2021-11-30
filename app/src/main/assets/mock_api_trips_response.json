@@ -13,6 +13,19 @@
         "tripsCount":"31",
         "cell":"+79101900122"
       }
+    },
+    {
+      "id":"SUID2",
+      "locationFrom":"Kazan",
+      "locationTo":"Moscow",
+      "date":"Wed, 4 Jul 2001 12:08:56 -0700",
+      "availableSeats":"1",
+      "driver":{
+        "id":"email",
+        "name":"Jane Dow",
+        "tripsCount":"1",
+        "cell":"+79501900122"
+      }
     }
   ]
 }

@@ -40,7 +40,7 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.5.21'
+        kotlinCompilerVersion version_kotlin
     }
     packagingOptions {
         resources {
@@ -57,11 +57,10 @@ dependencies {
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.0-alpha06'
+    implementation "androidx.activity:activity-compose:$version_activity_compose"
+    implementation "androidx.navigation:navigation-compose:$version_navigation_compose"
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_gson"
-//    implementation "com.google.code.gson:gson:$gson"
     implementation "com.google.dagger:hilt-android:$version_hilt"
     kapt "com.google.dagger:hilt-compiler:$version_hilt"
     kapt "com.google.dagger:hilt-android-compiler:$version_hilt"
@@ -71,6 +70,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$version_lifecycle"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$version_lifecycleKtx"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$version_lifecycleKtx"
+
     kapt "androidx.lifecycle:lifecycle-compiler:$version_lifecycle"
     implementation "com.google.android.material:material:$version_mdc"
 
