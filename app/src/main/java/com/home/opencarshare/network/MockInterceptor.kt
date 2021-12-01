@@ -1,6 +1,7 @@
 package com.home.opencarshare.network
 
 import android.content.Context
+import android.net.Uri
 import okhttp3.*
 import java.lang.IllegalArgumentException
 
@@ -8,9 +9,11 @@ class MockInterceptor(val context: Context): Interceptor {
 
     companion object {
 
-        private val URL_TRIP = "/api/trips"
+        private const val NO_QUERY = ""
 
-        private val URL_MAKES = "/api/Makes"
+        private const val URL_TRIP = "/api/trips?city=someCity&time=10000000"
+
+        private const val URL_TRIP_BY_ID = "/api/trips?id=101"
 
         private val URL_MODELS = "/api/Models"
 
@@ -55,11 +58,16 @@ class MockInterceptor(val context: Context): Interceptor {
 
     private fun getMockFileName(url: String, method: String): String {
         lateinit var msg: String
-        if (url.contains(URL_TRIP) && method.equals("GET")) {
+        val uri = Uri.parse(url)
+        if (matchPath(uri.pathSegments, URL_TRIP.split("?").first())
+            && matchQuery(uri.queryParameterNames, URL_TRIP.split("?").last())
+            && method.equals("GET")) {
             msg = "mock_api_trips_response.json"
-        } else if (url.contains(URL_MAKES) && method.equals("GET")) {
-            msg = "mock_get_makes_response.json"
-        } else if(url.contains(URL_MAKES) && method.equals("POST")) {
+        } else if (matchPath(uri.pathSegments, URL_TRIP_BY_ID.split("?").first())
+            && matchQuery(uri.queryParameterNames, URL_TRIP_BY_ID.split("?").last())
+            && method.equals("GET")) {
+            msg = "mock_api_trip_by_id_response.json"
+        } else if(url.contains(URL_TRIP_BY_ID) && method.equals("POST")) {
             msg = "mock_carmake_response.json"
         } else if (url.contains(URL_MODELS) && method.equals("GET")) {
             msg = "mock_get_models_response.json"
@@ -79,5 +87,20 @@ class MockInterceptor(val context: Context): Interceptor {
             throw IllegalArgumentException("Unsupported API method: " + url + " " + method)
         }
         return msg
+    }
+
+    private fun matchPath(pathSegments: List<String>, urlPattern: String): Boolean {
+        var patternTokens = urlPattern.split("/")
+        patternTokens = patternTokens.subList(1, patternTokens.size)
+        return pathSegments.intersect(patternTokens.toSet()).size == patternTokens.size
+    }
+
+    private fun matchQuery(queryParameterNames: MutableSet<String>, urlPattern: String): Boolean {
+        val queryPairs = urlPattern.split("&")
+        val patternQueryParameterNames = mutableListOf<String>()
+        for (pair in queryPairs) {
+            patternQueryParameterNames.add(pair.split("=").first())
+        }
+        return queryParameterNames.intersect(patternQueryParameterNames.toSet()).size == patternQueryParameterNames.size
     }
 }

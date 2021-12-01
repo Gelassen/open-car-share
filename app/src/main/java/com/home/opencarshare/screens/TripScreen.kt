@@ -1,26 +1,22 @@
 package com.home.opencarshare.screens
 
-import android.widget.Toast
+import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.home.opencarshare.navigation.AppNavigation
 import com.home.opencarshare.model.Trip
 import com.home.opencarshare.network.Response
 import com.home.opencarshare.ui.theme.OpenCarShareTheme
@@ -34,7 +30,7 @@ fun TripScreen(viewModel: TripsViewModel, navController: NavController) {
     //  the question is how does State is updated and compose is notified about this
     val state by viewModel.trips.collectAsState()
     LaunchedEffect(viewModel) {
-        viewModel.getTrips("", System.currentTimeMillis())
+        viewModel.getTrips("Moscow", System.currentTimeMillis())
     }
     OpenCarShareTheme {
         Surface(color = MaterialTheme.colors.background) {
@@ -58,7 +54,13 @@ fun TripsComposeList(
         when (state) {
             is Response.Data -> {
                 items(state.data) { it ->
-                    TripViewItem(data = it, navController = navController, modifier = Modifier.padding(vertical = 2.dp))
+                    TripViewItem(
+                        data = it,
+                        { tripId ->
+                            navController.navigate("${AppNavigation.TRIP_BOOKING}/$tripId")
+                        },
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
                 }
             }
             is Response.Error -> {

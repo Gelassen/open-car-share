@@ -16,12 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.home.opencarshare.AppNavigation
 import com.home.opencarshare.model.Trip
 
 @Composable
-fun TripViewItem(data: Trip, navController: NavController, modifier: Modifier) {
+fun TripViewItem(data: Trip,
+                 navigateToBooking: (String) -> Unit,
+                 modifier: Modifier) {
     val context = LocalContext.current
     Surface(modifier = modifier
         .fillMaxWidth()
@@ -34,7 +34,7 @@ fun TripViewItem(data: Trip, navController: NavController, modifier: Modifier) {
                     Toast.LENGTH_SHORT
                 )
                 .show()
-            navController.navigate(AppNavigation.TRIP_BOOKING)
+            navigateToBooking(data.id)
         }
     ) {
         Column(modifier = modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)) {

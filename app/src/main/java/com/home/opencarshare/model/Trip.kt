@@ -1,46 +1,36 @@
 package com.home.opencarshare.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
+import kotlinx.parcelize.Parcelize
 
-class Trip constructor() {
+@Parcelize
+class Trip(
     @SerializedName("id")
     @Expose
-    var id: String = ""
-
+    var id: String = "",
     @SerializedName("locationFrom")
     @Expose
-    var locationFrom: String = ""
-
+    var locationFrom: String = "",
     @SerializedName("locationTo")
     @Expose
-    var locationTo: String = ""
-
+    var locationTo: String = "",
     @SerializedName("date")
     @Expose
-    var date: String = "Wed, 4 Jul 2001 12:08:56 -0700"
-
+    var date: String = "Wed, 4 Jul 2001 12:08:56 -0700",
     @SerializedName("availableSeats")
     @Expose
-    var availableSeats: String = ""
-
+    var availableSeats: String = "",
     @SerializedName("driver")
     @Expose
-    lateinit var driver: Driver
+    var driver: Driver = Driver()) : Parcelable {
 
-    constructor(
-        id: String,
-        locationFrom: String,
-        locationTo: String,
-        date: String,
-        availableSeats: String,
-        driver: Driver
-    ) : this() {
-        this.id = id
-        this.locationFrom = locationFrom
-        this.locationTo = locationTo
-        this.date = date
-        this.availableSeats = availableSeats
-        this.driver = driver
+    fun isEmpty(): Boolean {
+        return id.isEmpty()
+                || locationFrom.isEmpty()
+//                || date.isEmpty()
+                || availableSeats.isEmpty()
+//                || driver.isEmpty()
     }
 }

@@ -17,7 +17,7 @@ class Repository @Inject constructor(val api: IApi) {
                 if (payload.code.toInt() != 200) {
                     throw IllegalStateException(
                         "System doesn't support any other states except code 200, " +
-                                            "but has received ${payload.code}")
+                                "but has received ${payload.code}")
                 }
                 emit(Response.Data(payload.result))
             } else {
@@ -29,6 +29,27 @@ class Repository @Inject constructor(val api: IApi) {
             }
 
     }
+
+    fun getTripById(id: String) : Flow<Response<Trip>> {
+        return flow {
+            val response = api.getTripById(id)
+            if (response.isSuccessful) {
+                val payload = response.body()!!
+                if (payload.code.toInt() != 200) {
+                    throw IllegalStateException(
+                        "System doesn't support any other states except code 200, " +
+                                "but has received ${payload.code}")
+                }
+                emit(Response.Data(payload.result.first()))
+            } else {
+                emit(Response.Error.Message(response.message()))
+            }
+        }
+            .catch { ex ->
+                Response.Error.Exception(ex)
+            }
+    }
+
 }
 
 sealed class Response<out T: Any> {

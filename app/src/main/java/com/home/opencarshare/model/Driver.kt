@@ -1,24 +1,30 @@
 package com.home.opencarshare.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
-
-class Driver {
+@Parcelize
+class Driver(
     @SerializedName("id")
     @Expose
-    var id: String? = null
-
+    var id: String = "",
     @SerializedName("name")
     @Expose
-    var name: String? = null
-
+    var name: String = "",
     @SerializedName("tripsCount")
     @Expose
-    var tripsCount: String? = null
-
+    var tripsCount: String = "",
     @SerializedName("cell")
     @Expose
-    var cell: String? = null
+    var cell: String = ""
+): Parcelable {
+    fun isEmpty(): Boolean {
+        return id.isEmpty()
+                || name.isEmpty()
+                || tripsCount.isEmpty()
+                || cell.isEmpty()
+    }
 }
