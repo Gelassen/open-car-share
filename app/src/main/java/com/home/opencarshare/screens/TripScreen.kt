@@ -1,6 +1,5 @@
 package com.home.opencarshare.screens
 
-import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,6 +18,7 @@ import androidx.navigation.NavController
 import com.home.opencarshare.navigation.AppNavigation
 import com.home.opencarshare.model.Trip
 import com.home.opencarshare.network.Response
+import com.home.opencarshare.screens.viewmodel.TripsViewModel
 import com.home.opencarshare.ui.theme.OpenCarShareTheme
 
 @Composable

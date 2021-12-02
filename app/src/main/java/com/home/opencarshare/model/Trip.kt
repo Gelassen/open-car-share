@@ -33,4 +33,10 @@ class Trip(
                 || availableSeats.isEmpty()
 //                || driver.isEmpty()
     }
+
+    override fun toString(): String {
+        return "Trip(id='$id', locationFrom='$locationFrom', locationTo='$locationTo', date='$date', availableSeats='$availableSeats')"
+    }
+
+
 }

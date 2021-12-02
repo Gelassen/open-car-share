@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.home.opencarshare.App
-import com.home.opencarshare.di.Stubs
 import com.home.opencarshare.network.Response
+import com.home.opencarshare.screens.viewmodel.TripsViewModel
 import com.home.opencarshare.ui.theme.OpenCarShareTheme
 import java.lang.IllegalStateException
 

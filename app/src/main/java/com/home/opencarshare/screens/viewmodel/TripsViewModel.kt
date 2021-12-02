@@ -1,7 +1,7 @@
-package com.home.opencarshare.screens
+package com.home.opencarshare.screens.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.home.opencarshare.App
@@ -29,6 +29,11 @@ class TripsViewModel @Inject constructor(val repo: Repository) : ViewModel() {
     private val tripPlaceholder: Response<Trip> = Response.Data<Trip>(Trip())
     private val _trip = MutableStateFlow(tripPlaceholder)
     val trip: StateFlow<Response<Trip>> = _trip
+
+    val searchTrip/*: StateFlow<Trip>*/ = MutableStateFlow(Trip())
+
+//    val text: MutableState<String> = mutableStateOf("a")
+    val tmp: Trip = Trip()
 
     fun getTrips(city: String, date: Long) {
         viewModelScope.launch {
