@@ -1,5 +1,6 @@
 package com.home.opencarshare.screens
 
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.home.opencarshare.App
 import com.home.opencarshare.navigation.AppNavigation
 import com.home.opencarshare.model.Trip
 import com.home.opencarshare.network.Response
@@ -22,12 +24,15 @@ import com.home.opencarshare.screens.viewmodel.TripsViewModel
 import com.home.opencarshare.ui.theme.OpenCarShareTheme
 
 @Composable
-fun TripScreen(viewModel: TripsViewModel, navController: NavController) {
+fun TripScreen(viewModel: TripsViewModel, navController: NavController, searchTrip: Trip) {
     // TODO
     //  work with a view model was rethink in compose,
     //  when State is for UI logic view model is for business logic,
     //  UI operates with state and invokes view model methods as like as a view use presenter,
     //  the question is how does State is updated and compose is notified about this
+
+    Log.d(App.TAG, "Trips: ${searchTrip.toString()}")
+
     val state by viewModel.trips.collectAsState()
     LaunchedEffect(viewModel) {
         viewModel.getTrips("Moscow", System.currentTimeMillis())
@@ -57,7 +62,7 @@ fun TripsComposeList(
                     TripViewItem(
                         data = it,
                         { tripId ->
-                            navController.navigate("${AppNavigation.TRIP_BOOKING}/$tripId")
+                            navController.navigate("${AppNavigation.Booking.TRIP_BOOKING}/$tripId")
                         },
                         modifier = Modifier.padding(vertical = 2.dp)
                     )
