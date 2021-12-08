@@ -1,6 +1,7 @@
 package com.home.opencarshare.screens
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.buttonColors
@@ -11,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -18,17 +21,29 @@ import com.home.opencarshare.R
 
 @Composable
 fun TripSearchScreen(onSearchClick: (locationFrom: String, locationTo: String, date: String) -> Unit) {
+    val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
+    val mainPadding = dimensionResource(id = R.dimen.main_margin_compact)
+    val componentSpace = dimensionResource(id = R.dimen.component_space)
+    val elevation = dimensionResource(id = R.dimen.elevation)
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxHeight()
             .fillMaxWidth()
-            .padding(paddingValues = PaddingValues(horizontal = 16.dp, vertical = 8.dp))
+            .background(color = colorResource(id = R.color.colorPrimaryDark))
+            .padding(
+                paddingValues = PaddingValues(
+                    horizontal = mainPadding,
+                    vertical = baselineGrid
+                )
+            )
     ) {
         Card(
             backgroundColor = MaterialTheme.colors.background,
-            modifier = Modifier.wrapContentHeight(align = CenterVertically).padding(24.dp),
-            elevation = 2.dp
+            modifier = Modifier
+                .wrapContentHeight(align = CenterVertically)
+                .padding(componentSpace),
+            elevation = elevation
         ) {
             // TODO figure out is there existing composable for date picker and numeric picker
             var locationFromTxt by remember { mutableStateOf("") }
@@ -54,7 +69,8 @@ fun TripSearchScreen(onSearchClick: (locationFrom: String, locationTo: String, d
                     onClick = { onSearchClick(locationFromTxt, locationToTxt, pickUpDate) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp),
+                        .padding(baselineGrid)
+                        .height(dimensionResource(id = R.dimen.button_height)),
                     colors = buttonColors(backgroundColor = Color.Blue, contentColor = Color.White),
                 ) {
                     Text(
@@ -70,11 +86,12 @@ fun TripSearchScreen(onSearchClick: (locationFrom: String, locationTo: String, d
 
 @Composable
 fun TripSearchRow(state: String, onTextChanged: (String) -> Unit, hint: String) {
+    val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
     TextField(
         value = state,
         onValueChange = { onTextChanged(it) },
         modifier = Modifier
-            .padding(8.dp)
+            .padding(baselineGrid)
             .fillMaxWidth(),
         placeholder = { Text("$hint") },
         leadingIcon = { Icon(imageVector = Icons.Default.LocationOn, contentDescription = null) },

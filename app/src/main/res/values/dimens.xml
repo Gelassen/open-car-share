@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- compact -->
+    <!-- medium >600dp-->
+    <!-- expanded >840dp-->
+    <dimen name="elevation">2dp</dimen>
+
+    <dimen name="baseline_grid">8dp</dimen>
+    <dimen name="icon_baseline_grid">4dp</dimen>
+
+    <dimen name="main_margin_compact">16dp</dimen>
+    <dimen name="main_margin_medium">32dp</dimen>
+
+    <dimen name="gutters_space_compact">16dp</dimen>
+    <dimen name="gutters_space_medium">24dp</dimen>
+
+    <dimen name="default_list_item_height">48dp</dimen>
+    <dimen name="button_height">56dp</dimen>
+
+    <dimen name="component_space">24dp</dimen>
+
+</resources>

@@ -9,4 +9,8 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="action">#1a73e8</color>
+
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#003366</color>
+    <color name="colorAccent">#B0C4DE</color>
 </resources>
