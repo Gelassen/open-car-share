@@ -11,7 +11,7 @@ class MockInterceptor(val context: Context): Interceptor {
 
         private const val NO_QUERY = ""
 
-        private const val URL_TRIP = "/api/trips?city=someCity&time=10000000"
+        private const val URL_TRIP = "/api/trips?locationTo=someCity&locationFrom=anotherCity&time=10000000"
 
         private const val URL_TRIP_BY_ID = "/api/trips?id=101"
 

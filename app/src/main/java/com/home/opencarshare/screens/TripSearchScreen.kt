@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -53,17 +54,20 @@ fun TripSearchScreen(onSearchClick: (locationFrom: String, locationTo: String, d
                 TripSearchRow(
                     state = locationFromTxt,
                     onTextChanged = { it -> locationFromTxt = it },
-                    hint = stringResource(id = R.string.search_screen_location_to_hint)
+                    hint = stringResource(id = R.string.search_screen_location_to_hint),
+                    icon = Icons.Default.LocationOn
                 )
                 TripSearchRow(
                     state = locationToTxt,
                     onTextChanged = { it -> locationToTxt = it },
-                    hint = stringResource(id = R.string.search_screen_location_from_hint)
+                    hint = stringResource(id = R.string.search_screen_location_from_hint),
+                    icon = Icons.Default.LocationOn
                 )
                 TripSearchRow(
                     state = pickUpDate,
                     onTextChanged = { it -> pickUpDate = it },
-                    hint = stringResource(id = R.string.search_screen_date)
+                    hint = stringResource(id = R.string.search_screen_date),
+                    icon = null
                 )
                 Button(
                     onClick = { onSearchClick(locationFromTxt, locationToTxt, pickUpDate) },
@@ -85,15 +89,26 @@ fun TripSearchScreen(onSearchClick: (locationFrom: String, locationTo: String, d
 }
 
 @Composable
-fun TripSearchRow(state: String, onTextChanged: (String) -> Unit, hint: String) {
+fun TripSearchRow(state: String, onTextChanged: (String) -> Unit, hint: String, icon: ImageVector? ) {
     val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
-    TextField(
-        value = state,
-        onValueChange = { onTextChanged(it) },
-        modifier = Modifier
-            .padding(baselineGrid)
-            .fillMaxWidth(),
-        placeholder = { Text("$hint") },
-        leadingIcon = { Icon(imageVector = Icons.Default.LocationOn, contentDescription = null) },
-    )
+    if (icon == null) {
+        TextField(
+            value = state,
+            onValueChange = { onTextChanged(it) },
+            modifier = Modifier
+                .padding(baselineGrid)
+                .fillMaxWidth(),
+            placeholder = { Text("$hint") },
+        )
+    } else {
+        TextField(
+            value = state,
+            onValueChange = { onTextChanged(it) },
+            modifier = Modifier
+                .padding(baselineGrid)
+                .fillMaxWidth(),
+            placeholder = { Text("$hint") },
+            leadingIcon = { Icon(imageVector = icon, contentDescription = null) },
+        )
+    }
 }
