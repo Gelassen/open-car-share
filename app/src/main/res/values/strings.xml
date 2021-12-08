@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Open Car Share</string>
+
+    <string name="search_screen_location_to_hint">Location to</string>
+    <string name="search_screen_location_from_hint">Location from</string>
+    <string name="search_screen_date">Date</string>
+    <string name="search_screen_confirm_button">Search</string>
+
+
 </resources>

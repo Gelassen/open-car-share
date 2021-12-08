@@ -1,7 +1,6 @@
 package com.home.opencarshare.network
 
 import com.home.opencarshare.model.Trip
-import com.home.opencarshare.model.TripsApiResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -9,9 +8,9 @@ import javax.inject.Inject
 
 class Repository @Inject constructor(val api: IApi) {
 
-    fun getTrips(city: String, time: Long): Flow<Response<List<Trip>>> {
+    fun getTrips(locationFrom: String, locationTo: String, time: Long): Flow<Response<List<Trip>>> {
         return flow {
-            val response = api.getTrips(city, time)
+            val response = api.getTrips(locationFrom, locationTo, time)
             if (response.isSuccessful) {
                 val payload = response.body()!!
                 if (payload.code.toInt() != 200) {

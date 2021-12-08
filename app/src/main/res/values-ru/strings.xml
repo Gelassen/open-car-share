@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Садись и поехали!</string>
+
+    <string name="search_screen_location_to_hint">Куда</string>
+    <string name="search_screen_location_from_hint">Откуда</string>
+    <string name="search_screen_date">Введите дату поездки в формате 7.01.2022</string>
+    <string name="search_screen_confirm_button">Найти</string>
+
+</resources>

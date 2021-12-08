@@ -1,7 +1,6 @@
 package com.home.opencarshare.screens.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.home.opencarshare.App
@@ -11,7 +10,6 @@ import com.home.opencarshare.network.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.lang.IllegalStateException
 import java.util.*
 import javax.inject.Inject
 
@@ -35,15 +33,15 @@ class TripsViewModel @Inject constructor(val repo: Repository) : ViewModel() {
 //    val text: MutableState<String> = mutableStateOf("a")
     val tmp: Trip = Trip()
 
-    fun getTrips(city: String, date: Long) {
+    fun getTrips(locationFrom: String, locationTo: String, date: Long) {
         viewModelScope.launch {
-            repo.getTrips(city, date)
+            repo.getTrips(locationFrom, locationTo, date)
                 .stateIn(viewModelScope)
                 .onCompletion {
                     _isLoading.value = false
                 }
                 .catch { e ->
-                    Log.e(App.TAG, "Something went wrong on loading trips for $city and ${Date(date)}", e)
+                    Log.e(App.TAG, "Something went wrong on loading trips for $locationFrom and ${Date(date)}", e)
                 }
                 .collect { it ->
                     _trips.value = it
