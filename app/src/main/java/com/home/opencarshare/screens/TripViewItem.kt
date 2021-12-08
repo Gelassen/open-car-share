@@ -3,10 +3,8 @@ package com.home.opencarshare.screens
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -14,41 +12,60 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.home.opencarshare.R
 import com.home.opencarshare.model.Trip
 
 @Composable
 fun TripViewItem(data: Trip,
                  navigateToBooking: (String) -> Unit,
                  modifier: Modifier) {
-    val context = LocalContext.current
-    Surface(modifier = modifier
-        .fillMaxWidth()
-        .background(color = MaterialTheme.colors.background)
-        .clickable {
-            Toast
-                .makeText(
-                    context,
-                    "On click action ${data.locationFrom} to ${data.locationTo}",
-                    Toast.LENGTH_SHORT
+    val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
+    val mainPadding = dimensionResource(id = R.dimen.main_margin_compact)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { navigateToBooking(data.id) }) {
+        Column(
+            modifier = modifier
+                .padding(
+                    top = baselineGrid,
+                    bottom = baselineGrid,
+                    start = mainPadding,
+                    end = mainPadding
                 )
-                .show()
-            navigateToBooking(data.id)
-        }
-    ) {
-        Column(modifier = modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)) {
+                .fillMaxWidth()
+        ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = data.locationFrom, fontWeight = FontWeight.Bold)
+                Text(
+                    text = data.locationFrom,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(2.dp),
+                    fontSize = 18.sp)
                 Text(text = " -- ")
-                Text(text = data.locationTo, fontWeight = FontWeight.Bold)
+                Text(
+                    text = data.locationTo,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(2.dp),
+                    fontSize = 18.sp)
             }
             Column() {
-                Text(text = data.date)
-                Text(text = "available seats: ${data.availableSeats}")
+                Text(
+                    text = data.date,
+                    modifier = Modifier.padding(2.dp),
+                    fontSize = 18.sp)
+                Text(
+                    text = "available seats: ${data.availableSeats}",
+                    modifier = Modifier.padding(2.dp),
+                    fontSize = 18.sp)
             }
         }
     }
+
 }
