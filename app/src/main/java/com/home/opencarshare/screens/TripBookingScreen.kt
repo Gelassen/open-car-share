@@ -7,24 +7,43 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.home.opencarshare.App
+import com.home.opencarshare.R
 import com.home.opencarshare.network.Response
+import com.home.opencarshare.screens.elements.SingleCard
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
 import java.lang.IllegalStateException
 
 @Composable
 fun TripBookingScreen(data: String?, viewModel: TripsViewModel, navController: NavController) {
     Log.d(App.TAG, "data:$data")
-    val state by viewModel.trip.collectAsState()
+
     LaunchedEffect(viewModel) {
         viewModel.getTripById(data!!)
     }
+
+    SingleCard(content = { TripBookingContent(viewModel = viewModel) })
+
+}
+
+@Composable
+fun TripBookingContent(viewModel: TripsViewModel) {
+    val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
+    val mainPadding = dimensionResource(id = R.dimen.main_margin_compact)
+    val state by viewModel.trip.collectAsState()
     Box(
-        modifier = Modifier.fillMaxHeight()
+        modifier = Modifier
+            .wrapContentHeight()
             .fillMaxWidth()
-            .padding(paddingValues = PaddingValues(horizontal = 16.dp, vertical = 8.dp))
+            .padding(
+                paddingValues = PaddingValues(
+                    horizontal = mainPadding,
+                    vertical = baselineGrid
+                )
+            )
     ) {
 
         when (state) {

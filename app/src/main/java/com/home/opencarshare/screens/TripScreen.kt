@@ -37,7 +37,6 @@ fun TripScreen(viewModel: TripsViewModel, navController: NavController, searchTr
     TripsComposeList(
         state = state,
         onClick = { tripId -> navController.navigate("${AppNavigation.Booking.TRIP_BOOKING}/$tripId")},
-        navController = navController
     )
 }
 
@@ -45,7 +44,6 @@ fun TripScreen(viewModel: TripsViewModel, navController: NavController, searchTr
 fun TripsComposeList(
     state: Response<List<Trip>>,
     onClick: (String) -> Unit,
-    navController: NavController
 ) {
     val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
     val mainPadding = dimensionResource(id = R.dimen.main_margin_compact)
@@ -64,7 +62,7 @@ fun TripsComposeList(
                 items(state.data) { it ->
                     TripViewItem(
                         data = it,
-                        navigateToBooking = { tripId -> onClick(tripId) },
+                        onClick = { tripId -> onClick(tripId) },
                         modifier = Modifier
                             .padding(vertical = 2.dp)
                             .background(colorResource(id = R.color.white))
