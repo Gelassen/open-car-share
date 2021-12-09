@@ -71,7 +71,9 @@ class MockInterceptor(val context: Context): Interceptor {
             msg = "mock_carmake_response.json"
         } else if (url.contains(URL_TRIP_BOOKING) && method.equals("GET")) {
             msg = "mock_get_models_response.json"
-        } else if (url.contains(URL_TRIP_BOOKING) && method.equals("POST")) {
+        } else if (matchPath(uri.pathSegments, URL_TRIP.split("?").first())
+            && matchQuery(uri.queryParameterNames, URL_TRIP_BOOKING.split("?").last())
+            && method.equals("POST")) {
             msg = "mock_api_trip_book_positive_response.json"
         } else if (url.contains(URL_SPARES)) {
             msg = "mock_spares_full.json"

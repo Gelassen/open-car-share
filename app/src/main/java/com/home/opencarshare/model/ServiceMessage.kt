@@ -3,7 +3,14 @@ package com.home.opencarshare.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+
 class ServiceMessage() {
+
+    object Status {
+        const val SUCCEED = "1"
+        const val FAILED = "0"
+        const val NONE = "-1"
+    }
 
     constructor(status: String) : this(status, "") {
         // no op
@@ -14,11 +21,7 @@ class ServiceMessage() {
         this.message = message
     }
 
-    object Status {
-        const val SUCCEED = "1"
-        const val FAILED = "0"
-        const val NONE = "-1"
-    }
+
 
     @SerializedName("status")
     @Expose

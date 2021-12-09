@@ -48,7 +48,6 @@ class TripsViewModel @Inject constructor(val repo: Repository) : ViewModel() {
                 .collect { it ->
                     _trips.value = it
                 }
-
         }
     }
 
