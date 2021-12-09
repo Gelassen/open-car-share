@@ -6,5 +6,10 @@
     <string name="search_screen_date">Date</string>
     <string name="search_screen_confirm_button">Search</string>
     <string name="booking_screen_confirm_button">Book</string>
+    <string name="booking_screen_driver">  Your driver  </string>
+    <string name="booking_screen_passed_trips">Passed trips: %1$s</string>
+    <string name="booking_screen_cell">Cell: %1$s</string>
 
+    <string name="default_error_message">Something went wrong</string>
+    <string name="error_message_with_server_response">Something went wrong with server response: \n %1$s</string>
 </resources>

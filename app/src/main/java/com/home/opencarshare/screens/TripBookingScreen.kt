@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,8 +21,10 @@ import com.home.opencarshare.App
 import com.home.opencarshare.R
 import com.home.opencarshare.model.Driver
 import com.home.opencarshare.network.Response
+import com.home.opencarshare.screens.elements.ErrorPlaceholder
 import com.home.opencarshare.screens.elements.SingleCard
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
+import kotlinx.coroutines.launch
 import java.lang.IllegalStateException
 
 @Composable
@@ -36,10 +35,17 @@ fun TripBookingScreen(data: String?, viewModel: TripsViewModel, navController: N
         viewModel.getTripById(data!!)
     }
 
+    val scope = rememberCoroutineScope()
+
     SingleCard(content = {
         TripBookingContent(
             viewModel = viewModel,
-            onBookingClick = { tripId -> /* TODO send request on the server and show confirmation page*/ }
+            onBookingClick = { tripId ->
+            /* TODO send request on the server and show confirmation page*/
+                scope.launch {
+                    viewModel.bookTrip(tripId)
+                }
+            }
         )
     })
 
@@ -71,7 +77,7 @@ fun TripBookingContent(viewModel: TripsViewModel, onBookingClick: (String) -> Un
                     modifier = Modifier.padding(vertical = baselineGrid)
                 )
                 Text(
-                    text = "  Your driver  ",
+                    text = stringResource(id = R.string.booking_screen_driver),
                     color = colorResource(id = R.color.white),
                     modifier = Modifier
                         .height(componentSpace)
@@ -79,10 +85,6 @@ fun TripBookingContent(viewModel: TripsViewModel, onBookingClick: (String) -> Un
                         .fillMaxWidth()
                         .background(color = colorResource(id = R.color.design_default_color_secondary_variant))
                 )
-
-/*                Spacer(modifier = Modifier
-                    .height(componentSpace)
-                    .background(color = colorResource(id = R.color.design_default_color_secondary_variant)))*/
                 DriverCard(data = (state as Response.Data).data.driver)
                 Button(
                     onClick = { onBookingClick((state as Response.Data).data.id) },
@@ -96,14 +98,19 @@ fun TripBookingContent(viewModel: TripsViewModel, onBookingClick: (String) -> Un
                     ),
                 ) {
                     Text(
-                        text = stringResource(id = R.string.search_screen_confirm_button),
+                        text = stringResource(id = R.string.booking_screen_confirm_button),
                         modifier = Modifier.align(Alignment.CenterVertically),
                         fontWeight = FontWeight.Bold
                     )
                 }
             }
             is Response.Error -> {
-                throw IllegalStateException("Not implemented yet")
+//                throw IllegalStateException("Not implemented yet")
+                ErrorPlaceholder(
+                    text = stringResource(
+                        id = R.string.error_message_with_server_response, (state as Response.Error.Message).msg
+                    )
+                )
             }
         }
 
@@ -131,13 +138,13 @@ fun DriverCard(data: Driver) {
             fontSize = textSize
         )
         Text(
-            text = "Passed trips: ${data.tripsCount}",
+            text = stringResource(id = R.string.booking_screen_passed_trips, data.tripsCount),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(textPadding),
             fontSize = textSize
         )
         Text(
-            text = "Cell: ${data.cell}",
+            text = stringResource(id = R.string.booking_screen_cell, data.cell),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(textPadding),
             fontSize = textSize

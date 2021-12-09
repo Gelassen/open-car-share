@@ -15,7 +15,7 @@ class MockInterceptor(val context: Context): Interceptor {
 
         private const val URL_TRIP_BY_ID = "/api/trips?id=101"
 
-        private val URL_MODELS = "/api/Models"
+        private const val URL_TRIP_BOOKING = "/api/trips/book?id=101"
 
         private val URL_SPARES = "/api/spares"
 
@@ -69,10 +69,10 @@ class MockInterceptor(val context: Context): Interceptor {
             msg = "mock_api_trip_by_id_response.json"
         } else if(url.contains(URL_TRIP_BY_ID) && method.equals("POST")) {
             msg = "mock_carmake_response.json"
-        } else if (url.contains(URL_MODELS) && method.equals("GET")) {
+        } else if (url.contains(URL_TRIP_BOOKING) && method.equals("GET")) {
             msg = "mock_get_models_response.json"
-        } else if (url.contains(URL_MODELS) && method.equals("POST")) {
-            msg = "mock_model_response.json"
+        } else if (url.contains(URL_TRIP_BOOKING) && method.equals("POST")) {
+            msg = "mock_api_trip_book_positive_response.json"
         } else if (url.contains(URL_SPARES)) {
             msg = "mock_spares_full.json"
         } else if (url.contains(URL_SCHEDULES)) {
