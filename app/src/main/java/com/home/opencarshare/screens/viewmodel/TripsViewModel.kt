@@ -4,10 +4,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.home.opencarshare.App
-import com.home.opencarshare.model.ServiceMessage
-import com.home.opencarshare.model.Trip
+import com.home.opencarshare.model.CreateTripUiModel
+import com.home.opencarshare.model.pojo.ServiceMessage
+import com.home.opencarshare.model.pojo.Trip
 import com.home.opencarshare.network.Repository
 import com.home.opencarshare.network.Response
+import com.home.opencarshare.persistent.PreferenceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -15,7 +17,11 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class TripsViewModel @Inject constructor(val repo: Repository) : ViewModel() {
+class TripsViewModel
+@Inject constructor(
+    private val repo: Repository,
+    private val preferenceRepository: PreferenceRepository
+    ) : ViewModel() {
 
     private val placeholder: Response<List<Trip>> = Response.Data(Collections.emptyList())
 
@@ -33,6 +39,38 @@ class TripsViewModel @Inject constructor(val repo: Repository) : ViewModel() {
         Response.Data(ServiceMessage(ServiceMessage.Status.NONE))
     private val _tripBookState = MutableStateFlow(tripBookStatePlaceholder)
     val tripBookState: StateFlow<Response<ServiceMessage>> = _tripBookState
+
+    private val driverPreferencesFlow = preferenceRepository.driverPreferencesFlow
+/*    private val tripCreateStatePlaceholder: Response<ServiceMessage> =
+        Response.Data(ServiceMessage(ServiceMessage.Status.NONE))
+    private val _tripCreateState = MutableStateFlow(tripCreateStatePlaceholder)
+    val tripCreateState: StateFlow<Response<ServiceMessage>> = _tripCreateState*/
+    private val _createTripUiModel = MutableStateFlow(CreateTripUiModel())
+    val createTripUiModel: StateFlow<CreateTripUiModel> = _createTripUiModel
+
+    fun getDriver() {
+        viewModelScope.launch {
+            driverPreferencesFlow
+                .stateIn(viewModelScope)
+                .collect { it ->
+                    _createTripUiModel.value.driver.from(it.driver)
+                }
+        }
+    }
+
+    fun createTrip(trip: Trip) {
+        viewModelScope.launch {
+            repo.createTrip(trip)
+                .stateIn(viewModelScope)
+                .catch { ex ->
+                    Log.e(App.TAG, "Something went wrong with creating the trip $trip", ex)
+                    Response.Error.Exception(ex)
+                }
+                .collect { it ->
+                    _createTripUiModel.value.state = it
+                }
+        }
+    }
 
     fun getTrips(locationFrom: String, locationTo: String, date: Long) {
         viewModelScope.launch {

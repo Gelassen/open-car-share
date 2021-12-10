@@ -1,9 +1,12 @@
-package com.home.opencarshare.model
+package com.home.opencarshare.model.pojo
 
 import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
 
-class TripBookingApiResponse {
+import com.google.gson.annotations.SerializedName
+import java.util.*
+
+
+class TripsApiResponse {
 
     @SerializedName("code")
     @Expose
@@ -15,5 +18,6 @@ class TripBookingApiResponse {
 
     @SerializedName("result")
     @Expose
-    var result: ServiceMessage = ServiceMessage()
+    var result: List<Trip> = Collections.emptyList()
+
 }

@@ -1,7 +1,7 @@
 package com.home.opencarshare.network
 
-import com.home.opencarshare.model.ServiceMessage
-import com.home.opencarshare.model.Trip
+import com.home.opencarshare.model.pojo.ServiceMessage
+import com.home.opencarshare.model.pojo.Trip
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -66,6 +66,23 @@ class Repository @Inject constructor(val api: IApi) {
             }
         }.catch { ex ->
             Response.Error.Exception(ex)
+        }
+    }
+
+    fun createTrip(trip: Trip) : Flow<Response<ServiceMessage>> {
+        return flow {
+            val response = api.createTrip(trip = trip)
+            if (response.isSuccessful) {
+                val payload = response.body()!!
+                if (payload.code.toInt() != 200) {
+                    throw IllegalStateException(
+                        "System doesn't support any other states except code 200, " +
+                                "but has received ${payload.code}")
+                }
+                emit(Response.Data(payload.result))
+            } else {
+                emit(Response.Error.Message(response.message()))
+            }
         }
     }
 

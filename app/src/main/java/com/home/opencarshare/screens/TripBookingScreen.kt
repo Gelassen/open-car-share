@@ -20,12 +20,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.home.opencarshare.App
 import com.home.opencarshare.R
-import com.home.opencarshare.model.Driver
-import com.home.opencarshare.model.ServiceMessage
-import com.home.opencarshare.model.Trip
+import com.home.opencarshare.model.pojo.Driver
+import com.home.opencarshare.model.pojo.ServiceMessage
+import com.home.opencarshare.model.pojo.Trip
 import com.home.opencarshare.network.Response
 import com.home.opencarshare.screens.elements.ErrorPlaceholder
-import com.home.opencarshare.screens.elements.LoadingPlaceholder
 import com.home.opencarshare.screens.elements.SingleCard
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
 import kotlinx.coroutines.launch

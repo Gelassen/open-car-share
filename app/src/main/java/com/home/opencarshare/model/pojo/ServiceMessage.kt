@@ -1,4 +1,4 @@
-package com.home.opencarshare.model
+package com.home.opencarshare.model.pojo
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -21,8 +21,6 @@ class ServiceMessage() {
         this.message = message
     }
 
-
-
     @SerializedName("status")
     @Expose
     var status: String = Status.SUCCEED
@@ -30,4 +28,9 @@ class ServiceMessage() {
     @SerializedName("message")
     @Expose
     var message: String = ""
+
+    fun from(serviceMessage: ServiceMessage) {
+        this.status = serviceMessage.status
+        this.message = serviceMessage.message
+    }
 }

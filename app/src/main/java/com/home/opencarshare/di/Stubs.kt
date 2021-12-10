@@ -1,8 +1,7 @@
 package com.home.opencarshare.di
 
-import com.home.opencarshare.model.Trip
-import com.home.opencarshare.di.Stubs.Trips
-import com.home.opencarshare.model.Driver
+import com.home.opencarshare.model.pojo.Trip
+import com.home.opencarshare.model.pojo.Driver
 import java.util.ArrayList
 
 class Stubs {

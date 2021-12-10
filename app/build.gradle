@@ -60,6 +60,7 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.activity:activity-compose:$version_activity_compose"
     implementation "androidx.navigation:navigation-compose:$version_navigation_compose"
+    implementation "androidx.datastore:datastore-preferences:$version_datastore"
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_gson"
     implementation "com.google.dagger:hilt-android:$version_hilt"

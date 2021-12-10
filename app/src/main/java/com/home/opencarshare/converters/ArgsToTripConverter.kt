@@ -1,7 +1,7 @@
 package com.home.opencarshare.converters
 
 import androidx.navigation.NavBackStackEntry
-import com.home.opencarshare.model.Trip
+import com.home.opencarshare.model.pojo.Trip
 import android.os.Bundle
 import com.home.opencarshare.navigation.AppNavigation
 import java.lang.IllegalArgumentException

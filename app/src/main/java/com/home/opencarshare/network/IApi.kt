@@ -1,12 +1,8 @@
 package com.home.opencarshare.network
 
-import com.home.opencarshare.model.TripBookingApiResponse
-import com.home.opencarshare.model.TripsApiResponse
+import com.home.opencarshare.model.pojo.*
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface IApi {
 
@@ -25,4 +21,8 @@ interface IApi {
     @Headers("Content-Type: application/json; charset=utf-8")
     @POST("/api/trips/book")
     suspend fun bookTrip(@Query("id") tripId: String): Response<TripBookingApiResponse>
+
+    @Headers("Content-Type: application/json; charset=utf-8")
+    @POST("/api/trips/create")
+    suspend fun createTrip(@Body trip: Trip): Response<TripCreateApiResponse>
 }

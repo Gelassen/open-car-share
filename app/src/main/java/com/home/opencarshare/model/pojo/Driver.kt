@@ -1,4 +1,4 @@
-package com.home.opencarshare.model
+package com.home.opencarshare.model.pojo
 
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
@@ -26,5 +26,12 @@ class Driver(
                 || name.isEmpty()
                 || tripsCount.isEmpty()
                 || cell.isEmpty()
+    }
+
+    fun from(driver: Driver) {
+        this.id = driver.id
+        this.name = driver.name
+        this.tripsCount = driver.tripsCount
+        this.cell = driver.cell
     }
 }

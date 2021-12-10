@@ -17,15 +17,7 @@ class MockInterceptor(val context: Context): Interceptor {
 
         private const val URL_TRIP_BOOKING = "/api/trips/book?id=101"
 
-        private val URL_SPARES = "/api/spares"
-
-        private val URL_SCHEDULES = "/api/ScheduleRequests"
-
-        private val URL_APPLICATION = "/api/application"
-
-        private val URL_CALENDAR = "/api/calendar"
-
-        private val URL_SERVICES = "/api/services"
+        private const val URL_TRIP_CREATE = "/api/trips/create"
     }
 
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
@@ -67,24 +59,14 @@ class MockInterceptor(val context: Context): Interceptor {
             && matchQuery(uri.queryParameterNames, URL_TRIP_BY_ID.split("?").last())
             && method.equals("GET")) {
             msg = "mock_api_trip_by_id_response.json"
-        } else if(url.contains(URL_TRIP_BY_ID) && method.equals("POST")) {
-            msg = "mock_carmake_response.json"
-        } else if (url.contains(URL_TRIP_BOOKING) && method.equals("GET")) {
-            msg = "mock_get_models_response.json"
-        } else if (matchPath(uri.pathSegments, URL_TRIP.split("?").first())
+        } else if (matchPath(uri.pathSegments, URL_TRIP_BOOKING.split("?").first())
             && matchQuery(uri.queryParameterNames, URL_TRIP_BOOKING.split("?").last())
             && method.equals("POST")) {
             msg = "mock_api_trip_book_positive_response.json"
-        } else if (url.contains(URL_SPARES)) {
-            msg = "mock_spares_full.json"
-        } else if (url.contains(URL_SCHEDULES)) {
-            msg = "mock_schedules_full.json"
-        } else if (url.contains(URL_APPLICATION)) {
-            msg = "mock_application.json"
-        } else if (url.contains(URL_CALENDAR)) {
-            msg = "mock_calendar.json"
-        } else if (url.contains(URL_SERVICES)) {
-            msg = "mock_services_full.json"
+        } else if (matchPath(uri.pathSegments, URL_TRIP_CREATE.split("?").first())
+            && matchQuery(uri.queryParameterNames, URL_TRIP_CREATE.split("?").last())
+            && method.equals("POST")) {
+            msg = "mock_api_trip_create_response.json"
         } else {
             throw IllegalArgumentException("Unsupported API method: " + url + " " + method)
         }

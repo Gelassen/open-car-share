@@ -12,6 +12,7 @@ buildscript {
         version_mdc = '1.3.0'
         version_navigation_compose = '2.4.0-beta02'
         version_activity_compose = '1.4.0'
+        version_datastore = '1.0.0'
     }
     repositories {
         google()

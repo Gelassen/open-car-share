@@ -18,7 +18,7 @@ import androidx.navigation.NavController
 import com.home.opencarshare.App
 import com.home.opencarshare.R
 import com.home.opencarshare.navigation.AppNavigation
-import com.home.opencarshare.model.Trip
+import com.home.opencarshare.model.pojo.Trip
 import com.home.opencarshare.network.Response
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
 

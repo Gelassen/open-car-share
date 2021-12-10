@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.home.opencarshare.R
-import com.home.opencarshare.model.Trip
+import com.home.opencarshare.model.pojo.Trip
 
 @Composable
 fun TripViewItem(data: Trip,

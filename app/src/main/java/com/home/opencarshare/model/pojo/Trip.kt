@@ -1,4 +1,4 @@
-package com.home.opencarshare.model
+package com.home.opencarshare.model.pojo
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -24,7 +24,8 @@ class Trip(
     var availableSeats: String = "",
     @SerializedName("driver")
     @Expose
-    var driver: Driver = Driver()) : Parcelable {
+    var driver: Driver = Driver()
+) : Parcelable {
 
     fun isEmpty(): Boolean {
         return id.isEmpty()
