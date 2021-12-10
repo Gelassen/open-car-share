@@ -77,4 +77,5 @@ sealed class Response<out T: Any> {
         data class Exception(val error: Throwable): Error()
         data class Message(val msg: String): Error()
     }
+    data class Loading<out T: Any>(val stub: T): Response<T>()
 }

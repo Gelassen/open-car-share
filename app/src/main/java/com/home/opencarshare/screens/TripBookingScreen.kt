@@ -25,6 +25,7 @@ import com.home.opencarshare.model.ServiceMessage
 import com.home.opencarshare.model.Trip
 import com.home.opencarshare.network.Response
 import com.home.opencarshare.screens.elements.ErrorPlaceholder
+import com.home.opencarshare.screens.elements.LoadingPlaceholder
 import com.home.opencarshare.screens.elements.SingleCard
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
 import kotlinx.coroutines.launch
@@ -57,6 +58,7 @@ fun TripBookingScreen(data: String?, viewModel: TripsViewModel, navController: N
 fun TripBookingContent(viewModel: TripsViewModel, onBookingClick: (String) -> Unit) {
     val tripState by viewModel.trip.collectAsState()
     val bookingState by viewModel.tripBookState.collectAsState()
+
     if (tripState is Response.Error) {
         TripBookingErrorState(state = (tripState as Response.Error))
     } else if (tripState is Response.Data && bookingState is Response.Error) {
