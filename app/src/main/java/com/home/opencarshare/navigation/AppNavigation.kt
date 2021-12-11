@@ -2,15 +2,23 @@ package com.home.opencarshare.navigation
 
 object AppNavigation {
 
+    object Start {
+        const val START = "start"
+    }
+
+    object Create {
+        const val CREATE = "tripCreate"
+    }
+
     object Search {
         const val TRIP_SEARCH = "tripSearch"
+        const val ARG_TRIP_ID = "tripId"
     }
 
     object Booking {
         const val TRIP_BOOKING = "tripBooking"
+        const val ARG_TRIP_ID = Search.ARG_TRIP_ID
     }
-
-    const val ARG_TRIP_ID = "tripId"
 
     object Trips {
         const val TRIPS = "trips"

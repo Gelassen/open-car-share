@@ -41,6 +41,7 @@ fun TripCreateScreen(viewModel: TripsViewModel) {
     LaunchedEffect(viewModel) {
         viewModel.getDriver()
     }
+    // TODO support back navigation
     // TODO show drive profile on trip
     // TODO response on CreateTrip status
     if (uiState.value.state is Response.Error) {

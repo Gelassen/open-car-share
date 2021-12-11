@@ -20,7 +20,7 @@ fun MainScreen(viewModel: TripsViewModel) {
                 context = context,
                 viewModel = viewModel,
                 navController = navController,
-                startDestination = AppNavigation.Search.TRIP_SEARCH
+                startDestination = AppNavigation.Start.START
             )
         }
     }

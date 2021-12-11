@@ -10,9 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.home.opencarshare.converters.ArgsToTripConverter
 import com.home.opencarshare.navigation.AppNavigation
-import com.home.opencarshare.screens.TripBookingScreen
-import com.home.opencarshare.screens.TripScreen
-import com.home.opencarshare.screens.TripSearchScreen
+import com.home.opencarshare.screens.*
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
 
 @Composable
@@ -24,9 +22,16 @@ fun AppNavGraph(
 ) {
 
     NavHost(navController = navController, startDestination = startDestination) {
-        composable(
-            AppNavigation.Search.TRIP_SEARCH
-        ) {
+        composable(AppNavigation.Start.START) {
+            StartScreen(
+                onDriverClick = { navController.navigate(AppNavigation.Create.CREATE) },
+                onPassengerClick = { navController.navigate(AppNavigation.Search.TRIP_SEARCH) }
+            )
+        }
+        composable(AppNavigation.Create.CREATE) {
+            TripCreateScreen(viewModel = viewModel)
+        }
+        composable(AppNavigation.Search.TRIP_SEARCH) {
             TripSearchScreen(onSearchClick = { locationFrom, locationTo, date ->
                 // TODO validate data and navigate to the next screen
                 Toast.makeText(context, "$locationFrom - $locationTo at $date", Toast.LENGTH_LONG).show()
@@ -56,7 +61,7 @@ fun AppNavGraph(
             "${AppNavigation.Booking.TRIP_BOOKING}/{tripId}",
             arguments = listOf(navArgument("tripId") { type = NavType.StringType })
         ) { navBackStackEntry ->
-            val tripId = navBackStackEntry.arguments?.getString(AppNavigation.ARG_TRIP_ID)
+            val tripId = navBackStackEntry.arguments?.getString(AppNavigation.Booking.ARG_TRIP_ID)
             TripBookingScreen(
                 data = tripId,
                 viewModel = viewModel,

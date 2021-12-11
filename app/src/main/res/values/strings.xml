@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Open Car Share</string>
 
+    <string name="start_screen_driver_button">Find a passenger</string>
+    <string name="start_screen_passenger_button">Find a trip</string>
     <string name="search_screen_location_to_hint">Location to</string>
     <string name="search_screen_location_from_hint">Location from</string>
     <string name="search_screen_date">Date</string>
