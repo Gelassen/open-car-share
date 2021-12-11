@@ -12,7 +12,7 @@ import androidx.compose.ui.res.dimensionResource
 import com.home.opencarshare.R
 
 @Composable
-fun TripSearchRow(state: String, onTextChanged: (String) -> Unit, hint: String, icon: ImageVector? ) {
+fun TextFieldEditable(state: String, onTextChanged: (String) -> Unit, hint: String, icon: ImageVector? ) {
     val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
     if (icon == null) {
         TextField(

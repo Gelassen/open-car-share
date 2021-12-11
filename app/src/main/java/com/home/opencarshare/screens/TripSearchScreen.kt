@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.home.opencarshare.R
 import com.home.opencarshare.screens.elements.SingleCard
-import com.home.opencarshare.screens.elements.TripSearchRow
+import com.home.opencarshare.screens.elements.TextFieldEditable
 
 @Composable
 fun TripSearchScreen(onSearchClick: (locationFrom: String, locationTo: String, date: String) -> Unit) {
@@ -33,19 +33,19 @@ fun TripSearchContent(onSearchClick: (locationFrom: String, locationTo: String, 
     var locationToTxt by remember { mutableStateOf("") }
     var pickUpDate by remember { mutableStateOf("")}
     Column(modifier = Modifier.padding(16.dp)) {
-        TripSearchRow(
+        TextFieldEditable(
             state = locationFromTxt,
             onTextChanged = { it -> locationFromTxt = it },
             hint = stringResource(id = R.string.search_screen_location_to_hint),
             icon = Icons.Default.LocationOn
         )
-        TripSearchRow(
+        TextFieldEditable(
             state = locationToTxt,
             onTextChanged = { it -> locationToTxt = it },
             hint = stringResource(id = R.string.search_screen_location_from_hint),
             icon = Icons.Default.LocationOn
         )
-        TripSearchRow(
+        TextFieldEditable(
             state = pickUpDate,
             onTextChanged = { it -> pickUpDate = it },
             hint = stringResource(id = R.string.search_screen_date),

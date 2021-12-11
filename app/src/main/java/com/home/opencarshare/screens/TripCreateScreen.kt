@@ -18,22 +18,37 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.home.opencarshare.R
+import com.home.opencarshare.model.pojo.Driver
+import com.home.opencarshare.model.pojo.Trip
 import com.home.opencarshare.screens.elements.SingleCard
-import com.home.opencarshare.screens.elements.TripSearchRow
+import com.home.opencarshare.screens.elements.TextFieldEditable
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun TripCreateScreen(viewModel: TripsViewModel) {
+    val uiState = viewModel.createTripUiModel.collectAsState()
     LaunchedEffect(viewModel) {
-        viewModel.tripBookState
+        viewModel.getDriver()
     }
-
-    SingleCard(content = { TripCreateScreenContent(
-        onCreateClick = { locationFromTxt, locationToTxt, pickUpDate ->
-            // TODO complete me
+    if (uiState.value.driver.isEmpty()) {
+//        SingleCard(content = )
+    } else {
+        val coroutineScope = rememberCoroutineScope()
+        SingleCard(content = { TripCreateScreenContent(
+            onCreateClick = { locationFromTxt, locationToTxt, pickUpDate ->
+                coroutineScope.launch {
+                    val trip = Trip()
+                    trip.locationFrom = locationFromTxt
+                    trip.locationTo = locationToTxt
+                    trip.date = pickUpDate
+                    trip.driver = Driver()
+                    viewModel.createTrip(trip)
+                }
+            })
         })
-    })
+    }
 }
 
 @Composable
@@ -44,19 +59,19 @@ fun TripCreateScreenContent(onCreateClick: (locationFrom: String, locationTo: St
     var pickUpDate by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.padding(16.dp)) {
-        TripSearchRow(
+        TextFieldEditable(
             state = locationFromTxt,
             onTextChanged = { it -> locationFromTxt = it },
             hint = stringResource(id = R.string.search_screen_location_to_hint),
             icon = Icons.Default.LocationOn
         )
-        TripSearchRow(
+        TextFieldEditable(
             state = locationToTxt,
             onTextChanged = { it -> locationToTxt = it },
             hint = stringResource(id = R.string.search_screen_location_from_hint),
             icon = Icons.Default.LocationOn
         )
-        TripSearchRow(
+        TextFieldEditable(
             state = pickUpDate,
             onTextChanged = { it -> pickUpDate = it },
             hint = stringResource(id = R.string.search_screen_date),
