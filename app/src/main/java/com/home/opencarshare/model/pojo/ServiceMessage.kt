@@ -23,7 +23,7 @@ class ServiceMessage() {
 
     @SerializedName("status")
     @Expose
-    var status: String = Status.SUCCEED
+    var status: String = Status.NONE
 
     @SerializedName("message")
     @Expose

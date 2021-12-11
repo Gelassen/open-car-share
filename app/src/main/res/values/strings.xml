@@ -9,6 +9,10 @@
     <string name="booking_screen_driver">  Your driver  </string>
     <string name="booking_screen_passed_trips">Passed trips: %1$s</string>
     <string name="booking_screen_cell">Cell: %1$s</string>
+    <string name="create_trip_screen_driver_name">Your name</string>
+    <string name="create_trip_screen_driver_cell">Your cell</string>
+    <string name="create_trip_screen_confirm_button">Confirm</string>
+    <string name="create_trip_error_msg">Failed to create trip. Please check the internet connection</string>
 
     <string name="default_error_message">Something went wrong</string>
     <string name="error_message_with_server_response">Something went wrong with server response: \n %1$s</string>

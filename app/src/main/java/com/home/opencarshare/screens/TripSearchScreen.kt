@@ -28,11 +28,12 @@ fun TripSearchScreen(onSearchClick: (locationFrom: String, locationTo: String, d
 @Composable
 fun TripSearchContent(onSearchClick: (locationFrom: String, locationTo: String, date: String) -> Unit) {
     val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
+    val mainPadding = dimensionResource(id = R.dimen.main_margin_compact)
     // TODO figure out is there existing composable for date picker and numeric picker
     var locationFromTxt by remember { mutableStateOf("") }
     var locationToTxt by remember { mutableStateOf("") }
-    var pickUpDate by remember { mutableStateOf("")}
-    Column(modifier = Modifier.padding(16.dp)) {
+    var pickUpDate by remember { mutableStateOf("") }
+    Column(modifier = Modifier.padding(mainPadding)) {
         TextFieldEditable(
             state = locationFromTxt,
             onTextChanged = { it -> locationFromTxt = it },

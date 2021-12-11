@@ -3,8 +3,10 @@ package com.home.opencarshare.screens.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.home.opencarshare.App
 import com.home.opencarshare.model.CreateTripUiModel
+import com.home.opencarshare.model.pojo.Driver
 import com.home.opencarshare.model.pojo.ServiceMessage
 import com.home.opencarshare.model.pojo.Trip
 import com.home.opencarshare.network.Repository
@@ -55,6 +57,12 @@ class TripsViewModel
                 .collect { it ->
                     _createTripUiModel.value.driver.from(it.driver)
                 }
+        }
+    }
+
+    fun saveDriver(driver: Driver) {
+        viewModelScope.launch {
+            preferenceRepository.saveDriver(driver)
         }
     }
 

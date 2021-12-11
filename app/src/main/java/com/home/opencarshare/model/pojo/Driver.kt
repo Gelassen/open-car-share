@@ -21,6 +21,7 @@ class Driver(
     @Expose
     var cell: String = ""
 ): Parcelable {
+
     fun isEmpty(): Boolean {
         return id.isEmpty()
                 || name.isEmpty()

@@ -12,4 +12,8 @@
 
     <string name="default_error_message">Что-то пошло не так. Проверьте доступ к интернету. В случае повтора ошибки, напишите разработчику.</string>
     <string name="error_message_with_server_response">Что-то пошло не так. Проверьте доступ к интернету. В случае повтора ошибки, напишите разработчику. Ответ сервера: \n %1$s</string>
+    <string name="create_trip_screen_driver_name">Ваше имя</string>
+    <string name="create_trip_screen_driver_cell">Ваш номер</string>
+    <string name="create_trip_screen_confirm_button">Подтвердить</string>
+    <string name="create_trip_error_msg">Failed to create trip. Please check the the internet connection</string>
 </resources>

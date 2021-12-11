@@ -22,7 +22,7 @@ import com.home.opencarshare.R
 import com.home.opencarshare.model.pojo.ServiceMessage
 import com.home.opencarshare.model.pojo.Trip
 import com.home.opencarshare.network.Response
-import com.home.opencarshare.screens.elements.DriverCard
+import com.home.opencarshare.screens.elements.DriverCardContent
 import com.home.opencarshare.screens.elements.ErrorPlaceholder
 import com.home.opencarshare.screens.elements.SingleCard
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
@@ -108,7 +108,7 @@ fun TripBookingInitialState(state: Response.Data<Trip>, onBookingClick: (String)
                 .fillMaxWidth()
                 .background(color = colorResource(id = R.color.design_default_color_secondary_variant))
         )
-        DriverCard(data = (state as Response.Data).data.driver)
+        DriverCardContent(data = (state as Response.Data).data.driver)
         Button(
             onClick = { onBookingClick(state.data.id) },
             modifier = Modifier
