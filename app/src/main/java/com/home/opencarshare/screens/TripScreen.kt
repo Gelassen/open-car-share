@@ -40,6 +40,7 @@ fun TripScreen(viewModel: TripsViewModel, navController: NavController, searchTr
     )
 }
 
+@Deprecated("Use NewTripsComposeList")
 @Composable
 fun TripsComposeList(
     state: Response<List<Trip>>,
@@ -76,3 +77,30 @@ fun TripsComposeList(
     }
 }
 
+@Composable
+fun NewTripsComposeList(
+    state: List<Trip>,
+    onClick: (String) -> Unit,
+    modifier: Modifier
+) {
+    val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
+    val mainPadding = dimensionResource(id = R.dimen.main_margin_compact)
+    val componentSpace = dimensionResource(id = R.dimen.component_space)
+    val elevation = dimensionResource(id = R.dimen.elevation)
+    val scrollState = rememberLazyListState()
+    LazyColumn(
+        state = scrollState,
+        contentPadding = PaddingValues(horizontal = mainPadding, vertical = baselineGrid),
+        modifier = modifier
+    ) {
+        items(state) { it ->
+            TripViewItem(
+                data = it,
+                onClick = { tripId -> onClick(tripId) },
+                modifier = Modifier
+                    .padding(vertical = 2.dp)
+                    .background(colorResource(id = R.color.white))
+            )
+        }
+    }
+}

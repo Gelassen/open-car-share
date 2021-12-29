@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.home.opencarshare.R
 import com.home.opencarshare.model.pojo.Driver
+import com.home.opencarshare.model.pojo.DriverCredentials
 import com.home.opencarshare.model.pojo.Trip
 
 @Composable
@@ -27,13 +28,13 @@ fun DriverCardContent(data: Driver) {
     val textPadding = dimensionResource(id = R.dimen.text_padding)
     Column(
         modifier = Modifier
-            .padding(
-                top = baselineGrid,
-                bottom = baselineGrid,
-                start = mainPadding,
-                end = mainPadding
-            )
-            .fillMaxWidth()
+                .padding(
+                        top = baselineGrid,
+                        bottom = baselineGrid,
+                        start = mainPadding,
+                        end = mainPadding
+                )
+                .fillMaxWidth()
     ) {
         Text(
             text = data.name,
@@ -57,13 +58,14 @@ fun DriverCardContent(data: Driver) {
 }
 
 @Composable
-fun DriverCardContentEditable(onConfirmClick: (driver: Driver) -> Unit) {
+fun DriverCardContentEditable(onConfirmClick: (driver: DriverCredentials) -> Unit) {
     val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
     val mainPadding = dimensionResource(id = R.dimen.main_margin_compact)
     var componentSpace = dimensionResource(id = R.dimen.component_space)
 
     var driverName by remember { mutableStateOf("") }
     var driverCell by remember { mutableStateOf("") }
+    var driverSecret by remember { mutableStateOf("") }
     Column(modifier = Modifier.padding(mainPadding)) {
         TextFieldEditable(
             state = driverName,
@@ -77,12 +79,18 @@ fun DriverCardContentEditable(onConfirmClick: (driver: Driver) -> Unit) {
             hint = stringResource(id = R.string.create_trip_screen_driver_cell),
             icon = null
         )
+        TextFieldEditable(
+                state = driverSecret,
+                onTextChanged = { it -> driverSecret = it },
+                hint = stringResource(id = R.string.create_trip_screen_driver_secret),
+                icon = null
+        )
         Button(
-            onClick = { onConfirmClick(Driver(name = driverName, cell = driverCell)) },
+            onClick = { onConfirmClick(DriverCredentials(name = driverName, cell = driverCell, secret = driverSecret)) },
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(baselineGrid)
-                .height(dimensionResource(id = R.dimen.button_height)),
+                    .fillMaxWidth()
+                    .padding(baselineGrid)
+                    .height(dimensionResource(id = R.dimen.button_height)),
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue, contentColor = Color.White),
         ) {
             Text(

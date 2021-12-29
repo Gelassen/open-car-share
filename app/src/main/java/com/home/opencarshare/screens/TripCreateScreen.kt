@@ -1,11 +1,10 @@
 package com.home.opencarshare.screens
 
+import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -21,96 +20,76 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.home.opencarshare.App
 import com.home.opencarshare.R
 import com.home.opencarshare.model.pojo.Driver
+import com.home.opencarshare.model.pojo.DriverCredentials
 import com.home.opencarshare.model.pojo.ServiceMessage
 import com.home.opencarshare.model.pojo.Trip
-import com.home.opencarshare.network.Response
-import com.home.opencarshare.screens.elements.DriverCardContent
-import com.home.opencarshare.screens.elements.DriverCardContentEditable
-import com.home.opencarshare.screens.elements.SingleCard
-import com.home.opencarshare.screens.elements.TextFieldEditable
-import com.home.opencarshare.screens.viewmodel.TripsViewModel
+import com.home.opencarshare.screens.elements.*
+import com.home.opencarshare.screens.viewmodel.*
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-
+/**
+ * NOTE
+ * TripCreateScreen trigger navigateToDriver when ServiceMessage status has been updated,
+ * each time when state has been updated previous ServiceMessage status will trigger navigateToDriver
+ * recursively. DisposableEffect() seems wouldn't fit this scenario, another option
+ * is to add extra state to ServiceMessage for opening driver screen (which means it should
+ * be converted to UI state), alternatively just pop up current screen from stack
+ * */
 @Composable
-fun TripCreateScreen(viewModel: TripsViewModel) {
-    val coroutineScope = rememberCoroutineScope()
-    val uiState = viewModel.createTripUiModel.collectAsState()
-    LaunchedEffect(viewModel) {
-        viewModel.getDriver()
-    }
-    // TODO support back navigation
-    // TODO show drive profile on trip
-    // TODO response on CreateTrip status
-    if (uiState.value.state is Response.Error) {
-        Toast.makeText(LocalContext.current, stringResource(id = R.string.create_trip_error_msg), Toast.LENGTH_SHORT).show()
-    } else if (uiState.value.state is Response.Data) {
-        when((uiState.value.state as Response.Data).data.status) {
-            ServiceMessage.Status.NONE -> {
-                if (uiState.value.driver.isEmpty()) {
-                    SingleCard(content = {
-                        DriverCardContentEditable(
-                            onConfirmClick = { driver ->
-                                coroutineScope.launch {
-                                    viewModel.saveDriver(driver = driver)
-                                }
-                            }
-                        )
-                    })
-                } else {
-                    SingleCard(content = {
-                        TripCreateScreenContent(
-                            driver = uiState.value.driver,
-                            onCreateClick = { locationFromTxt, locationToTxt, pickUpDate ->
-                                coroutineScope.launch {
-                                    viewModel.createTrip(
-                                        Trip(locationFrom = locationFromTxt, locationTo = locationToTxt, date = pickUpDate)
-                                    )
-                                }
-                            }
-                        )
-                    })
-                }
+fun CreateTripContent(
+    viewModel: DriverViewModel,
+    state: CreateTripUiState.NewTripUiState,
+    onCreateClick: (Trip) -> Unit
+) {
+    if (state.errors.isEmpty()) {
+        when(state.tripStatus) {
+            TripStatus.NONE -> {
+                SingleCard(content = {
+                    TripCreateScreenContent(
+                        driver = state.driver,
+                        onCreateClick = { locationFromTxt, locationToTxt, pickUpDate ->
+                            onCreateClick(Trip(locationFrom = locationFromTxt, locationTo = locationToTxt, date = pickUpDate))
+                        }
+                    )
+                })
             }
-            ServiceMessage.Status.SUCCEED -> {
-                // TODO navigate further:
+            TripStatus.SUCCEED_WAIT_FOR_ACTION -> {
+                viewModel.onAfterTripCreateAction()
             }
-            ServiceMessage.Status.FAILED -> {
-
-                if (uiState.value.driver.isEmpty()) {
-                    SingleCard(content = {
-                        DriverCardContentEditable(
-                            onConfirmClick = { driver ->
-                                coroutineScope.launch {
-                                    viewModel.saveDriver(driver = driver)
-                                }
-                            }
-                        )
-                    })
-                } else {
-                    SingleCard(content = {
-                        TripCreateScreenContent(
-                            driver = uiState.value.driver,
-                            onCreateClick = { locationFromTxt, locationToTxt, pickUpDate ->
-                                coroutineScope.launch {
-                                    viewModel.createTrip(
-                                        Trip(locationFrom = locationFromTxt, locationTo = locationToTxt, date = pickUpDate)
-                                    )
-                                }
-                            }
-                        )
-                    })
+            TripStatus.SUCCEED -> {
+                // no op
+                Log.d(App.TAG, "[status] create::trip - navigate action is done")
+            }
+            TripStatus.FAILED -> {
+                if (!state.errors.isEmpty()) {
+                    val errorMessage = stringResource(id = R.string.error_message_with_server_response, state.errors.last())
+                    showError(LocalContext.current, errorMessage)
+                    viewModel.errorShown(errorMessage)
                 }
+                SingleCard(content = {
+                    TripCreateScreenContent(
+                        driver = state.driver,
+                        onCreateClick = { locationFromTxt, locationToTxt, pickUpDate ->
+                            onCreateClick(Trip(locationFrom = locationFromTxt, locationTo = locationToTxt, date = pickUpDate))
+                        }
+                    )
+                })
             }
         }
+    } else {
+        val errorMessage = state.errors.last()
+        showError(LocalContext.current, errorMessage)
+        viewModel.errorShown(errorMessage)
     }
 }
 
 @Composable
 fun TripCreateScreenContent(
-    driver: Driver,
+    driver: DriverCredentials,
     onCreateClick: (locationFrom: String, locationTo: String, date: String) -> Unit) {
     val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
     var componentSpace = dimensionResource(id = R.dimen.component_space)
@@ -146,7 +125,13 @@ fun TripCreateScreenContent(
                 .fillMaxWidth()
                 .background(color = colorResource(id = R.color.design_default_color_secondary_variant))
         )
-        DriverCardContent(data = driver)
+        DriverCardContent(
+                data = Driver(
+                    id = driver.id,
+                    name = driver.name,
+                    cell = driver.cell,
+                    tripsCount = driver.tripsCount)
+        )
         Button(
             onClick = { onCreateClick(locationFromTxt, locationToTxt, pickUpDate) },
             modifier = Modifier
@@ -156,10 +141,14 @@ fun TripCreateScreenContent(
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue, contentColor = Color.White),
         ) {
             Text(
-                text = stringResource(id = R.string.search_screen_confirm_button),
+                text = stringResource(id = R.string.create_trip_screen_confirm_button),
                 modifier = Modifier.align(Alignment.CenterVertically),
                 fontWeight = FontWeight.Bold
             )
         }
     }
+}
+
+fun showError(context: Context, msg: String) {
+    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 }

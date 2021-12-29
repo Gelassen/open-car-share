@@ -15,9 +15,15 @@ class MockInterceptor(val context: Context): Interceptor {
 
         private const val URL_TRIP_BY_ID = "/api/trips?id=101"
 
+        private const val URL_TRIP_BY_DRIVER = "/api/trips"
+
         private const val URL_TRIP_BOOKING = "/api/trips/book?id=101"
 
         private const val URL_TRIP_CREATE = "/api/trips/create"
+
+        private const val URL_DRIVER = "/api/driver"
+
+        private const val URL_DRIVER_CREATE = "/api/driver"
     }
 
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
@@ -59,14 +65,27 @@ class MockInterceptor(val context: Context): Interceptor {
             && matchQuery(uri.queryParameterNames, URL_TRIP_BY_ID.split("?").last())
             && method.equals("GET")) {
             msg = "mock_api_trip_by_id_response.json"
+        } else if (matchPath(uri.pathSegments, URL_TRIP_BY_ID.split("?").first())
+            && matchQuery(uri.queryParameterNames, URL_TRIP_BY_ID.split("?").last())
+            && method.equals("DELETE")) {
+            msg = "mock_api_trip_cancel_response.json"
         } else if (matchPath(uri.pathSegments, URL_TRIP_BOOKING.split("?").first())
             && matchQuery(uri.queryParameterNames, URL_TRIP_BOOKING.split("?").last())
             && method.equals("POST")) {
             msg = "mock_api_trip_book_positive_response.json"
         } else if (matchPath(uri.pathSegments, URL_TRIP_CREATE.split("?").first())
-            && matchQuery(uri.queryParameterNames, URL_TRIP_CREATE.split("?").last())
+            /*&& matchQuery(uri.queryParameterNames, URL_TRIP_CREATE.split("?").last())*/
             && method.equals("POST")) {
             msg = "mock_api_trip_create_response.json"
+        } else if (matchPath(uri.pathSegments, URL_DRIVER_CREATE.split("?").first())
+                && method.equals("POST")) {
+            msg = "mock_api_driver_create_response.json"
+        } else if (matchPath(uri.pathSegments, URL_DRIVER.split("?").first())
+                && method.equals("GET")) {
+            msg = "mock_api_driver_get_response.json"
+        } else if (matchPath(uri.pathSegments, URL_TRIP_BY_DRIVER.split("?").first())
+            && method.equals("GET")) {
+            msg = "mock_api_trips_by_driver_response.json"
         } else {
             throw IllegalArgumentException("Unsupported API method: " + url + " " + method)
         }

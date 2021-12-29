@@ -6,5 +6,5 @@ import com.home.opencarshare.network.Response
 
 class CreateTripUiModel {
     var state: Response<ServiceMessage> = Response.Data(ServiceMessage())
-    val driver: Driver = Driver()
+    var driver: Driver = Driver()
 }

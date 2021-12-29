@@ -18,4 +18,8 @@
     <string name="create_trip_error_msg">Failed to create trip. Please check the the internet connection</string>
     <string name="start_screen_driver_button">Найти пассажира</string>
     <string name="start_screen_passenger_button">Найти поездку</string>
+    <string name="create_trip_screen_driver_secret">Ваше секретное слово, необходимое для авторизации на сервере</string>
+    <string name="driver_screen_confirmation_message">Вы хотите отменить поездку?</string>
+    <string name="driver_screen_button_confirm">Да</string>
+    <string name="driver_screen_button_cancel">Нет</string>
 </resources>

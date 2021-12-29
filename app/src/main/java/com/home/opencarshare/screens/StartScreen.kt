@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.home.opencarshare.R
 import com.home.opencarshare.screens.elements.SingleCard
+import com.home.opencarshare.screens.viewmodel.TripsViewModel
 
 @Composable
 fun StartScreen(onDriverClick: () -> Unit, onPassengerClick: () -> Unit) {

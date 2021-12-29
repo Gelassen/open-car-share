@@ -4,6 +4,8 @@ public class App {
 
     public static final String TAG = "TAG";
 
+    public static final String TRIP = "Trip";
+
     /**
      * TODO
      * - do the check for rotation changes and activity recreation; you can keep the state only within

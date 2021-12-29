@@ -7,7 +7,12 @@ object AppNavigation {
     }
 
     object Create {
+        const val CREATE_LAUNCHER = "tripCreateLauncher"
         const val CREATE = "tripCreate"
+    }
+
+    object Driver {
+        const val DRIVER = "driver"
     }
 
     object Search {

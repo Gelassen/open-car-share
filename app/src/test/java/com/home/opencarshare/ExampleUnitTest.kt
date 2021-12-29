@@ -14,4 +14,11 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
     }
+
+    @Test
+    fun addNewItemToList_isCorrect() {
+        val list = emptyList<String>()
+        val newList = list + "new_item"
+        assertEquals(1, newList.size)
+    }
 }

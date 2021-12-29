@@ -1,6 +1,7 @@
 package com.home.opencarshare
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -11,12 +12,14 @@ import androidx.navigation.navArgument
 import com.home.opencarshare.converters.ArgsToTripConverter
 import com.home.opencarshare.navigation.AppNavigation
 import com.home.opencarshare.screens.*
+import com.home.opencarshare.screens.viewmodel.DriverViewModel
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
 
 @Composable
 fun AppNavGraph(
     context: Context,
-    viewModel: TripsViewModel,
+    driverViewModel: DriverViewModel,
+    passengerViewModel: TripsViewModel,
     navController: NavHostController,
     startDestination: String
 ) {
@@ -24,12 +27,15 @@ fun AppNavGraph(
     NavHost(navController = navController, startDestination = startDestination) {
         composable(AppNavigation.Start.START) {
             StartScreen(
-                onDriverClick = { navController.navigate(AppNavigation.Create.CREATE) },
+                onDriverClick = { navController.navigate(AppNavigation.Create.CREATE_LAUNCHER) },
                 onPassengerClick = { navController.navigate(AppNavigation.Search.TRIP_SEARCH) }
             )
         }
-        composable(AppNavigation.Create.CREATE) {
-            TripCreateScreen(viewModel = viewModel)
+        composable(AppNavigation.Create.CREATE_LAUNCHER) {
+            TripCreateScreenLauncher(viewModel = driverViewModel)
+        }
+        composable(AppNavigation.Driver.DRIVER) {
+            DriverScreen(viewModel = driverViewModel)
         }
         composable(AppNavigation.Search.TRIP_SEARCH) {
             TripSearchScreen(onSearchClick = { locationFrom, locationTo, date ->
@@ -55,7 +61,7 @@ fun AppNavGraph(
             )
         ) { navBackStackEntry ->
             val searchTrip = ArgsToTripConverter().convertArgsToTrip(navBackStackEntry)
-            TripScreen(searchTrip = searchTrip, viewModel = viewModel, navController = navController)
+            TripScreen(searchTrip = searchTrip, viewModel = passengerViewModel, navController = navController)
         }
         composable(
             "${AppNavigation.Booking.TRIP_BOOKING}/{tripId}",
@@ -64,7 +70,7 @@ fun AppNavGraph(
             val tripId = navBackStackEntry.arguments?.getString(AppNavigation.Booking.ARG_TRIP_ID)
             TripBookingScreen(
                 data = tripId,
-                viewModel = viewModel,
+                viewModel = passengerViewModel,
                 navController = navController) }
     }
 }

@@ -1,0 +1,11 @@
+{
+  "code":"200",
+  "message": "",
+  "result": {
+    "id":"email",
+    "name":"Joe Dow",
+    "tripsCount":"31",
+    "cell":"+79101900122",
+    "secret": "some_secret_word"
+  }
+}
