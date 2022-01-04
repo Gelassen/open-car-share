@@ -1,0 +1,24 @@
+{
+  "name": "com.home.opencarshare",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "jest",
+    "install": "npm install --save-dev eslint && npm install --save-dev mysql && npm install --save-dev express && npm install --save-dev jest supertest && npm install @sentry/node@5.15.5"
+  },
+  "author": "dkazakov",
+  "license": "ISC",
+  "dependencies": {
+    "@sentry/node": "^5.15.5",
+    "node": "^14.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "express": "^4.17.2",
+    "jest": "^26.6.3",
+    "mysql": "^2.18.1",
+    "supertest": "^4.0.2"
+  }
+}

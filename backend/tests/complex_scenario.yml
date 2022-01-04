@@ -1,0 +1,44 @@
+config:
+  target: "http://127.0.0.1:3000/v1" # "http://84.201.133.46:3000/v1"
+  phases:
+    - duration: 60
+      arrivalRate: 20
+  payload: 
+    # path: "payload.csv"
+    # fields:
+    #   - "payloadCategory"
+  defaults:
+    headers:
+      x-my-service-auth: '987401838271002188298567'
+      Content-Type: application/json; charset=UTF-8
+scenarios:
+  - flow:
+    - get: 
+        url: "/"
+    - post: 
+        url: "/category/create"
+        body: "{\"title\":\"category 3\",\"uid\":0}"
+       
+    - get:
+        url: "/category"
+        capture:
+          json: "$.status.payload[0].uid"
+          as: "category_uid"
+
+    - post:
+        url: "/course/create"
+        body: "{\"course_uid\":{{ category_uid }},\"title\":\"second\",\"uid\":0, \"author\": \"843b2df0-96f4-489d-aa5d-238493c91173\"}"
+
+    - get:
+        url: "/category/{{ category_uid }}/course/"
+        capture:
+          json: "$.status.payload[0].uid"
+          as: "course_uid"
+
+    - post:
+        url: "/category/{{ category_uid }}/course/"
+        body: "{\"courseUid\":{{ course_uid }},\"source\":\"test_url\",\"title\":\"test_source\",\"uid\":0,\"author\":\"843b2df0-96f4-489d-aa5d-238493c91173\"}"
+
+    - get:
+        url: "/category/{{ category_uid }}/course/{{ course_uid }}/source"
+        
