@@ -200,6 +200,7 @@ class DriverViewModel
 
     fun createTrip(trip: Trip) {
         viewModelScope.launch {
+            Log.d(App.TAG, "[action] create trip start")
             repo.createTrip(trip)
                 .stateIn(viewModelScope)
                 .onStart {
@@ -215,8 +216,10 @@ class DriverViewModel
                     }
                 }
                 .collect { it ->
+                    Log.d(App.TAG, "[action] create trip collect data")
                     when (it) {
                         is Response.Data -> {
+                            Log.d(App.TAG, "[action] create trip data as Response.Data")
                             state.update { state ->
                                 var tripStatus = TripStatus.NONE
                                 var errorMessage = ""
@@ -240,18 +243,21 @@ class DriverViewModel
                             }
                         }
                         is Response.Error.Exception -> {
+                            Log.d(App.TAG, "[action] create trip data as Response.Error.Exception")
                             state.update { state ->
                                 val errors = state.errors + getErrorMessage(it)
                                 state.copy(errors = errors, isLoading = false)
                             }
                         }
                         is Response.Error.Message -> {
+                            Log.d(App.TAG, "[action] create trip data as Response.Error.Message")
                             state.update { state ->
                                 val errors = state.errors + getErrorMessage(it)
                                 state.copy(errors = errors, isLoading = false)
                             }
                         }
                         is Response.Loading<*> -> {
+                            Log.d(App.TAG, "[action] create trip data as Response.Loading")
                             state.update { state ->
                                 state.copy(isLoading = true)
                             }

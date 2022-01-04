@@ -52,7 +52,14 @@ fun CreateTripContent(
                     TripCreateScreenContent(
                         driver = state.driver,
                         onCreateClick = { locationFromTxt, locationToTxt, pickUpDate ->
-                            onCreateClick(Trip(locationFrom = locationFromTxt, locationTo = locationToTxt, date = pickUpDate))
+                            onCreateClick(
+                                Trip(
+                                    locationFrom = locationFromTxt,
+                                    locationTo = locationToTxt,
+                                    date = pickUpDate,
+                                    driverId = state.driver.id
+                                )
+                            )
                         }
                     )
                 })

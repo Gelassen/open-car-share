@@ -27,8 +27,6 @@ exports.getSpecific = function(req, res, authAsTokens) {
                                 util.getErrorMessage(401, "There is no driver match for this request, find rows count is " + rows.length)
                             ) 
                         }
-                        // var response = (rows.length === 1) ? util.getPayloadMessage(converter.dbToBussinessDriverSingle(rows[0])) 
-                            // : util.getErrorMessage("There is no driver match for this request, find rows count is " + rows.length)  
 
                         resolve(response)
                     }

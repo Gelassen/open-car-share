@@ -77,15 +77,20 @@ exports.create = async function(req, res) {
                 {sql: 'INSERT INTO trips SET locationFrom = ?, locationTo = ?, date = ?, availableSeats = ?, driverId = ?;', timeout: TIMEOUT}, 
                 [body.locationFrom, body.locationTo, body.date, body.availableSeats, body.driverId], 
                 function(error, rows, fields) {
+                    console.log("[trip] create trip result")
                     if (error != null) {
+                        console.log("[trip] there is an error")
                         console.log(JSON.stringify(error))
                         var payload = util.getServiceMessage(util.statusFailed, JSON.stringify(error))
                         var response = util.getErrorMessage(payload)
-                        resolve(response)
+                        console.log("[trip] response: " + JSON.stringify(response))
+                        resolve(JSON.stringify(response))
                     } else {
+                        console.log("[trip] there is no error")
                         var payload = util.getServiceMessage(util.statusFailed)
-                        var response = util.getPayloadMessage(payload) 
-                        resolve(response)
+                        var response = util.getPayloadMessage(payload)
+                        console.log("[trip] response: " + JSON.stringify(response)) 
+                        resolve(JSON.stringify(response))
                     }
                     connection.release()
                 }

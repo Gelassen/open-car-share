@@ -90,14 +90,7 @@ app.post('/api/v1/trips/book', function(req, res) {
 
 app.post('/api/v1/trips/create', function(req, res) {
     pool.status()
-    // TODO process authorization
-    // test only
     console.log(req.body)
-    req.body.locationFrom = "Kazan"
-    req.body.locationTo = "Moscow"
-    req.body.date = "Wed, 4 Jul 2001 12:08:56 -0700"
-    req.body.availableSeats = "3"
-    req.body.driverId = 11
     trips.create(req, res)
 })
 
