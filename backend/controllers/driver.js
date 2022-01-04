@@ -9,11 +9,13 @@ exports.specific = async function(req, res) {
     } else {
         let authResult = auth.parse(req.get("Authorization"))
         if (authResult.error) {
-            res.send(network.getErrorMessage(401, authResult.result))
+            let result = network.getErrorMessage(401, authResult.result)
+            console.log("[1] Driver response: " + result)
+            res.send(result)
         } else {
-            let result = await driver.getSpecific(req)
+            let result = await driver.getSpecific(req, res, authResult.result.split(":"))
                 .catch(e => network.getErrorMessage(e))
-            
+            console.log("[2] Driver response: " + result)
             res.send(result)
         }
     }

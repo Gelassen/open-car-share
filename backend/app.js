@@ -34,7 +34,6 @@ app.use(function(req, res, next) {
 })
 
 
-// Basic Sm9lIERvZTpjbGVhbl9ibG9vZA==
 // app.post('/api/v1/authTest', function(req, res, next) {
 //     console.log('Authorization header: ' + req.get('Authorization'))
 //     var authHederValue = req.get('Authorization') 
