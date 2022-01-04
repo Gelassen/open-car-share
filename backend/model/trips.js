@@ -87,7 +87,7 @@ exports.create = async function(req, res) {
                         resolve(JSON.stringify(response))
                     } else {
                         console.log("[trip] there is no error")
-                        var payload = util.getServiceMessage(util.statusFailed)
+                        var payload = util.getServiceMessage(util.statusSuccess)
                         var response = util.getPayloadMessage(payload)
                         console.log("[trip] response: " + JSON.stringify(response)) 
                         resolve(JSON.stringify(response))

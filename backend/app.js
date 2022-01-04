@@ -100,68 +100,6 @@ app.delete('/api/v1/trips', function(req, res) {
     trips.delete(req, res)
 })
 
-// app.get('/api/v1/trips')
-
-/*
-app.get('/v1/category', function(req, res, next) {
-    pool.status()
-    tasks.all(req, res)
-})
-
-app.get('/v1/category/:id', function(req, res, next) {
-    pool.status()
-    tasks.specific(req, res)
-})
-
-app.post('/v1/category/create', function(req, res, next) {
-    pool.status()
-    tasks.create(req, res)
-})
-
-app.post('/v1/category/edit/:id', function(req, res, next) {
-    tasks.edit(req, res)
-})
-
-app.post('/v1/category/delete/:id', function(req, res, next) {
-    tasks.delete(req, res)
-});
-
-app.get('/v1/category/:id/course', function(req, res, next) {
-    pool.status()
-    courses.specific(req, res)
-})
-
-app.post('/v1/course/create', function(req, res, next) {
-    pool.status()
-    courses.create(req, res)
-})
-
-app.get('/v1/category/:id/course/:courseId/source', function(req, res, next) {
-    pool.status()
-    sources.specific(req, res) 
-})
-
-app.post('/v1/source/create', function(req, res, next) {
-    pool.status()
-    sources.create(req, res)
-})
-
-app.get('/v1/category/:id/course/:courseId/source/meta', function(req, res, next) {
-    pool.status()
-    sources.specificWithMeta(req, res) 
-})
-
-app.get('/v1/category/:id/course/:courseId/source/:sourceId/like', function(req, res, next) {
-    pool.status()
-    sources.specific(req, res) 
-})
-
-app.post('/v1/like/create', function(req, res, next) {
-    console.log("hit /v1/like/create")
-    likes.create(req, res)
-})
-*/
-
 // The error handler must be before any other error middleware and after all controllers
 // app.use(Sentry.Handlers.errorHandler());
 
