@@ -1,8 +1,10 @@
 package com.home.opencarshare.di
 
 import android.content.Context
+import com.home.opencarshare.R
 import com.home.opencarshare.network.IApi
 import com.home.opencarshare.network.MockInterceptor
+import com.home.opencarshare.network.PlainInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +23,8 @@ open class NetworkModule() {
 
     @Provides
     fun provideInterceptor(@ApplicationContext context: Context): Interceptor {
-        return MockInterceptor(context)
+//        return MockInterceptor(context)
+        return PlainInterceptor()
     }
 
     @Provides
@@ -32,11 +35,11 @@ open class NetworkModule() {
     }
 
     @Provides
-    fun provideApi(client: OkHttpClient): IApi {
+    fun provideApi(@ApplicationContext context: Context, client: OkHttpClient): IApi {
         return Retrofit.Builder()
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://api.com")
+            .baseUrl(context.getString(R.string.server_url))
             .build()
             .create(IApi::class.java)
     }

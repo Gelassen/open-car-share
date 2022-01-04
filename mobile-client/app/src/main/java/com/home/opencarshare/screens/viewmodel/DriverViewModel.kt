@@ -131,15 +131,19 @@ class DriverViewModel
     }
 
     fun getDriver() {
+        Log.d(App.TAG, "[action] attempt to get driver")
         viewModelScope.launch {
             driverPreferencesFlow
                 .stateIn(viewModelScope)
                 .flatMapConcat { it ->
+                    Log.d(App.TAG, "[get driver] Got driver from cache. Checking is it empty")
                     if (it.driver.isEmpty()) {
+                        Log.d(App.TAG, "[get driver] Driver from cache is empty. Emit empty driver credentials")
                         flow {
                             emit(Response.Data(DriverCredentials()))
                         }.stateIn(viewModelScope)
                     } else {
+                        Log.d(App.TAG, "[get driver] Driver from cache is not empty. Request driver from server.")
                         repo.getDriver(cell = it.driver.cell, secret = it.driver.secret)
                     }
                 }
@@ -149,12 +153,14 @@ class DriverViewModel
                     }
                 }
                 .catch { e ->
+                    Log.e(App.TAG, "[get driver] Got an exception. Updating the state", e)
                     state.update { state ->
                         val errors = state.errors + getErrorMessage(Response.Error.Exception(e))
                         state.copy(errors = errors, isLoading = false)
                     }
                 }
                 .collect { it ->
+                    Log.d(App.TAG, "[get driver] collecting the result")
                     processDriverResponse(it)
                 }
         }

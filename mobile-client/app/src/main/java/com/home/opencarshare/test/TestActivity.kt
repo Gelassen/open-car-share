@@ -22,6 +22,7 @@ import com.home.opencarshare.network.Response
 import com.home.opencarshare.persistent.DriverPreferences
 import com.home.opencarshare.persistent.PreferenceRepository
 import com.home.opencarshare.screens.DriverScreen
+import com.home.opencarshare.screens.TripCreateScreenLauncher
 import com.home.opencarshare.screens.viewmodel.DriverViewModel
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,9 +74,25 @@ class TestActivity : AppCompatActivity() {
         preferenceRepository = PreferenceRepository(applicationContext)
         driverPreferencesFlow = preferenceRepository.driverPreferencesFlow
         val module = NetworkModule()
-        repo = Repository(module.provideApi(module.provideClient(module.provideInterceptor(applicationContext))))
+        repo = Repository(module.provideApi(this, module.provideClient(module.provideInterceptor(applicationContext))))
 
-        runAnotherScenario()
+        runDriverScenario()
+    }
+
+    fun runDriverScenario() {
+        setContent {
+            TripCreateScreenLauncher(viewModel = driverViewModel)
+        }
+    }
+
+    fun runAuthScenario() {
+        viewModel.createDriver(
+            driverCredentials = DriverCredentials(
+                name = "Joe Dow",
+                cell = "+79808007060",
+                secret = "clean_blood",
+                tripsCount = "0"
+            ))
     }
 
     fun runOneScenario() {

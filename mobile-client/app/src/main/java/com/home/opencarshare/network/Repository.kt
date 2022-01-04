@@ -119,12 +119,14 @@ class Repository @Inject constructor(val api: IApi) {
             val response = api.getDriver(credentials = Credentials.basic(cell, secret))
             if (response.isSuccessful) {
                 val payload = response.body()!!
-                if (payload.code.toInt() != 200) {
-                    throw IllegalStateException(
-                            "System doesn't support any other states except code 200, " +
-                                    "but has received ${payload.code}")
+                if (payload.code.toInt() == 200) {
+//                    throw IllegalStateException(
+//                            "System doesn't support any other states except code 200, " +
+//                                    "but has received ${payload.code}")
+                    emit(Response.Data(payload.result))
+                } else {
+                    emit(Response.Error.Message("${payload.code}: ${payload.message}"))
                 }
-                emit(Response.Data(payload.result))
             } else {
                 emit(Response.Error.Message(response.message()))
             }
