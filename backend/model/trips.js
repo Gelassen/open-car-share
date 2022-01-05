@@ -2,6 +2,7 @@ const TIMEOUT = 60000;
 const { resolve } = require('path/posix');
 var pool = require('../database');
 var util = require('../utils/network')
+var converter = require('../utils/converters/converter')
 
 exports.getSpecific = function(req, res) {
     return new Promise( (resolve) => {
@@ -31,7 +32,9 @@ exports.all = function(req, res) {
                 [req.query.locationFrom, req.query.locationTo, req.query.time],
                 function(error, rows, fields) {
                     if (error != null) {
-                        resolve(JSON.stringify(util.getErrorMessage()))
+                        var response = util.getErrorMessage(JSON.stringify(error))
+                        console.log("[trip] response: " + JSON.stringify(response))
+                        resolve(JSON.stringify(response))
                     } else {
                         resolve(JSON.stringify(util.getPayloadMessage(rows)))
                     }
@@ -45,14 +48,21 @@ exports.all = function(req, res) {
 exports.tripsByDriver = async function(req, res, authAsTokens) {
     return new Promise( (resolve) => {
         pool.getConnection(function(err, connection) {
+            console.log("[action] trips by driver call")
             connection.query(
-                {sql: 'SELECT * FROM trips INNER JOIN drivers ON trips.driverId = drivers.id WHERE drivers.name = ? AND drivers.secret = ?', TIMEOUT},
+                {sql: 'SELECT trips.id as tripId, trips.locationFrom, trips.locationTo, trips.date, trips.availableSeats, trips.driverId,  drivers.id as driverId, drivers.name as driverName, drivers.cell, drivers.tripsCount FROM trips INNER JOIN drivers  ON trips.driverId = drivers.id WHERE drivers.cell = ? AND drivers.secret = ?', TIMEOUT},
                 [authAsTokens[0], authAsTokens[1]],
                 function(error, rows, fields) {
                     if (error != null) {
-                        resolve(JSON.stringify(util.getErrorMessage()))
+                        console.log("[action] trips by driver sql response, there is an error")
+                        var response = util.getErrorMessage(JSON.stringify(error))
+                        console.log("[trip] response: " + JSON.stringify(response))
+                        resolve(JSON.stringify(response))
                     } else {
-                        resolve(JSON.stringify(util.getPayloadMessage(rows)))
+                        console.log("[action] trips by driver sql response, there is no error")
+                        var response = util.getPayloadMessage(converter.dbToBusinessTripsByDriver(rows))
+                        console.log(response)
+                        resolve(JSON.stringify(response))
                     }
                     connection.release()
                 }
@@ -105,7 +115,7 @@ exports.delete = async function(req, res, authAsTokens) {
             connection.beginTransaction(function(error) {
                 if (error) { throw err; }
                 connection.query(
-                    {sql: "SELECT count(*) as cnt FROM trips INNER JOIN drivers ON trips.driverId = drivers.id WHERE drivers.name = ? AND drivers.secret = ?"},
+                    {sql: "SELECT count(*) as cnt FROM trips INNER JOIN drivers ON trips.driverId = drivers.id WHERE drivers.cell = ? AND drivers.secret = ?"},
                     [authAsTokens[0], authAsTokens[1]], 
                     function (error, rows, fields) {
                         if (error) {

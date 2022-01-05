@@ -133,7 +133,7 @@ class Repository @Inject constructor(val api: IApi) {
         }
     }
 
-    var tripsByDriver = mutableListOf<Trip>()
+/*    var tripsByDriver = mutableListOf<Trip>()
 
     init {
         tripsByDriver.add(
@@ -156,11 +156,11 @@ class Repository @Inject constructor(val api: IApi) {
                 driver = Driver(id = "email", name = "Joe Dow", tripsCount = "31", cell = "+79101900122")
             )
         )
-    }
+    }*/
 
     fun getTripsByDriver(cell: String, secret: String): Flow<Response<List<Trip>>> {
         return flow {
-/*            val response = api.getTripByDriver(credentials = Credentials.basic(cell, secret))
+            val response = api.getTripByDriver(credentials = Credentials.basic(cell, secret))
             if (response.isSuccessful) {
                 val payload = response.body()!!
                 if (payload.code.toInt() != 200) {
@@ -171,14 +171,14 @@ class Repository @Inject constructor(val api: IApi) {
                 emit(Response.Data(payload.result))
             } else {
                 emit(Response.Error.Message(response.message()))
-            }*/
-            emit(Response.Data(tripsByDriver))
+            }
+            /*emit(Response.Data(tripsByDriver))*/
         }
     }
 
     fun cancelTrip(tripId: String, cell: String, secret: String): Flow<Response<ServiceMessage>> {
         return flow {
-/*            val response = api.cancelTrip(
+            val response = api.cancelTrip(
                 credentials = Credentials.basic(cell, secret),
                 tripId = tripId
             )
@@ -192,10 +192,10 @@ class Repository @Inject constructor(val api: IApi) {
                 emit(Response.Data(payload.result))
             } else {
                 emit(Response.Error.Message(response.message()))
-            }*/
-            tripsByDriver = tripsByDriver.filter { it.id != tripId } as MutableList<Trip>
+            }
+/*            tripsByDriver = tripsByDriver.filter { it.id != tripId } as MutableList<Trip>
             Log.d(App.TAG, "[action] repository::trips ${tripsByDriver.count()}")
-            emit(Response.Data(ServiceMessage(status = ServiceMessage.Status.SUCCEED)))
+            emit(Response.Data(ServiceMessage(status = ServiceMessage.Status.SUCCEED)))*/
         }
     }
 

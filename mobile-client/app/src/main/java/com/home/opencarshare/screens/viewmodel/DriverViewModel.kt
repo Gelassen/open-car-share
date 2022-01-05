@@ -314,32 +314,40 @@ class DriverViewModel
         }
     }
 
+    // TODO you have to filter trips that are outdated, e.g. 24 hours after their start time
     fun getTripsByDriver() {
         viewModelScope.launch {
+            Log.d(App.TAG, "[action] get trips by driver start")
             driverPreferencesFlow
                 .stateIn(viewModelScope)
                 .flatMapConcat { it ->
                     if (it.driver.isEmpty()) {
+                        Log.d(App.TAG, "[getTripsByDriver] check driver in cache and it is empty")
                         flow {
                             emit(Response.Data(DriverCredentials()))
                         }.stateIn(viewModelScope)
                     } else {
+                        Log.d(App.TAG, "[getTripsByDriver] check driver in cache and it isn't empty. Request full profile from server")
                         repo.getDriver(cell = it.driver.cell, secret = it.driver.secret)
                     }
                 }
                 .flatMapConcat { it ->
                     if (it is Response.Data) {
+                        Log.d(App.TAG, "[getTripsByDriver] get driver from server, request trips")
                         var driver = it.data
                         repo.getTripsByDriver(cell = driver.cell, secret = driver.secret)
                     } else {
+                        Log.d(App.TAG, "[getTripsByDriver] there is an error with driver from server, emit error")
                         flow {
                             emit(Response.Error.Message("There is no driver for call for trips"))
                         }.stateIn(viewModelScope)
                     }
                 }
                 .collect { it ->
+                    Log.d(App.TAG, "[getTripsByDriver] collect data")
                     when (it) {
                         is Response.Data -> {
+                            Log.d(App.TAG, "[getTripsByDriver] got data as Response.Data")
                             state.update { state ->
                                 val noTrips = it.data.isEmpty()
                                 state.copy(
@@ -349,6 +357,7 @@ class DriverViewModel
                             }
                         }
                         is Response.Error -> {
+                            Log.d(App.TAG, "[getTripsByDriver] got data as Response.Error")
                             val errorMessage = getErrorMessage(it)
                             state.update { state ->
                                 state.copy(errors = state.errors + errorMessage)
