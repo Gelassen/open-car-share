@@ -78,17 +78,13 @@ fun DriverWithTripsContent(state: CreateTripUiState.DriverHasTripsUiState, viewM
 
             NewTripsComposeList(
                 state = state.tripsByDriver,
-                onClick = { tripId ->
-                    Log.d(App.TAG, "[action] on cancel click with trip id $tripId")
-                    viewModel.addTripInCancelList(tripId)
-                          },
+                onClick = { tripId -> viewModel.addTripInCancelList(tripId) },
                 modifier = Modifier
                     .fillMaxHeight()
                     .background(color = colorResource(id = R.color.white))
             )
         }
         if (state.queueToCancel.isNotEmpty()) {
-            Log.d(App.TAG, "[state] queueToCancel ${state.queueToCancel}")
             ConfirmationDialog(
                 tripId = state.queueToCancel.first(),
                 onConfirmClick = { tripId -> viewModel.cancelTrip(tripId, state.driver)},

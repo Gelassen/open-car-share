@@ -381,15 +381,12 @@ class DriverViewModel
     }
 
     fun cancelTrip(tripId: String, driver: DriverCredentials) {
-        Log.d(App.TAG, "[action] start - cancel trip")
-        Log.d(App.TAG, "[action] cancel trip - trip id is $tripId")
         viewModelScope.launch {
             repo.cancelTrip(tripId, driver.cell, driver.secret)
                 .stateIn(viewModelScope)
                 .collect { it ->
                     when (it) {
                         is Response.Data -> {
-                            Log.d(App.TAG, "[action] end - cancel trip")
                             state.update { state ->
                                 val newTripsList = state.tripsByDriver.filter { it.id != tripId }
                                 if (newTripsList.isNotEmpty()) {
@@ -398,7 +395,6 @@ class DriverViewModel
                                         tripsByDriver = newTripsList
                                     )
                                 } else {
-                                    Log.d(App.TAG, "[state] cancel trip invalidation")
                                     state.copy(
                                         tripStatus = TripStatus.NONE,
                                         queueToCancel = state.queueToCancel.minus(tripId),

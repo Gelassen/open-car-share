@@ -164,9 +164,6 @@ class Repository @Inject constructor(val api: IApi) {
             } else {
                 emit(Response.Error.Message(response.message()))
             }
-/*            tripsByDriver = tripsByDriver.filter { it.id != tripId } as MutableList<Trip>
-            Log.d(App.TAG, "[action] repository::trips ${tripsByDriver.count()}")
-            emit(Response.Data(ServiceMessage(status = ServiceMessage.Status.SUCCEED)))*/
         }
     }
 
