@@ -1,5 +1,6 @@
 package com.home.opencarshare.screens
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.home.opencarshare.App
 import com.home.opencarshare.R
 import com.home.opencarshare.model.pojo.Trip
 
@@ -28,7 +30,11 @@ fun TripViewItem(data: Trip,
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick(data.id) }) {
+            .clickable {
+                Log.d(App.TAG, "[action] trip view item click ${data.toString()}")
+                onClick(data.id)
+            }
+    ) {
         Column(
             modifier = modifier
                 .padding(

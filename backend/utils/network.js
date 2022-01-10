@@ -18,6 +18,10 @@ exports.getErrorMessage = function(code, message) {
     return {code: code, message: message, result: {}}
 }
 
+exports.getErrorMessage = function(code, message, payload) {
+    return {code: code, message: message, result: payload}
+}
+
 exports.statusSuccess = 1
 exports.statusFailed = 0
 exports.getServiceMessage = function(statusCode) {

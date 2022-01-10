@@ -120,9 +120,6 @@ class Repository @Inject constructor(val api: IApi) {
             if (response.isSuccessful) {
                 val payload = response.body()!!
                 if (payload.code.toInt() == 200) {
-//                    throw IllegalStateException(
-//                            "System doesn't support any other states except code 200, " +
-//                                    "but has received ${payload.code}")
                     emit(Response.Data(payload.result))
                 } else {
                     emit(Response.Error.Message("${payload.code}: ${payload.message}"))
@@ -133,50 +130,25 @@ class Repository @Inject constructor(val api: IApi) {
         }
     }
 
-/*    var tripsByDriver = mutableListOf<Trip>()
-
-    init {
-        tripsByDriver.add(
-            Trip(
-                id = "SUID",
-                locationFrom = "Kazan",
-                locationTo = "Moscow",
-                date = "Wed, 4 Jul 2001 12:08:56 -0700",
-                availableSeats = "2",
-                driver = Driver(id = "email", name = "Joe Dow", tripsCount = "31", cell = "+79101900122")
-            )
-        )
-        tripsByDriver.add(
-            Trip(
-                id = "SUID2",
-                locationFrom = "Kazan",
-                locationTo = "Moscow",
-                date = "Wed, 4 Jul 2001 12:08:56 -0700",
-                availableSeats = "1",
-                driver = Driver(id = "email", name = "Joe Dow", tripsCount = "31", cell = "+79101900122")
-            )
-        )
-    }*/
-
     fun getTripsByDriver(cell: String, secret: String): Flow<Response<List<Trip>>> {
         return flow {
             val response = api.getTripByDriver(credentials = Credentials.basic(cell, secret))
             if (response.isSuccessful) {
                 val payload = response.body()!!
-                if (payload.code.toInt() != 200) {
-                    throw IllegalStateException(
-                        "System doesn't support any other states except code 200, " +
-                                "but has received ${payload.code}")
+                if (payload.code.toInt() == 200) {
+                    emit(Response.Data(payload.result))
+                } else {
+                    emit(Response.Error.Message("${payload.code}: ${payload.message}"))
                 }
-                emit(Response.Data(payload.result))
             } else {
                 emit(Response.Error.Message(response.message()))
             }
-            /*emit(Response.Data(tripsByDriver))*/
         }
     }
 
     fun cancelTrip(tripId: String, cell: String, secret: String): Flow<Response<ServiceMessage>> {
+        if (tripId.isEmpty())
+            throw IllegalArgumentException("Trip id for cancellation is empty. Does your trip have correct one?")
         return flow {
             val response = api.cancelTrip(
                 credentials = Credentials.basic(cell, secret),
@@ -184,12 +156,11 @@ class Repository @Inject constructor(val api: IApi) {
             )
             if (response.isSuccessful) {
                 val payload = response.body()!!
-                if (payload.code.toInt() != 200) {
-                    throw IllegalStateException(
-                        "System doesn't support any other states except code 200, " +
-                                "but has received ${payload.code}")
+                if (payload.code.toInt() == 200) {
+                    emit(Response.Data(payload.result))
+                } else {
+                    emit(Response.Error.Message("${payload.code}: ${payload.message}"))
                 }
-                emit(Response.Data(payload.result))
             } else {
                 emit(Response.Error.Message(response.message()))
             }

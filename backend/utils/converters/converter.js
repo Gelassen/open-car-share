@@ -26,7 +26,7 @@ exports.dbToBusinessTripsByDriver = function(rows) {
 
 exports.dbToBusinessTripsByDriverSingle = function(row) {
     return {
-        id: row.tripsId,
+        id: row.tripId,
         locationFrom: row.locationFrom,
         locationTo: row.locationTo,
         date: row.date,

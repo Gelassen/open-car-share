@@ -53,6 +53,10 @@ exports.delete = async function(req, res) {
         if (authResult.error) {
             res.send(network.getErrorMessage(401, authResult.result))
         } else {
+            console.log("[trips_delete] " 
+            + JSON.stringify(req.body) + " " 
+            + JSON.stringify(authResult) + " " 
+            + JSON.stringify(req.query))
             let result = await trips.delete(req, res, authResult.result.split(":"))
                 .catch(e => JSON.stringify(err, Object.getOwnPropertyNames(e)))
             

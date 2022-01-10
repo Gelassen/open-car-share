@@ -55,7 +55,7 @@ exports.tripsByDriver = async function(req, res, authAsTokens) {
                 function(error, rows, fields) {
                     if (error != null) {
                         console.log("[action] trips by driver sql response, there is an error")
-                        var response = util.getErrorMessage(JSON.stringify(error))
+                        var response = util.getErrorMessage(500, JSON.stringify(error), [])
                         console.log("[trip] response: " + JSON.stringify(response))
                         resolve(JSON.stringify(response))
                     } else {
@@ -112,20 +112,25 @@ exports.create = async function(req, res) {
 exports.delete = async function(req, res, authAsTokens) {
     return new Promise( (resolve) => {
         pool.getConnection(function(err, connection) {
+            console.log("[trip] delete - start")
             connection.beginTransaction(function(error) {
                 if (error) { throw err; }
                 connection.query(
                     {sql: "SELECT count(*) as cnt FROM trips INNER JOIN drivers ON trips.driverId = drivers.id WHERE drivers.cell = ? AND drivers.secret = ?"},
                     [authAsTokens[0], authAsTokens[1]], 
                     function (error, rows, fields) {
+                        console.log("[trip] delete - get trips count for driver")
                         if (error) {
                             return connection.rollback(function() {
                                 throw error;
                             })
                         }
-                        var isUserAuthrorizedToOperateWithThisTrip = rows[0].cnt == 1
+                        console.log(JSON.stringify(rows))
+
+                        var isUserAuthrorizedToOperateWithThisTrip = rows[0].cnt > 0
                         console.log(isUserAuthrorizedToOperateWithThisTrip)
                         if (isUserAuthrorizedToOperateWithThisTrip) {
+                            console.log("[trip] delete - start delete query")
                             connection.query(
                                 {sql: 'DELETE FROM trips WHERE trips.id = ?'},
                                 [req.query.id],
@@ -135,20 +140,24 @@ exports.delete = async function(req, res, authAsTokens) {
                                             throw errorSecond;
                                         })
                                     }
+                                    console.log("[trip] delete - attempt to confirm result ")
                                     connection.commit(function(errorThird) {
                                         if (errorThird) {
+                                            console.log("[trip] delete - rollback")
                                             return connection.rollback(function() {
                                                 throw errorThird
                                             })
                                         } else {
+                                            console.log("[trip] delete - prepare and send the response")
                                             var payload = util.getServiceMessage(util.statusSuccess)
                                             var response = util.getPayloadMessage(payload)
-                                            resolve(response)
+                                            console.log(JSON.stringify(response))
+                                            resolve(JSON.stringify(response))
                                         }
                                         if (err) {
-                                          return connection.rollback(function() {
-                                            throw err;
-                                          });
+                                            return connection.rollback(function() {
+                                                throw err;
+                                            });
                                         }
                                       })
                                 })

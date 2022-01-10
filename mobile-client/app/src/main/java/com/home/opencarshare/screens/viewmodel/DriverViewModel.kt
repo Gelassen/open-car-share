@@ -382,6 +382,7 @@ class DriverViewModel
 
     fun cancelTrip(tripId: String, driver: DriverCredentials) {
         Log.d(App.TAG, "[action] start - cancel trip")
+        Log.d(App.TAG, "[action] cancel trip - trip id is $tripId")
         viewModelScope.launch {
             repo.cancelTrip(tripId, driver.cell, driver.secret)
                 .stateIn(viewModelScope)
@@ -397,7 +398,7 @@ class DriverViewModel
                                         tripsByDriver = newTripsList
                                     )
                                 } else {
-                                    Log.d(App.TAG, "[state] invalidation")
+                                    Log.d(App.TAG, "[state] cancel trip invalidation")
                                     state.copy(
                                         tripStatus = TripStatus.NONE,
                                         queueToCancel = state.queueToCancel.minus(tripId),
