@@ -40,3 +40,22 @@ exports.dbToBusinessTripsByDriverSingle = function(row) {
         }
     }
 }
+
+exports.dbToBusinessTrips = function(rows) {
+    let result = new Array(rows.length)
+    for (id = 0; id < rows.length; id++) {
+        result[id] = this.dbToBusinessTripSingle(rows[id])
+    }
+    return result
+}
+
+exports.dbToBusinessTripSingle = function(row) {
+    return {
+        id: row.id, 
+        locationFrom: row.locationFrom,
+        locationTo: row.locationTo, 
+        date: row.date,
+        availableSeats: row.availableSeats,
+        driverId: row.driverId
+    }
+}

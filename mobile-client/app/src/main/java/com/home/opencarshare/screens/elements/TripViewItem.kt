@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.home.opencarshare.R
 import com.home.opencarshare.model.pojo.Trip
+import com.home.opencarshare.providers.TripsProvider
 
 @Composable
 fun TripViewItem(data: Trip,
@@ -28,7 +29,8 @@ fun TripViewItem(data: Trip,
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick(data.id) }
+            .clickable {
+                onClick(data.id) }
     ) {
         Column(
             modifier = modifier
@@ -57,7 +59,7 @@ fun TripViewItem(data: Trip,
             }
             Column() {
                 Text(
-                    text = data.date,
+                    text = TripsProvider().dateInUserFormat(data.date),
                     modifier = Modifier.padding(textPadding),
                     fontSize = textSize)
                 Text(

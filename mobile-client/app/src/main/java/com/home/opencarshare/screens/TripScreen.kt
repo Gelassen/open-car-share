@@ -31,7 +31,7 @@ fun TripScreen(viewModel: TripsViewModel, navController: NavController, searchTr
         viewModel.getTrips(
             searchTrip.locationFrom,
             searchTrip.locationTo,
-            System.currentTimeMillis()
+            searchTrip.date
         )
     }
     TripsComposeList(

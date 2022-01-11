@@ -25,10 +25,11 @@ exports.getSpecific = function(req, res) {
 }
 
 exports.all = function(req, res) {
+    console.log("[trips] get all - " + JSON.stringify(req.query))
     return new Promise( (resolve) => {
         pool.getConnection(function(err, connection) {
             connection.query(
-                {sql: 'SELECT * FROM trips WHERE locationFrom = ?, locationTo = ?, time = ?', TIMEOUT},
+                {sql: 'SELECT * FROM trips WHERE locationFrom = ? AND locationTo = ? AND date = ?', TIMEOUT},
                 [req.query.locationFrom, req.query.locationTo, req.query.time],
                 function(error, rows, fields) {
                     if (error != null) {
@@ -36,7 +37,11 @@ exports.all = function(req, res) {
                         console.log("[trip] response: " + JSON.stringify(response))
                         resolve(JSON.stringify(response))
                     } else {
-                        resolve(JSON.stringify(util.getPayloadMessage(rows)))
+                        console.log("[trip] response: " + JSON.stringify(rows))
+                        var payload = converter.dbToBusinessTrips(rows)
+                        var response = JSON.stringify(util.getPayloadMessage(payload))
+                        console.log("[trip] response: " + response)
+                        resolve(response)
                     }
                     connection.release()
                 }

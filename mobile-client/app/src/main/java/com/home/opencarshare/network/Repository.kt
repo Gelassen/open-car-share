@@ -46,6 +46,8 @@ class Repository @Inject constructor(val api: IApi) {
                         "System doesn't support any other states except code 200, " +
                                 "but has received ${payload.code}")
                 }
+                Log.d(App.TAG, "payload $payload.result")
+                Log.d(App.TAG, "List item ${payload.result.get(0)}")
                 emit(Response.Data(payload.result))
             } else {
                 emit(Response.Error.Message(response.message()))

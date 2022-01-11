@@ -1,6 +1,7 @@
 package com.home.opencarshare.screens
 
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.buttonColors
@@ -14,19 +15,21 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.home.opencarshare.App
 import com.home.opencarshare.R
+import com.home.opencarshare.providers.TripsProvider
 import com.home.opencarshare.screens.elements.SingleCard
 import com.home.opencarshare.screens.elements.TextFieldEditable
 
 @Composable
-fun TripSearchScreen(onSearchClick: (locationFrom: String, locationTo: String, date: String) -> Unit) {
+fun TripSearchScreen(onSearchClick: (locationFrom: String, locationTo: String, date: Long) -> Unit) {
 
     SingleCard(content = { TripSearchContent(onSearchClick = onSearchClick) })
 
 }
 
 @Composable
-fun TripSearchContent(onSearchClick: (locationFrom: String, locationTo: String, date: String) -> Unit) {
+fun TripSearchContent(onSearchClick: (locationFrom: String, locationTo: String, date: Long) -> Unit) {
     val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
     val mainPadding = dimensionResource(id = R.dimen.main_margin_compact)
     // TODO figure out is there existing composable for date picker and numeric picker
@@ -53,7 +56,10 @@ fun TripSearchContent(onSearchClick: (locationFrom: String, locationTo: String, 
             icon = null
         )
         Button(
-            onClick = { onSearchClick(locationFromTxt, locationToTxt, pickUpDate) },
+            onClick = {
+                onSearchClick(locationFromTxt, locationToTxt, TripsProvider().dateTimeAsLong(pickUpDate))
+                Log.d(App.TAG, "On search click ${TripsProvider().dateTimeAsLong(pickUpDate)}")
+                      },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(baselineGrid)

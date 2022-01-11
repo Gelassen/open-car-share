@@ -18,7 +18,7 @@ class ArgsToTripConverter {
         return Trip(
             locationFrom = args.getString(AppNavigation.Trips.ARG_TRIP_LOCATION_FROM, ""),
             locationTo = args.getString(AppNavigation.Trips.ARG_TRIP_LOCATION_TO, ""),
-            date = args.getString(AppNavigation.Trips.ARG_TRIP_DATE, "")
+            date = args.getLong(AppNavigation.Trips.ARG_TRIP_DATE, 0L)
         )
     }
 }

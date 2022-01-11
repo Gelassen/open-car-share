@@ -57,7 +57,7 @@ fun AppNavGraph(
             arguments = listOf(
                 navArgument(AppNavigation.Trips.ARG_TRIP_LOCATION_FROM) { defaultValue = "" },
                 navArgument(AppNavigation.Trips.ARG_TRIP_LOCATION_TO) { defaultValue = "" },
-                navArgument(AppNavigation.Trips.ARG_TRIP_DATE) { defaultValue = "" }
+                navArgument(AppNavigation.Trips.ARG_TRIP_DATE) { defaultValue = 0L }
             )
         ) { navBackStackEntry ->
             val searchTrip = ArgsToTripConverter().convertArgsToTrip(navBackStackEntry)

@@ -18,15 +18,13 @@ class Trip(
     var locationTo: String = "",
     @SerializedName("date")
     @Expose
-    var date: String = "Wed, 4 Jul 2001 12:08:56 -0700",
+    var date: Long = 0L,
     @SerializedName("availableSeats")
     @Expose
     var availableSeats: String = "1",
-
     @SerializedName("driverId")
     @Expose
     var driverId: String = "",
-
     @SerializedName("driver")
     @Expose
     var driver: Driver = Driver()

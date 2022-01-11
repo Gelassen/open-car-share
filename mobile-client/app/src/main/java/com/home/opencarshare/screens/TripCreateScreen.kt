@@ -26,6 +26,7 @@ import com.home.opencarshare.model.pojo.Driver
 import com.home.opencarshare.model.pojo.DriverCredentials
 import com.home.opencarshare.model.pojo.ServiceMessage
 import com.home.opencarshare.model.pojo.Trip
+import com.home.opencarshare.providers.TripsProvider
 import com.home.opencarshare.screens.elements.*
 import com.home.opencarshare.screens.viewmodel.*
 import kotlinx.coroutines.coroutineScope
@@ -56,7 +57,7 @@ fun CreateTripContent(
                                 Trip(
                                     locationFrom = locationFromTxt,
                                     locationTo = locationToTxt,
-                                    date = pickUpDate,
+                                    date = TripsProvider().dateTimeAsLong(pickUpDate),
                                     driverId = state.driver.id
                                 )
                             )
@@ -81,7 +82,13 @@ fun CreateTripContent(
                     TripCreateScreenContent(
                         driver = state.driver,
                         onCreateClick = { locationFromTxt, locationToTxt, pickUpDate ->
-                            onCreateClick(Trip(locationFrom = locationFromTxt, locationTo = locationToTxt, date = pickUpDate))
+                            onCreateClick(
+                                Trip(
+                                    locationFrom = locationFromTxt,
+                                    locationTo = locationToTxt,
+                                    date = TripsProvider().dateTimeAsLong(pickUpDate)
+                                )
+                            )
                         }
                     )
                 })
