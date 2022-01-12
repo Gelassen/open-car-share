@@ -22,16 +22,10 @@ import com.home.opencarshare.screens.elements.SingleCard
 import com.home.opencarshare.screens.elements.TextFieldEditable
 import com.home.opencarshare.screens.viewmodel.PassengerTripUiState
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun TripSearchScreen(
-    viewModel: TripsViewModel,
-    onSearchClick: (locationFrom: String, locationTo: String, date: Long) -> Unit,
-    onTripsListUiState: (tripId: String) -> Unit,
-    onTripsBookUiState: () -> Unit
-) {
+fun TripSearchScreen(viewModel: TripsViewModel) {
     Log.d(App.TAG, "[screen] TripSearchScreen")
     val scope = rememberCoroutineScope()
     val state by viewModel.uiState.collectAsState()
@@ -59,7 +53,7 @@ fun TripSearchScreen(
             }
             is PassengerTripUiState.TripsListUiState -> {
                 Log.d(App.TAG, "[state] TripsListUiState")
-                NewTripsComposeList(
+                TripsComposeList(
                     state = (state as PassengerTripUiState.TripsListUiState).trips,
                     onClick = { tripId ->
                         scope.launch {

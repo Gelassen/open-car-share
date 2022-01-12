@@ -38,48 +38,8 @@ fun AppNavGraph(
         }
         composable(AppNavigation.Search.TRIP_SEARCH) {
             TripSearchScreen(
-                viewModel = passengerViewModel,
-                onSearchClick = { locationFrom, locationTo, date ->
-                // TODO validate data and navigate to the next screen
-                Toast.makeText(context, "$locationFrom - $locationTo at $date", Toast.LENGTH_LONG).show()
-                navController.navigate(
-                    "${AppNavigation.Trips.TRIPS}" +
-                            "?${AppNavigation.Trips.ARG_TRIP_LOCATION_FROM}=$locationFrom" +
-                            "&${AppNavigation.Trips.ARG_TRIP_LOCATION_TO}=$locationTo" +
-                            "&${AppNavigation.Trips.ARG_TRIP_DATE}=$date",
-                )},
-                onTripsListUiState = { tripId ->
-                    navController.navigate("${AppNavigation.Booking.TRIP_BOOKING}/$tripId")
-                                     },
-                onTripsBookUiState = { }
+                viewModel = passengerViewModel
             )
         }
-        composable(
-            route = "${AppNavigation.Trips.TRIPS}" +
-                    "?${AppNavigation.Trips.ARG_TRIP_LOCATION_FROM}={locationFrom}" +
-                    "&${AppNavigation.Trips.ARG_TRIP_LOCATION_TO}={locationTo}" +
-                    "&${AppNavigation.Trips.ARG_TRIP_DATE}={date}",
-            arguments = listOf(
-                navArgument(AppNavigation.Trips.ARG_TRIP_LOCATION_FROM) { defaultValue = "" },
-                navArgument(AppNavigation.Trips.ARG_TRIP_LOCATION_TO) { defaultValue = "" },
-                navArgument(AppNavigation.Trips.ARG_TRIP_DATE) { defaultValue = 0L }
-            )
-        ) { navBackStackEntry ->
-            val searchTrip = ArgsToTripConverter().convertArgsToTrip(navBackStackEntry)
-            TripScreen(
-                searchTrip = searchTrip,
-                onTripClick = { tripId -> navController.navigate("${AppNavigation.Booking.TRIP_BOOKING}/{tripId}")},
-                viewModel = passengerViewModel,
-                navController = navController)
-        }
-        composable(
-            "${AppNavigation.Booking.TRIP_BOOKING}/{tripId}",
-            arguments = listOf(navArgument("tripId") { type = NavType.StringType })
-        ) { navBackStackEntry ->
-            val tripId = navBackStackEntry.arguments?.getString(AppNavigation.Booking.ARG_TRIP_ID)
-            TripBookingScreen(
-                data = tripId,
-                viewModel = passengerViewModel,
-                navController = navController) }
     }
 }

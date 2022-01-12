@@ -76,7 +76,7 @@ fun DriverWithTripsContent(state: CreateTripUiState.DriverHasTripsUiState, viewM
                 )
             )
 
-            NewTripsComposeList(
+            TripsComposeList(
                 state = state.tripsByDriver,
                 onClick = { tripId -> viewModel.addTripInCancelList(tripId) },
                 modifier = Modifier
