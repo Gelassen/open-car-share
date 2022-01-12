@@ -34,6 +34,12 @@ fun TripScreen(viewModel: TripsViewModel, navController: NavController, searchTr
             searchTrip.date
         )
     }
+
+/*    NewTripsComposeList(
+        state = state,
+        onClick = { tripId -> navController.navigate("${AppNavigation.Booking.TRIP_BOOKING}/$tripId") },
+        modifier = Modifier
+    )*/
     TripsComposeList(
         state = state,
         onClick = { tripId -> navController.navigate("${AppNavigation.Booking.TRIP_BOOKING}/$tripId")},

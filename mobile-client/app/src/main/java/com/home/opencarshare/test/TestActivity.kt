@@ -34,14 +34,14 @@ import javax.inject.Inject
 fun TestScreen(viewModel: TripsViewModel) {
 
 //    val driverState by viewModel.newDriverState.collectAsState()
-    val driverState by viewModel.newCreateTripUiState.collectAsState()
+//    val driverState by viewModel.newCreateTripUiState.collectAsState()
 //    val driverState by viewModel.uiState.collectAsState()
 
-    Button(onClick = {viewModel.getDriver()}) {
+    Button(onClick = {/*viewModel.getDriver()*/}) {
 /*        if (driverState is Response.Data) {
             Text(text = "Driver: ${(driverState as Response.Data).data.name}")
         }*/
-        Text(text = "Driver: ${driverState.driver}")
+//        Text(text = "Driver: ${driverState.driver}")
     }
 
 }
@@ -85,7 +85,7 @@ class TestActivity : AppCompatActivity() {
         }
     }
 
-    fun runAuthScenario() {
+/*    fun runAuthScenario() {
         viewModel.createDriver(
             driverCredentials = DriverCredentials(
                 name = "Joe Dow",
@@ -102,7 +102,7 @@ class TestActivity : AppCompatActivity() {
         setContent {
             TestScreen(viewModel = viewModel)
         }
-    }
+    }*/
 
     fun runAnotherScenario() {
         setContent {

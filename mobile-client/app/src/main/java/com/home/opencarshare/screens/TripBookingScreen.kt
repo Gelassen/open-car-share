@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -36,17 +37,10 @@ fun TripBookingScreen(data: String?, viewModel: TripsViewModel, navController: N
         viewModel.getTripById(data!!)
     }
 
-    val scope = rememberCoroutineScope()
-
     SingleCard(content = {
         TripBookingContent(
             viewModel = viewModel,
-            onBookingClick = { tripId ->
-            /* TODO send request on the server and show confirmation page*/
-                scope.launch {
-                    viewModel.bookTrip(tripId)
-                }
-            }
+            onBookingClick = { tripId -> /* no op */ }
         )
     })
 
@@ -109,9 +103,14 @@ fun TripBookingInitialState(state: Response.Data<Trip>, onBookingClick: (String)
                 .background(color = colorResource(id = R.color.design_default_color_secondary_variant))
         )
         DriverCardContent(data = (state as Response.Data).data.driver)
+        /**
+         * Disable book button at current (alfa version), for more details
+         * see {@link https://github.com/Gelassen/open-car-share/issues/3}
+         * */
         Button(
             onClick = { onBookingClick(state.data.id) },
             modifier = Modifier
+                .alpha(0F)
                 .fillMaxWidth()
                 .padding(baselineGrid)
                 .height(dimensionResource(id = R.dimen.button_height)),
