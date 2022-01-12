@@ -26,6 +26,7 @@ import com.home.opencarshare.network.Response
 import com.home.opencarshare.screens.elements.DriverCardContent
 import com.home.opencarshare.screens.elements.ErrorPlaceholder
 import com.home.opencarshare.screens.elements.SingleCard
+import com.home.opencarshare.screens.viewmodel.PassengerTripUiState
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
 import kotlinx.coroutines.launch
 
@@ -37,19 +38,75 @@ fun TripBookingScreen(data: String?, viewModel: TripsViewModel, navController: N
         viewModel.getTripById(data!!)
     }
 
-    SingleCard(content = {
-        TripBookingContent(
-            viewModel = viewModel,
-            onBookingClick = { tripId -> /* no op */ }
-        )
-    })
+//    SingleCard(content = {
+//        TripBookingContent(
+//            state = state,
+//            onBookingClick = { tripId -> /* no op */ }
+//        )
+//    })
 
 }
 
 @Composable
-fun TripBookingContent(viewModel: TripsViewModel, onBookingClick: (String) -> Unit) {
-    val tripState by viewModel.trip.collectAsState()
-    val bookingState by viewModel.tripBookState.collectAsState()
+fun TripBookingContent(state: PassengerTripUiState.TripBookUiState) {
+    val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
+    val mainPadding = dimensionResource(id = R.dimen.main_margin_compact)
+    var componentSpace = dimensionResource(id = R.dimen.component_space)
+    Column(
+        modifier = Modifier
+            .wrapContentHeight()
+            .fillMaxWidth()
+            .padding(
+                paddingValues = PaddingValues(
+                    horizontal = mainPadding,
+                    vertical = baselineGrid
+                )
+            )
+    ) {
+        TripViewItem(
+            data = state.trip,
+            {},
+            modifier = Modifier.padding(vertical = baselineGrid)
+        )
+        Text(
+            text = stringResource(id = R.string.booking_screen_driver),
+            color = colorResource(id = R.color.white),
+            modifier = Modifier
+                .height(componentSpace)
+                .padding(start = baselineGrid)
+                .fillMaxWidth()
+                .background(color = colorResource(id = R.color.design_default_color_secondary_variant))
+        )
+        DriverCardContent(data = state.driver.toDriver())
+        /**
+         * Disable book button at current (alfa version), for more details
+         * see {@link https://github.com/Gelassen/open-car-share/issues/3}
+         * */
+        Button(
+            onClick = { /* no op */ },
+            modifier = Modifier
+                .alpha(0F)
+                .fillMaxWidth()
+                .padding(baselineGrid)
+                .height(dimensionResource(id = R.dimen.button_height)),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Blue,
+                contentColor = Color.White
+            ),
+        ) {
+            Text(
+                text = stringResource(id = R.string.booking_screen_confirm_button),
+                modifier = Modifier.align(Alignment.CenterVertically),
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+/*@Composable
+fun TripBookingContent(state: PassengerTripUiState/*viewModel: TripsViewModel*/, onBookingClick: (String) -> Unit) {
+//    val tripState by viewModel.trip.collectAsState()
+//    val bookingState by viewModel.tripBookState.collectAsState()
 
     if (tripState is Response.Error) {
         TripBookingErrorState(state = (tripState as Response.Error))
@@ -70,7 +127,7 @@ fun TripBookingContent(viewModel: TripsViewModel, onBookingClick: (String) -> Un
             }
         }
     }
-}
+}*/
 
 @Composable
 fun TripBookingInitialState(state: Response.Data<Trip>, onBookingClick: (String) -> Unit) {

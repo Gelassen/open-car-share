@@ -55,8 +55,8 @@ data class PassengerTripState(
     val trips: List<Trip> = emptyList(),
     val bookTrip: Trip = Trip(),
     val driver: DriverCredentials = DriverCredentials(),
-    val isLoading: Boolean,
-    val errors: List<String>,
+    val isLoading: Boolean = false,
+    val errors: List<String> = emptyList(),
     val flag: TripState = TripState.SEARCH
 ) {
     fun toUiState() : PassengerTripUiState {
@@ -93,102 +93,100 @@ class TripsViewModel
 @Inject constructor(
     @ApplicationContext private val context: Context,
     private val repo: Repository,
-    private val preferenceRepository: PreferenceRepository
-    ) : ViewModel() {
+    ) : BaseViewModel(context) {
 
-    /**
-     * TODO at first keep all state in one ViewModel; when it becomes not convenient, refactor code
-     * to expose business or functional isolated pieces
-     * */
-    private val placeholder: Response<List<Trip>> = Response.Data(Collections.emptyList())
-
-    private val _trips = MutableStateFlow(placeholder)
-    val trips: StateFlow<Response<List<Trip>>> = _trips
-
-    @Deprecated("use UI state instead")
-    private val _isLoading = MutableStateFlow(true)
-    @Deprecated("use UI state instead")
-    val isLoading: StateFlow<Boolean> = _isLoading
-
-    private val tripPlaceholder: Response<Trip> = Response.Data<Trip>(Trip())
-    private val _trip = MutableStateFlow(tripPlaceholder)
-    val trip: StateFlow<Response<Trip>> = _trip
-
-    private val tripBookStatePlaceholder: Response<ServiceMessage> =
-        Response.Data(ServiceMessage(ServiceMessage.Status.NONE))
-    private val _tripBookState = MutableStateFlow(tripBookStatePlaceholder)
-    val tripBookState: StateFlow<Response<ServiceMessage>> = _tripBookState
-
-    private val driverPreferencesFlow = preferenceRepository.driverPreferencesFlow
-
-    /*private val newCreateTripState = MutableStateFlow(CreateTripState())
-    val newCreateTripUiState = newCreateTripState
-        .map { it }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, CreateTripState())*/
+    private val state = MutableStateFlow(PassengerTripState())
+    val uiState = state
+        .map { it.toUiState() }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, state.value.toUiState())
 
     fun getTrips(locationFrom: String, locationTo: String, date: Long) {
         viewModelScope.launch {
             repo.getTrips(locationFrom, locationTo, date)
                 .stateIn(viewModelScope)
+                .onStart {
+                    state.update { state ->
+                        state.copy(
+                            isLoading = true
+                        )
+                    }
+                }
                 .onCompletion {
-                    _isLoading.value = false
+                    // no op, isLoading will be update in .collect() part
                 }
                 .catch { e ->
                     Log.e(App.TAG, "Something went wrong on loading trips for $locationFrom and ${Date(date)}", e)
-                    Response.Error.Exception(e)
                 }
                 .collect { it ->
-                    _trips.value = it
+                    when(it) {
+                        is Response.Data -> {
+                            Log.d(App.TAG, "[state] getTrips update state")
+                            state.update { state ->
+                                state.copy(flag = TripState.LIST, trips = it.data, isLoading = false)
+                            }
+                        }
+                        is Response.Error.Exception -> {
+                            Log.e(App.TAG, "[action] get trips - get an error", it.error)
+                            state.update { state ->
+                                state.copy(errors = state.errors + getErrorMessage(it), isLoading = false)
+                            }
+                        }
+                        is Response.Error.Message -> {
+                            state.update { state ->
+                                state.copy(errors = state.errors + getErrorMessage(it), isLoading = false)
+                            }
+                        }
+                        is Response.Loading<*> -> {
+                            // no op, operate with special state flag
+                        }
+                    }
                 }
         }
     }
 
+    // TODO expand backend to add driver to the response
     fun getTripById(id: String) {
         viewModelScope.launch {
             repo.getTripById(id)
                 .stateIn(viewModelScope)
                 .onStart {
-                    _isLoading.value = true
+                    state.update { state ->
+                        state.copy(isLoading = true)
+                    }
                 }
-                .onCompletion { e ->
-                    _isLoading.value = false
+                .onCompletion {
+                    // no op, isLoading will be updated in .collect() part
                 }
                 .catch { e ->
                     Log.e(App.TAG, "Something went wrong on loading with id $id", e)
-                    Response.Error.Exception(e)
                 }
                 .collect { it ->
-                    _trip.value = it
+                    when (it) {
+                        is Response.Data<Trip> -> {
+                            Log.d(App.TAG, "[state] getTripById - update trips state")
+                            state.update { state ->
+                                state.copy(flag = TripState.BOOKING, bookTrip = it.data, isLoading = false)
+                            }
+                        }
+                        is Response.Error.Exception -> {
+                            Log.d(App.TAG, "[state] getTripById - update trips error state")
+                            state.update { state ->
+                                val errors = state.errors + getErrorMessage(it)
+                                state.copy(errors = errors, isLoading = false)
+                            }
+                        }
+                        is Response.Error.Message -> {
+                            Log.d(App.TAG, "[state] getTripById - update trips error state with message")
+                            state.update { state ->
+                                val errors = state.errors + getErrorMessage(it)
+                                state.copy(errors = errors, isLoading = false)
+                            }
+                        }
+                        is Response.Loading<*> -> {
+                            // no op, isLoading will be updated in .collect() and .onStart() points
+                        }
+                    }
                 }
         }
     }
-
-/*    fun bookTrip(tripId: String) {
-        viewModelScope.launch {
-            repo.bookTrip(tripId)
-                .stateIn(viewModelScope)
-                .onStart {
-                    _isLoading.value = true
-                }
-                .onCompletion { e ->
-                    _isLoading.value = false
-                }
-                .catch { e ->
-                    Log.e(App.TAG, "Something went wrong on loading with id $tripId", e)
-                    Response.Error.Exception(e)
-                }
-                .collect { it ->
-                    _tripBookState.value = it
-                }
-        }
-    }*/
-
 }
-
-/*
-data class CreateTripState(
-    val driver: DriverCredentials = DriverCredentials(),
-    val tripStatus: ServiceMessage = ServiceMessage(),
-    val isLoading: Boolean = false,
-    val errors: List<String> = emptyList()
-)*/

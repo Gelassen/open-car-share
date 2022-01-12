@@ -14,17 +14,68 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.home.opencarshare.App
 import com.home.opencarshare.R
 import com.home.opencarshare.providers.TripsProvider
+import com.home.opencarshare.screens.elements.ErrorCard
 import com.home.opencarshare.screens.elements.SingleCard
 import com.home.opencarshare.screens.elements.TextFieldEditable
+import com.home.opencarshare.screens.viewmodel.PassengerTripUiState
+import com.home.opencarshare.screens.viewmodel.TripsViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
-fun TripSearchScreen(onSearchClick: (locationFrom: String, locationTo: String, date: Long) -> Unit) {
-
-    SingleCard(content = { TripSearchContent(onSearchClick = onSearchClick) })
+fun TripSearchScreen(
+    viewModel: TripsViewModel,
+    onSearchClick: (locationFrom: String, locationTo: String, date: Long) -> Unit,
+    onTripsListUiState: (tripId: String) -> Unit,
+    onTripsBookUiState: () -> Unit
+) {
+    Log.d(App.TAG, "[screen] TripSearchScreen")
+    val scope = rememberCoroutineScope()
+    val state by viewModel.uiState.collectAsState()
+    if (state.errors.isNotEmpty()) {
+        ErrorCard(state = state.errors.last())
+    } else {
+        if (state.isLoading) {
+            Log.d(App.TAG, "[TripSearchScreen] isLoading state on")
+        }
+        when(state) {
+            is PassengerTripUiState.SearchTripUiState -> {
+                Log.d(App.TAG, "[state] SearchTripUiState")
+                SingleCard(content = {
+                    TripSearchContent(
+                        onSearchClick = { locationFrom, locationTo, date ->
+                            scope.launch {
+                                viewModel.getTrips(
+                                    locationFrom = locationFrom,
+                                    locationTo = locationTo,
+                                    date = date
+                                )
+                            }
+                        })
+                })
+            }
+            is PassengerTripUiState.TripsListUiState -> {
+                Log.d(App.TAG, "[state] TripsListUiState")
+                NewTripsComposeList(
+                    state = (state as PassengerTripUiState.TripsListUiState).trips,
+                    onClick = { tripId ->
+                        scope.launch {
+                            viewModel.getTripById(tripId)
+                        }
+                    },
+                    modifier = Modifier)
+            }
+            is PassengerTripUiState.TripBookUiState -> {
+                Log.d(App.TAG, "[state] TripBookUiState")
+                SingleCard(content = {
+                    TripBookingContent(state = state as PassengerTripUiState.TripBookUiState)
+                })
+            }
+        }
+    }
 
 }
 

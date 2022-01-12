@@ -76,7 +76,7 @@ class TestActivity : AppCompatActivity() {
         val module = NetworkModule()
         repo = Repository(module.provideApi(this, module.provideClient(module.provideInterceptor(applicationContext))))
 
-        runDriverScenario()
+//        runDriverScenario()
     }
 
     fun runDriverScenario() {

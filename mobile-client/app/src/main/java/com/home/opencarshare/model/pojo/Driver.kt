@@ -72,6 +72,14 @@ class DriverCredentials(
                 || cell.isEmpty()
     }
 
+    fun toDriver(): Driver {
+        return Driver(
+            id = id,
+            name = name,
+            tripsCount = tripsCount,
+            cell = cell,
+        )
+    }
 
     override fun toString(): String {
         return "DriverCredentials(id='$id', " +

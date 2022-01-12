@@ -1,7 +1,6 @@
 package com.home.opencarshare
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -38,7 +37,9 @@ fun AppNavGraph(
             DriverScreen(viewModel = driverViewModel)
         }
         composable(AppNavigation.Search.TRIP_SEARCH) {
-            TripSearchScreen(onSearchClick = { locationFrom, locationTo, date ->
+            TripSearchScreen(
+                viewModel = passengerViewModel,
+                onSearchClick = { locationFrom, locationTo, date ->
                 // TODO validate data and navigate to the next screen
                 Toast.makeText(context, "$locationFrom - $locationTo at $date", Toast.LENGTH_LONG).show()
                 navController.navigate(
@@ -46,8 +47,12 @@ fun AppNavGraph(
                             "?${AppNavigation.Trips.ARG_TRIP_LOCATION_FROM}=$locationFrom" +
                             "&${AppNavigation.Trips.ARG_TRIP_LOCATION_TO}=$locationTo" +
                             "&${AppNavigation.Trips.ARG_TRIP_DATE}=$date",
-                )
-            })
+                )},
+                onTripsListUiState = { tripId ->
+                    navController.navigate("${AppNavigation.Booking.TRIP_BOOKING}/$tripId")
+                                     },
+                onTripsBookUiState = { }
+            )
         }
         composable(
             route = "${AppNavigation.Trips.TRIPS}" +
@@ -61,7 +66,11 @@ fun AppNavGraph(
             )
         ) { navBackStackEntry ->
             val searchTrip = ArgsToTripConverter().convertArgsToTrip(navBackStackEntry)
-            TripScreen(searchTrip = searchTrip, viewModel = passengerViewModel, navController = navController)
+            TripScreen(
+                searchTrip = searchTrip,
+                onTripClick = { tripId -> navController.navigate("${AppNavigation.Booking.TRIP_BOOKING}/{tripId}")},
+                viewModel = passengerViewModel,
+                navController = navController)
         }
         composable(
             "${AppNavigation.Booking.TRIP_BOOKING}/{tripId}",

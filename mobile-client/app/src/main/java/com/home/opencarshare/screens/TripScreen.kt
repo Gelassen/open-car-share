@@ -20,13 +20,17 @@ import com.home.opencarshare.R
 import com.home.opencarshare.navigation.AppNavigation
 import com.home.opencarshare.model.pojo.Trip
 import com.home.opencarshare.network.Response
+import com.home.opencarshare.screens.viewmodel.PassengerTripUiState
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
 
 @Composable
-fun TripScreen(viewModel: TripsViewModel, navController: NavController, searchTrip: Trip) {
+fun TripScreen(viewModel: TripsViewModel,
+               onTripClick: (tripId: String) -> Unit,
+               navController: NavController,
+               searchTrip: Trip) {
     Log.d(App.TAG, "Trips: ${searchTrip.toString()}")
 
-    val state by viewModel.trips.collectAsState()
+    val state by viewModel.uiState.collectAsState()
     LaunchedEffect(viewModel) {
         viewModel.getTrips(
             searchTrip.locationFrom,
@@ -35,15 +39,26 @@ fun TripScreen(viewModel: TripsViewModel, navController: NavController, searchTr
         )
     }
 
+    when(state) {
+        is PassengerTripUiState.TripsListUiState -> {
+            NewTripsComposeList(
+                state = (state as PassengerTripUiState.TripsListUiState).trips,
+                onClick = onTripClick,
+                modifier = Modifier)
+        }
+    }
+
+
+
 /*    NewTripsComposeList(
         state = state,
         onClick = { tripId -> navController.navigate("${AppNavigation.Booking.TRIP_BOOKING}/$tripId") },
         modifier = Modifier
     )*/
-    TripsComposeList(
+/*    TripsComposeList(
         state = state,
         onClick = { tripId -> navController.navigate("${AppNavigation.Booking.TRIP_BOOKING}/$tripId")},
-    )
+    )*/
 }
 
 @Deprecated("Use NewTripsComposeList")
