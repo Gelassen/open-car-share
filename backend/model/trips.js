@@ -9,13 +9,26 @@ exports.getSpecific = function(req, res) {
         pool.getConnection(function(err, connection) {
             console.log("req.params.id: " + pool.escape(req.query.id))
             connection.query(
-                {sql: 'SELECT * FROM trips WHERE id = ?', TIMEOUT},
+                {sql: 'SELECT trips.id as tripId, trips.locationFrom, trips.locationTo, trips.date, trips.availableSeats, trips.driverId,  drivers.id as driverId, drivers.name as driverName, drivers.cell, drivers.tripsCount FROM trips INNER JOIN drivers  ON trips.driverId = drivers.id WHERE trips.id = ?', TIMEOUT},
                 [req.query.id],
                 function(error, rows, fields) {
+                    var response
                     if (error != null) {
                         resolve(JSON.stringify(util.getErrorMessage()))
                     } else {
-                        resolve(JSON.stringify(util.getPayloadMessage(rows)))
+                        if (rows.length === 1) {
+                            response = JSON.stringify(
+                                util.getPayloadMessage(
+                                    converter.dbToBusinessTripsByDriver(rows)
+                                )
+                            )
+                        } else {
+                            response = JSON.stringify(
+                                util.getErrorMessage(401, "There is no trip match for this request, find rows count is " + rows.length)
+                            ) 
+                        }
+                        console.log("[trips] get specific trip response " + response)
+                        resolve(response)
                     }
                     connection.release()
                 }

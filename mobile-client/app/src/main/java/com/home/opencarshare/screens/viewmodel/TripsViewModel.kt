@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.home.opencarshare.App
 import com.home.opencarshare.R
+import com.home.opencarshare.model.pojo.Driver
 import com.home.opencarshare.model.pojo.DriverCredentials
 import com.home.opencarshare.model.pojo.ServiceMessage
 import com.home.opencarshare.model.pojo.Trip
@@ -39,7 +40,7 @@ sealed interface PassengerTripUiState {
 
     data class TripBookUiState(
         val trip: Trip = Trip(),
-        val driver: DriverCredentials = DriverCredentials(),
+        val driver: Driver = Driver(),
         override val isLoading: Boolean = false,
         override val errors: List<String> = emptyList()
     ) : PassengerTripUiState
@@ -54,7 +55,7 @@ enum class TripState {
 data class PassengerTripState(
     val trips: List<Trip> = emptyList(),
     val bookTrip: Trip = Trip(),
-    val driver: DriverCredentials = DriverCredentials(),
+    val driver: Driver = Driver(),
     val isLoading: Boolean = false,
     val errors: List<String> = emptyList(),
     val flag: TripState = TripState.SEARCH
@@ -146,6 +147,7 @@ class TripsViewModel
 
     // TODO expand backend to add driver to the response
     fun getTripById(id: String) {
+        Log.d(App.TAG, "[action] getTripById() - start")
         viewModelScope.launch {
             repo.getTripById(id)
                 .stateIn(viewModelScope)
@@ -161,11 +163,16 @@ class TripsViewModel
                     Log.e(App.TAG, "Something went wrong on loading with id $id", e)
                 }
                 .collect { it ->
+                    Log.d(App.TAG, "[state] getTripById() - collect")
                     when (it) {
                         is Response.Data<Trip> -> {
                             Log.d(App.TAG, "[state] getTripById - update trips state")
                             state.update { state ->
-                                state.copy(flag = TripState.BOOKING, bookTrip = it.data, isLoading = false)
+                                state.copy(
+                                    flag = TripState.BOOKING,
+                                    bookTrip = it.data,
+                                    driver = it.data.driver,
+                                    isLoading = false)
                             }
                         }
                         is Response.Error.Exception -> {

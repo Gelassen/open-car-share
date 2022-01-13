@@ -1,5 +1,6 @@
 package com.home.opencarshare.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -13,13 +14,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextIndent
+import androidx.compose.ui.unit.ExperimentalUnitApi
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
+import androidx.compose.ui.unit.dp
+import com.home.opencarshare.App
 import com.home.opencarshare.R
 import com.home.opencarshare.screens.elements.DriverCardContent
 import com.home.opencarshare.screens.viewmodel.PassengerTripUiState
 
+@ExperimentalUnitApi
 @Composable
 fun TripBookingContent(state: PassengerTripUiState.TripBookUiState) {
+    Log.d(App.TAG, "[screen] TripBookingContent")
     val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
     val mainPadding = dimensionResource(id = R.dimen.main_margin_compact)
     var componentSpace = dimensionResource(id = R.dimen.component_space)
@@ -42,13 +52,28 @@ fun TripBookingContent(state: PassengerTripUiState.TripBookUiState) {
         Text(
             text = stringResource(id = R.string.booking_screen_driver),
             color = colorResource(id = R.color.white),
+            style = TextStyle(textIndent = TextIndent(firstLine = TextUnit(16F, TextUnitType.Sp))),
             modifier = Modifier
                 .height(componentSpace)
                 .padding(start = baselineGrid)
                 .fillMaxWidth()
                 .background(color = colorResource(id = R.color.design_default_color_secondary_variant))
         )
-        DriverCardContent(data = state.driver.toDriver())
+        Log.d(App.TAG, "[state] state.driver - ${state}")
+        Log.d(App.TAG, "[state] state.driver.toDriver() - ${state.driver}")
+        DriverCardContent(data = state.driver)
+
+        Text(
+            text = stringResource(id = R.string.booking_screen_msg),
+            color = colorResource(id = R.color.white),
+            style = TextStyle(textIndent = TextIndent(firstLine = TextUnit(16F, TextUnitType.Sp))),
+            modifier = Modifier
+//                .height(componentSpace)
+//                .height(32.dp)
+                .padding(start = baselineGrid)
+                .fillMaxWidth()
+                .background(color = colorResource(id = R.color.colorPrimaryDark))
+        )
         /**
          * Disable book button at current (alfa version), for more details
          * see {@link https://github.com/Gelassen/open-car-share/issues/3}

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import okhttp3.Credentials
+import java.lang.Exception
 import javax.inject.Inject
 
 class Repository @Inject constructor(val api: IApi) {
@@ -61,6 +62,11 @@ class Repository @Inject constructor(val api: IApi) {
 
     fun getTripById(id: String) : Flow<Response<Trip>> {
         return flow {
+            try {
+
+            } catch (ex: Exception) {
+                Log.e(App.TAG, "Got an exception" )
+            }
             val response = api.getTripById(id)
             if (response.isSuccessful) {
                 val payload = response.body()!!
