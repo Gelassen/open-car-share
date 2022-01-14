@@ -5,7 +5,7 @@ var auth = require('../utils/auth.js')
 var stubs = require('../utils/stubs.js')
 
 exports.specific = async function(req, res) {
-    let result = await trips.getSpecific(req)
+    let result = stubs.mockErrorResponse()//await trips.getSpecific(req)
     res.send(result)
     res.end()
 }

@@ -101,6 +101,15 @@ class TripsViewModel
         .map { it.toUiState() }
         .stateIn(viewModelScope, SharingStarted.Eagerly, state.value.toUiState())
 
+    fun errorShown(error: String) {
+        state.update { it ->
+            Log.d(App.TAG, "[state] errors before update ${it.errors.size}")
+            val errors = it.errors.filterNot { it.equals(error) }
+            Log.d(App.TAG, "[state] errors after update ${errors.size}")
+            it.copy(errors = errors)
+        }
+    }
+
     fun getTrips(locationFrom: String, locationTo: String, date: Long) {
         viewModelScope.launch {
             repo.getTrips(locationFrom, locationTo, date)

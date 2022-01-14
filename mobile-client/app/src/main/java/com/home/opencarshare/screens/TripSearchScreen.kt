@@ -33,7 +33,7 @@ fun TripSearchScreen(viewModel: TripsViewModel) {
     val state by viewModel.uiState.collectAsState()
     if (state.errors.isNotEmpty()) {
         Log.d(App.TAG, "Show error card")
-        ErrorCard(state = state.errors.last())
+        ErrorCard(state = state.errors.last(), viewModel)
     } else {
         if (state.isLoading) {
             Log.d(App.TAG, "[TripSearchScreen] isLoading state on")

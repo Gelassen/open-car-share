@@ -98,7 +98,7 @@ class DriverViewModel
     @ApplicationContext private val context: Context,
     private val repo: Repository,
     private val preferenceRepository: PreferenceRepository
-    ) : ViewModel() {
+    ) : BaseViewModel(context) {
 
     private val driverPreferencesFlow = preferenceRepository.driverPreferencesFlow
 
@@ -122,7 +122,7 @@ class DriverViewModel
         }
     }
 
-    fun getErrorMessage(errorResponse: Response.Error): String {
+/*    fun getErrorMessage(errorResponse: Response.Error): String {
         var errorMessage = ""
         if (errorResponse is Response.Error.Exception) {
             errorMessage = context.resources.getString(R.string.default_error_message)
@@ -130,7 +130,7 @@ class DriverViewModel
             errorMessage = context.resources.getString(R.string.error_message_with_server_response, (errorResponse as Response.Error.Message).msg)
         }
         return errorMessage
-    }
+    }*/
 
     fun getDriver() {
         Log.d(App.TAG, "[action] attempt to get driver")
@@ -275,7 +275,7 @@ class DriverViewModel
         }
     }
 
-    fun getTripById(id: String) {
+/*    fun getTripById(id: String) {
         viewModelScope.launch {
             repo.getTripById(id)
                 .stateIn(viewModelScope)
@@ -314,7 +314,7 @@ class DriverViewModel
                     }
                 }
         }
-    }
+    }*/
 
     // TODO you have to filter trips that are outdated, e.g. 24 hours after their start time
     fun getTripsByDriver() {
