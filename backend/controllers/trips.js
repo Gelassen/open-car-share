@@ -2,6 +2,7 @@ var trips = require('../model/trips.js')
 var driver = require('../controllers/driver')
 var network = require('../utils/network')
 var auth = require('../utils/auth.js')
+var stubs = require('../utils/stubs.js')
 
 exports.specific = async function(req, res) {
     let result = await trips.getSpecific(req)

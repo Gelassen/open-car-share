@@ -76,14 +76,7 @@ fun TripBookingContent(state: PassengerTripUiState.TripBookUiState) {
                 text = stringResource(id = R.string.booking_screen_msg),
                 color = colorResource(id = R.color.white),
                 style = TextStyle(textIndent = TextIndent(firstLine = TextUnit(16F, TextUnitType.Sp))),
-                textAlign = TextAlign.Center,
-
-/*                modifier = Modifier
-//                .height(componentSpace)
-                    .height(32.dp)
-                    .padding(start = baselineGrid)
-                    .fillMaxWidth()
-                    .background(color = colorResource(id = R.color.colorPrimaryDark))*/
+                textAlign = TextAlign.Center
             )
         }
 

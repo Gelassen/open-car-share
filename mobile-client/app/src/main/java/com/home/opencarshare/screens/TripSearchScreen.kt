@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.ExperimentalUnitApi
 import com.home.opencarshare.App
 import com.home.opencarshare.R
 import com.home.opencarshare.providers.TripsProvider
@@ -24,12 +25,14 @@ import com.home.opencarshare.screens.viewmodel.PassengerTripUiState
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
 import kotlinx.coroutines.launch
 
+@ExperimentalUnitApi
 @Composable
 fun TripSearchScreen(viewModel: TripsViewModel) {
     Log.d(App.TAG, "[screen] TripSearchScreen")
     val scope = rememberCoroutineScope()
     val state by viewModel.uiState.collectAsState()
     if (state.errors.isNotEmpty()) {
+        Log.d(App.TAG, "Show error card")
         ErrorCard(state = state.errors.last())
     } else {
         if (state.isLoading) {

@@ -3,6 +3,7 @@ package com.home.opencarshare
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -14,6 +15,7 @@ import com.home.opencarshare.screens.*
 import com.home.opencarshare.screens.viewmodel.DriverViewModel
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
 
+@ExperimentalUnitApi
 @Composable
 fun AppNavGraph(
     context: Context,

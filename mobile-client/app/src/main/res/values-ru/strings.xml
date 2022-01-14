@@ -23,4 +23,5 @@
     <string name="driver_screen_confirmation_message">Вы хотите отменить поездку?</string>
     <string name="driver_screen_button_confirm">Да</string>
     <string name="driver_screen_button_cancel">Нет</string>
+    <string name="list_screen_no_items">Нет поездок</string>
 </resources>

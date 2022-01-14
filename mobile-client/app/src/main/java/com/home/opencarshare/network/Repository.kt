@@ -41,15 +41,12 @@ class Repository @Inject constructor(val api: IApi) {
             val response = api.getTrips(locationFrom, locationTo, time)
             if (response.isSuccessful) {
                 val payload = response.body()!!
-                payload.message
-                if (payload.code.toInt() != 200) {
-                    throw IllegalStateException(
-                        "System doesn't support any other states except code 200, " +
-                                "but has received ${payload.code}")
+                if (payload.code.toInt() == 200) {
+                    Log.d(App.TAG, "payload $payload.result")
+                    emit(Response.Data(payload.result))
+                } else {
+                    emit(Response.Error.Message("${payload.code}: ${payload.message}"))
                 }
-                Log.d(App.TAG, "payload $payload.result")
-                Log.d(App.TAG, "List item ${payload.result.get(0)}")
-                emit(Response.Data(payload.result))
             } else {
                 emit(Response.Error.Message(response.message()))
             }
@@ -62,20 +59,15 @@ class Repository @Inject constructor(val api: IApi) {
 
     fun getTripById(id: String) : Flow<Response<Trip>> {
         return flow {
-            try {
-
-            } catch (ex: Exception) {
-                Log.e(App.TAG, "Got an exception" )
-            }
             val response = api.getTripById(id)
             if (response.isSuccessful) {
                 val payload = response.body()!!
-                if (payload.code.toInt() != 200) {
-                    throw IllegalStateException(
-                        "System doesn't support any other states except code 200, " +
-                                "but has received ${payload.code}")
+                Log.d(App.TAG, "getTripById() response $payload")
+                if (payload.code.toInt() == 200) {
+                    emit(Response.Data(payload.result.first()))
+                } else {
+                    emit(Response.Error.Message("${payload.code}: ${payload.message}"))
                 }
-                emit(Response.Data(payload.result.first()))
             } else {
                 emit(Response.Error.Message(response.message()))
             }
