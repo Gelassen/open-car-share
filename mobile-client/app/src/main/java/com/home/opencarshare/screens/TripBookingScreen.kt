@@ -16,6 +16,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
@@ -63,17 +64,29 @@ fun TripBookingContent(state: PassengerTripUiState.TripBookUiState) {
         Log.d(App.TAG, "[state] state.driver.toDriver() - ${state.driver}")
         DriverCardContent(data = state.driver)
 
-        Text(
-            text = stringResource(id = R.string.booking_screen_msg),
-            color = colorResource(id = R.color.white),
-            style = TextStyle(textIndent = TextIndent(firstLine = TextUnit(16F, TextUnitType.Sp))),
+        Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
-//                .height(componentSpace)
-//                .height(32.dp)
+                .height(32.dp)
                 .padding(start = baselineGrid)
                 .fillMaxWidth()
                 .background(color = colorResource(id = R.color.colorPrimaryDark))
-        )
+        ) {
+            Text(
+                text = stringResource(id = R.string.booking_screen_msg),
+                color = colorResource(id = R.color.white),
+                style = TextStyle(textIndent = TextIndent(firstLine = TextUnit(16F, TextUnitType.Sp))),
+                textAlign = TextAlign.Center,
+
+/*                modifier = Modifier
+//                .height(componentSpace)
+                    .height(32.dp)
+                    .padding(start = baselineGrid)
+                    .fillMaxWidth()
+                    .background(color = colorResource(id = R.color.colorPrimaryDark))*/
+            )
+        }
+
         /**
          * Disable book button at current (alfa version), for more details
          * see {@link https://github.com/Gelassen/open-car-share/issues/3}
