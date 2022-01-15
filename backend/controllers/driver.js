@@ -2,6 +2,7 @@ var driver = require('../model/driver')
 var auth = require('../utils/auth')
 var network = require('../utils/network')
 var validator = require('../utils/validator')
+var stubs = require('../utils/stubs.js')
 
 exports.specific = async function(req, res) {
     if (req.get("Authorization") === undefined) {
@@ -24,11 +25,11 @@ exports.specific = async function(req, res) {
 
 
 exports.create = async function(req, res) {
-    // test only
-    req.body.name = "Joe Dow"
-    req.body.cell = "+79808007090"
-    req.body.secret = "clean_blood"
-    req.body.tripsCount = "0"
+    // // test only
+    // req.body.name = "Joe Dow"
+    // req.body.cell = "+79808007090"
+    // req.body.secret = "clean_blood"
+    // req.body.tripsCount = "0"
 
     if (validator.validateDriverPayload(req.body)) {
         // TODO add server error handler or add check for uniqueness and Error [ERR_HTTP_HEADERS_SENT] issue

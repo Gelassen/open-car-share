@@ -268,10 +268,6 @@ class DriverViewModel
         }
     }
 
-    fun getTripsByDriverSafely() {
-        
-    }
-
     fun getTripsByDriver() {
         viewModelScope.launch {
             Log.d(App.TAG, "[action] get trips by driver start")

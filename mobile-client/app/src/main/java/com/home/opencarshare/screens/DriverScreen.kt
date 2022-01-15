@@ -60,7 +60,7 @@ fun DriverScreen(viewModel: DriverViewModel) {
 
     } else {
         Log.d(App.TAG, "[state] ErrorCard")
-        ErrorCard(state = state.errors.last())
+        ErrorCard(state = state.errors.last(), viewModel = viewModel)
     }
 }
 

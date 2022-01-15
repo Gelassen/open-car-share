@@ -15,3 +15,11 @@ exports.mockErrorResponse = function(res) {
     console.log(response)
     return response 
 }
+
+exports.mockDriverErrorResponse = function(res) {
+    response = JSON.stringify(
+        util.getErrorMessage(401, "There is no auth header", {})
+    )
+    console.log(response)
+    return response
+}

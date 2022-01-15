@@ -10,6 +10,7 @@ import com.home.opencarshare.App
 import com.home.opencarshare.R
 import com.home.opencarshare.network.Response
 import com.home.opencarshare.screens.viewmodel.BaseViewModel
+import com.home.opencarshare.screens.viewmodel.DriverViewModel
 import com.home.opencarshare.screens.viewmodel.TripsViewModel
 
 @Deprecated(message = "Use ErrorCard(state: String, viewModel: BaseViewModel) instead")
@@ -31,6 +32,9 @@ fun ErrorCard(state: String, viewModel: BaseViewModel) {
         Log.d(App.TAG, "[action] on back pressed is called")
         when(viewModel) {
             is TripsViewModel -> {
+                viewModel.errorShown(errorMessage)
+            }
+            is DriverViewModel -> {
                 viewModel.errorShown(errorMessage)
             }
         }

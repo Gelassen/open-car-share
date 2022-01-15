@@ -14,7 +14,7 @@ exports.getSpecific = function(req, res) {
                 function(error, rows, fields) {
                     var response
                     if (error != null) {
-                        resolve(JSON.stringify(util.getErrorMessage()))
+                        resolve(JSON.stringify(util.getErrorMessage([])))
                     } else {
                         if (rows.length === 1) {
                             response = JSON.stringify(
@@ -24,7 +24,7 @@ exports.getSpecific = function(req, res) {
                             )
                         } else {
                             response = JSON.stringify(
-                                util.getErrorMessage(401, "There is no trip match for this request, find rows count is " + rows.length)
+                                util.getErrorMessage(401, "There is no trip match for this request, find rows count is " + rows.length, [])
                             ) 
                         }
                         console.log("[trips] get specific trip response " + response)
@@ -46,7 +46,7 @@ exports.all = function(req, res) {
                 [req.query.locationFrom, req.query.locationTo, req.query.time],
                 function(error, rows, fields) {
                     if (error != null) {
-                        var response = util.getErrorMessage(JSON.stringify(error))
+                        var response = util.getErrorMessage(500, JSON.stringify(error), [])
                         console.log("[trip] response: " + JSON.stringify(response))
                         resolve(JSON.stringify(response))
                     } else {
