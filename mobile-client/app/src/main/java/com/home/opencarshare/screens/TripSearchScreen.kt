@@ -2,6 +2,7 @@ package com.home.opencarshare.screens
 
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.buttonColors
@@ -56,20 +57,11 @@ fun TripSearchScreen(viewModel: TripsViewModel) {
             }
             is PassengerTripUiState.TripsListUiState -> {
                 Log.d(App.TAG, "[state] TripsListUiState")
-                TripsComposeList(
-                    state = (state as PassengerTripUiState.TripsListUiState).trips,
-                    onClick = { tripId ->
-                        scope.launch {
-                            viewModel.getTripById(tripId)
-                        }
-                    },
-                    modifier = Modifier)
+                TripListCard(state, viewModel)
             }
             is PassengerTripUiState.TripBookUiState -> {
                 Log.d(App.TAG, "[state] TripBookUiState")
-                SingleCard(content = {
-                    TripBookingContent(state = state as PassengerTripUiState.TripBookUiState)
-                })
+                TripBookingCard(state, viewModel)
             }
         }
     }

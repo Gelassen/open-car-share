@@ -1,6 +1,7 @@
 package com.home.opencarshare.screens
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -25,7 +26,20 @@ import androidx.compose.ui.unit.dp
 import com.home.opencarshare.App
 import com.home.opencarshare.R
 import com.home.opencarshare.screens.elements.DriverCardContent
+import com.home.opencarshare.screens.elements.SingleCard
 import com.home.opencarshare.screens.viewmodel.PassengerTripUiState
+import com.home.opencarshare.screens.viewmodel.TripsViewModel
+
+@OptIn(ExperimentalUnitApi::class)
+@Composable
+fun TripBookingCard(state: PassengerTripUiState, viewModel: TripsViewModel) {
+    BackHandler {
+        viewModel.onReturnBackFromBookingScreen()
+    }
+    SingleCard(content = {
+        TripBookingContent(state = state as PassengerTripUiState.TripBookUiState)
+    })
+}
 
 @ExperimentalUnitApi
 @Composable

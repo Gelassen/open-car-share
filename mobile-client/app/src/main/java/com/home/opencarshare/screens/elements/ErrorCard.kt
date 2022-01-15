@@ -41,6 +41,4 @@ fun ErrorCard(state: String, viewModel: BaseViewModel) {
             ErrorPlaceholder(text = errorMessage)
         }
     )
-    Toast.makeText(LocalContext.current, "You are on error card", Toast.LENGTH_SHORT).show()
-    // TODO on back navigation don't forget update error message by removing the last error
 }

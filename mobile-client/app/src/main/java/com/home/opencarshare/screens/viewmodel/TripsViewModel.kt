@@ -154,7 +154,6 @@ class TripsViewModel
         }
     }
 
-    // TODO expand backend to add driver to the response
     fun getTripById(id: String) {
         Log.d(App.TAG, "[action] getTripById() - start")
         viewModelScope.launch {
@@ -203,6 +202,20 @@ class TripsViewModel
                         }
                     }
                 }
+        }
+    }
+
+    fun onReturnBackFromListScreen() {
+        updateStatusFlag(TripState.SEARCH)
+    }
+
+    fun onReturnBackFromBookingScreen() {
+        updateStatusFlag(TripState.LIST)
+    }
+
+    private fun updateStatusFlag(status: TripState) {
+        state.update { state ->
+            state.copy(flag = status)
         }
     }
 }
