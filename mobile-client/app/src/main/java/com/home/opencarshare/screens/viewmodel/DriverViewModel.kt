@@ -92,6 +92,9 @@ data class CreateTripState(
     }
 }
 
+const val DAY_IN_MILLIS = 24 * 60 * 60 * 1000L
+const val TWO_DAYS_IN_MILLIS = 2 * DAY_IN_MILLIS
+
 @HiltViewModel
 class DriverViewModel
 @Inject constructor(
@@ -121,16 +124,6 @@ class DriverViewModel
                 }
         }
     }
-
-/*    fun getErrorMessage(errorResponse: Response.Error): String {
-        var errorMessage = ""
-        if (errorResponse is Response.Error.Exception) {
-            errorMessage = context.resources.getString(R.string.default_error_message)
-        } else {
-            errorMessage = context.resources.getString(R.string.error_message_with_server_response, (errorResponse as Response.Error.Message).msg)
-        }
-        return errorMessage
-    }*/
 
     fun getDriver() {
         Log.d(App.TAG, "[action] attempt to get driver")
@@ -275,48 +268,10 @@ class DriverViewModel
         }
     }
 
-/*    fun getTripById(id: String) {
-        viewModelScope.launch {
-            repo.getTripById(id)
-                .stateIn(viewModelScope)
-                .catch { e ->
-                    Log.e(App.TAG, "Something went wrong on loading with id $id", e)
-                    Response.Error.Exception(e)
-                    state.update { state ->
-                        val errors = state.errors + getErrorMessage(Response.Error.Exception(e))
-                        state.copy(errors = errors, isLoading = false)
-                    }
-                }
-                .collect { it ->
-                    when (it) {
-                        is Response.Data<Trip> -> {
-                            state.update { state ->
-                                state.copy(trip = it.data, isLoading = false)
-                            }
-                        }
-                        is Response.Error.Exception -> {
-                            state.update { state ->
-                                val errors = state.errors + getErrorMessage(it)
-                                state.copy(errors = errors, isLoading = false)
-                            }
-                        }
-                        is Response.Error.Message -> {
-                            state.update { state ->
-                                val errors = state.errors + getErrorMessage(it)
-                                state.copy(errors = errors, isLoading = false)
-                            }
-                        }
-                        is Response.Loading<*> -> {
-                            state.update { state ->
-                                state.copy(isLoading = true)
-                            }
-                        }
-                    }
-                }
-        }
-    }*/
+    fun getTripsByDriverSafely() {
+        
+    }
 
-    // TODO you have to filter trips that are outdated, e.g. 24 hours after their start time
     fun getTripsByDriver() {
         viewModelScope.launch {
             Log.d(App.TAG, "[action] get trips by driver start")
@@ -351,9 +306,11 @@ class DriverViewModel
                         is Response.Data -> {
                             Log.d(App.TAG, "[getTripsByDriver] got data as Response.Data")
                             state.update { state ->
-                                val noTrips = it.data.isEmpty()
+                                val twoDaysBeforeNow = System.currentTimeMillis() - TWO_DAYS_IN_MILLIS
+                                val tripsWithoutOutdated = it.data.filter { twoDaysBeforeNow < it.date} // filter trips that are outdated
+                                val noTrips = tripsWithoutOutdated.isEmpty()
                                 state.copy(
-                                    tripsByDriver = it.data,
+                                    tripsByDriver = tripsWithoutOutdated,
                                     tripStatus = if (noTrips) { TripStatus.NONE } else { TripStatus.SUCCEED }
                                 )
                             }

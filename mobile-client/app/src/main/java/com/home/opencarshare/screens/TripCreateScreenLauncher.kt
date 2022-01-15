@@ -26,7 +26,7 @@ fun TripCreateScreenLauncher(viewModel: DriverViewModel) {
         Text(text = "isForceRefresh is called")
     }
     if (!state.errors.isEmpty()) {
-        ErrorCard(state = state.errors.last())
+        ErrorCard(state = state.errors.last(), viewModel = viewModel)
     } else {
         if (state.isLoading) {
             // for now just track it
