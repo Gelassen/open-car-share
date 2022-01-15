@@ -130,6 +130,23 @@ class Repository @Inject constructor(val api: IApi) {
         }
     }
 
+    fun getDriverWithTrips(cell: String, secret: String): Flow<Response<DriverCredentials>> {
+        return flow {
+            Log.d(App.TAG, "Request driver with trips from server")
+            val response = api.getDriverWithTrips(credentials = Credentials.basic(cell, secret))
+            if (response.isSuccessful) {
+                val payload = response.body()!!
+                if (payload.code.toInt() == 200) {
+                    emit(Response.Data(payload.result))
+                } else {
+                    emit(Response.Error.Message("${payload.code}: ${payload.message}"))
+                }
+            } else {
+                emit(Response.Error.Message(response.message()))
+            }
+        }
+    }
+
     fun getTripsByDriver(cell: String, secret: String): Flow<Response<List<Trip>>> {
         return flow {
             val response = api.getTripByDriver(credentials = Credentials.basic(cell, secret))

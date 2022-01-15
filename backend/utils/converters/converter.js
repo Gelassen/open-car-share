@@ -59,3 +59,29 @@ exports.dbToBusinessTripSingle = function(row) {
         driverId: row.driverId
     }
 }
+
+exports.dbToBusinessDriverWithTrips = function(rows) {
+    if (rows.length === 0) {
+        return {}
+    } else {
+        let driver = {
+            id: rows[0].driverId,
+            name: rows[0].driverName,
+            cell: rows[0].cell,
+            tripsCount: rows[0].tripsCount,
+        }
+        let trips = new Array(rows.length)
+        for (id = 0; id < rows.length; id++) {
+            trips[id] = {
+                id: rows[id].tripId, 
+                locationFrom: rows[id].locationFrom,
+                locationTo: rows[id].locationTo, 
+                date: rows[id].date,
+                availableSeats: rows[id].availableSeats,
+                driverId: rows[id].driverId
+            }
+        }
+        driver.trips = trips
+        return driver
+    }
+}

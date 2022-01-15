@@ -161,6 +161,52 @@ class DriverViewModel
         }
     }
 
+    fun getDriverWithTrips() {
+        viewModelScope.launch {
+            driverPreferencesFlow
+                .stateIn(viewModelScope)
+                .onStart {
+                    state.update { state ->
+                        state.copy(isLoading = true)
+                    }
+                }
+                .flatMapConcat { it ->
+                    if (it.driver.isEmpty()) {
+                        flow {
+                            emit(Response.Data(DriverCredentials()))
+                        }.stateIn(viewModelScope)
+                    } else {
+                        repo.getDriverWithTrips(cell = it.driver.cell, secret = it.driver.secret)
+                    }
+                }
+                .collect { it ->
+                    when(it) {
+                        is Response.Data -> {
+                            state.update { state ->
+                                val twoDaysBeforeNow = System.currentTimeMillis() - TWO_DAYS_IN_MILLIS
+                                val tripsWithoutOutdated = it.data.trips.filter { twoDaysBeforeNow < it.date} // filter trips that are outdated
+                                val noTrips = tripsWithoutOutdated.isEmpty()
+                                state.copy(
+                                    driver = it.data,
+                                    tripsByDriver = tripsWithoutOutdated,
+                                    tripStatus = if (noTrips) { TripStatus.NONE } else { TripStatus.SUCCEED },
+                                    isLoading = false
+                                )
+                            }
+                        }
+                        is Response.Error -> {
+                            state.update { state ->
+                                state.copy(errors = state.errors + getErrorMessage(it), isLoading = false)
+                            }
+                        }
+                        is Response.Loading<*> -> {
+                            // no op, isLoading will be updated in .collect() and .onStart() points
+                        }
+                    }
+                }
+        }
+    }
+
     private fun processDriverResponse(driverResponse: Response<DriverCredentials>) {
         when (driverResponse) {
             is Response.Data -> {
@@ -268,6 +314,64 @@ class DriverViewModel
         }
     }
 
+    @Deprecated("Redundent. Use getDriverWithTrips() instead")
+    fun getInitialState() {
+        viewModelScope.launch {
+            driverPreferencesFlow
+                .stateIn(viewModelScope)
+                .flatMapConcat { it ->
+                    if (it.driver.isEmpty()) {
+                        state.update { state ->
+                            state.copy(driver = DriverCredentials(), isLoading = false)
+                        }
+                        flow {
+                            emit(Response.Data(DriverCredentials()))
+                        }.stateIn(viewModelScope)
+                    } else {
+                        repo.getDriver(cell = it.driver.cell, secret = it.driver.secret)
+                    }
+                }
+                .flatMapConcat { it ->
+                    if (it is Response.Data && !it.data.isEmpty()) {
+                        Log.d(App.TAG, "[getTripsByDriver] get driver from server, request trips")
+                        var driver = it.data
+                        state.update { state ->
+                            state.copy(driver = driver)
+                        }
+                        repo.getTripsByDriver(cell = driver.cell, secret = driver.secret)
+                    } else {
+                        Log.d(App.TAG, "[getTripsByDriver] there is an error with driver from server, emit error")
+                        flow {
+                            emit(Response.Data<List<Trip>>(emptyList()))
+                        }.stateIn(viewModelScope)
+                    }
+                }
+                .collect { it ->
+                    when (it) {
+                        is Response.Data -> {
+                            Log.d(App.TAG, "[getTripsByDriver] got data as Response.Data")
+                            state.update { state ->
+                                val twoDaysBeforeNow = System.currentTimeMillis() - TWO_DAYS_IN_MILLIS
+                                val tripsWithoutOutdated = it.data.filter { twoDaysBeforeNow < it.date} // filter trips that are outdated
+                                val noTrips = tripsWithoutOutdated.isEmpty()
+                                state.copy(
+                                    tripsByDriver = tripsWithoutOutdated,
+                                    tripStatus = if (noTrips) { TripStatus.NONE } else { TripStatus.SUCCEED }
+                                )
+                            }
+                        }
+                        is Response.Error -> {
+                            Log.d(App.TAG, "[getTripsByDriver] got data as Response.Error")
+                            val errorMessage = getErrorMessage(it)
+                            state.update { state ->
+                                state.copy(errors = state.errors + errorMessage)
+                            }
+                        }
+                    }
+                }
+        }
+    }
+
     fun getTripsByDriver() {
         viewModelScope.launch {
             Log.d(App.TAG, "[action] get trips by driver start")
@@ -285,7 +389,7 @@ class DriverViewModel
                     }
                 }
                 .flatMapConcat { it ->
-                    if (it is Response.Data) {
+                    if (it is Response.Data && !it.data.isEmpty()) {
                         Log.d(App.TAG, "[getTripsByDriver] get driver from server, request trips")
                         var driver = it.data
                         repo.getTripsByDriver(cell = driver.cell, secret = driver.secret)
@@ -305,6 +409,7 @@ class DriverViewModel
                                 val twoDaysBeforeNow = System.currentTimeMillis() - TWO_DAYS_IN_MILLIS
                                 val tripsWithoutOutdated = it.data.filter { twoDaysBeforeNow < it.date} // filter trips that are outdated
                                 val noTrips = tripsWithoutOutdated.isEmpty()
+                                Log.d(App.TAG, "$tripsWithoutOutdated")
                                 state.copy(
                                     tripsByDriver = tripsWithoutOutdated,
                                     tripStatus = if (noTrips) { TripStatus.NONE } else { TripStatus.SUCCEED }

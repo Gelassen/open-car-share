@@ -68,6 +68,11 @@ app.get('/api/v1/driver', function(req, res, next) {
     drivers.specific(req, res)
 })
 
+app.get('/api/v1/driver/trips', function(req, res, next) {
+    pool.status()
+    drivers.driverWithTrips(req, res)
+})
+
 app.get('/api/v1/trips', function(req, res) {
     pool.status()
     if (req.query.hasOwnProperty('id')) {

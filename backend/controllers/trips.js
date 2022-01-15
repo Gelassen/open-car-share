@@ -30,7 +30,6 @@ exports.tripsByDriver = async function(req, res) {
             res.send(result)
         }
     }
-    // res.send(stubs.mockErrorResponse())
     res.end()
 }
 

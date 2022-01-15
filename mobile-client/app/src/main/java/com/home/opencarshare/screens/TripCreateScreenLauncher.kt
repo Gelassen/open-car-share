@@ -1,10 +1,8 @@
 package com.home.opencarshare.screens
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalContext
 import com.home.opencarshare.App
 import com.home.opencarshare.screens.elements.DriverCardContentEditable
 import com.home.opencarshare.screens.elements.ErrorCard
@@ -12,7 +10,6 @@ import com.home.opencarshare.screens.elements.SingleCard
 import com.home.opencarshare.screens.viewmodel.CreateTripUiState
 import com.home.opencarshare.screens.viewmodel.DriverViewModel
 import kotlinx.coroutines.launch
-import java.lang.RuntimeException
 
 @Composable
 fun TripCreateScreenLauncher(viewModel: DriverViewModel) {
@@ -20,7 +17,7 @@ fun TripCreateScreenLauncher(viewModel: DriverViewModel) {
     val state by viewModel.uiState.collectAsState()
     val isForceRefresh = viewModel.forceRefresh.collectAsState()
     LaunchedEffect(viewModel) {
-        viewModel.getDriver()
+        viewModel.getDriverWithTrips()
     }
     if (isForceRefresh.value) {
         Text(text = "isForceRefresh is called")

@@ -40,3 +40,22 @@ exports.create = async function(req, res) {
     res.send(result)
     res.end()
 }
+
+exports.driverWithTrips = async function(req, res) {
+    if (req.get("Authorization") === undefined) {
+        res.send(network.getErrorMessage(401, "There is no auth header."))
+    } else {
+        let authResult = auth.parse(req.get("Authorization"))
+        if (authResult.error) {
+            let result = network.getErrorMessage(401, authResult.result)
+            console.log("[1] Driver with trips response: " + result)
+            res.send(result)
+        } else {
+            let result = await driver.driverWithTrips(req, res, authResult.result.split(":"))
+                .catch(e => network.getErrorMessage(e))
+            console.log("[2] Driver with trips response: " + result)
+            res.send(result)
+        }
+    }
+    res.end()
+} 

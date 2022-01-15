@@ -2,7 +2,8 @@ const TIMEOUT = 60000;
 const { resolve } = require('path/posix');
 var pool = require('../database');
 var util = require('../utils/network')
-var converter = require('../utils/converters/converter')
+var converter = require('../utils/converters/converter');
+const { response } = require('express');
 
 exports.getSpecific = function(req, res, authAsTokens) {
     return new Promise( (resolve) => {
@@ -60,4 +61,28 @@ exports.create = function(req) {
             )
         });
     })
+}
+
+exports.driverWithTrips = function(req, res, authAsTokens) {
+    return new Promise((resolve) => {
+        pool.getConnection(function(err, connection) {
+            connection.query(
+                {sql: 'SELECT trips.id as tripId, trips.locationFrom, trips.locationTo, trips.date, trips.availableSeats, trips.driverId,  drivers.id as driverId, drivers.name as driverName, drivers.cell, drivers.tripsCount FROM drivers INNER JOIN trips ON drivers.id = trips.driverId WHERE drivers.cell = ? AND drivers.secret = ?', timeout: TIMEOUT },
+                [authAsTokens[0], authAsTokens[1]],
+                function(error, rows, fields) {
+                    if (error != null) {
+                        resolve(JSON.stringify(util.getErrorMessage()))
+                    } else {
+                        console.log("Driver with trips from db: " + JSON.stringify(rows))
+                        var payload = converter.dbToBusinessDriverWithTrips(rows)
+                        var response = JSON.stringify(util.getPayloadMessage(payload))
+                        resolve(response)
+                    }
+                    connection.release()
+                }
+            )
+        })
+    }
+
+    )
 }

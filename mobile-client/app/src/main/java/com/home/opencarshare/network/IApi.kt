@@ -17,6 +17,10 @@ interface IApi {
     suspend fun getDriver(@Header("Authorization") credentials: String): Response<DriverApiResponse>
 
     @Headers("Content-Type: application/json; charset=utf-8")
+    @GET("/api/v1/driver/trips")
+    suspend fun getDriverWithTrips(@Header("Authorization") credentials: String): Response<DriverApiResponse>
+
+    @Headers("Content-Type: application/json; charset=utf-8")
     @GET("/api/v1/trips")
     suspend fun getTrips(
         @Query("locationFrom") locationFrom: String,

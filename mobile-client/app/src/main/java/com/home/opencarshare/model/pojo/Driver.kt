@@ -19,7 +19,10 @@ open class Driver(
     var tripsCount: String = "",
     @SerializedName("cell")
     @Expose
-    var cell: String = ""
+    var cell: String = "",
+    @SerializedName("trips")
+    @Expose
+    var trips: List<Trip> = emptyList()
 ): Parcelable {
 
     fun isEmpty(): Boolean {
@@ -56,7 +59,10 @@ class DriverCredentials(
         var cell: String = "",
         @SerializedName("secret")
         @Expose
-        var secret: String = ""
+        var secret: String = "",
+        @SerializedName("trips")
+        @Expose
+        var trips: List<Trip> = emptyList()
         ) : Parcelable {
 
     fun from(driver: DriverCredentials) {
@@ -64,7 +70,7 @@ class DriverCredentials(
         this.name = driver.name
         this.tripsCount = driver.tripsCount
         this.cell = driver.cell
-        this.secret = secret
+        this.secret = secret // TODO check it - is it a bug or by intent?
     }
 
     fun isEmpty(): Boolean {
