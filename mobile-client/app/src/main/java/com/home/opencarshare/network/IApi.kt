@@ -10,7 +10,8 @@ interface IApi {
     @Deprecated("Implement and use method where driver passed in encoded form")
     @Headers("Content-Type: application/json; charset=utf-8")
     @POST("/api/v1/driver")
-    suspend fun createDriver(@Body driver: DriverCredentials): Response<DriverCreateApiResponse>
+    suspend fun createDriver(@Header("Authorization") credentials: String,
+                             @Body driver: Driver): Response<DriverCreateApiResponse>
 
     @Headers("Content-Type: application/json; charset=utf-8")
     @GET("/api/v1/driver")

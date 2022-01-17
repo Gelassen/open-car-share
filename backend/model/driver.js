@@ -51,9 +51,7 @@ exports.create = function(req) {
                         resolve(JSON.stringify(util.getErrorMessage()))
                     } else {
                         req.body.uid = rows.affectRows == 0 ? -1 : rows.insertId
-                        var payload = []
-                        payload.push(req.body)
-                        var response = util.getPayloadMessage(payload)
+                        var response = JSON.stringify(util.getPayloadMessage(req.body))
                         resolve(response)
                     }
                     connection.release()

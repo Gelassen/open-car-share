@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun ErrorPlaceholder(text: String) {
@@ -13,6 +14,9 @@ fun ErrorPlaceholder(text: String) {
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        Text(text = text)
+        Text(
+            text = text,
+            textAlign = TextAlign.Center
+        )
     }
 }

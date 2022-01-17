@@ -17,16 +17,18 @@ class Repository @Inject constructor(val api: IApi) {
 
     fun createDriver(driverCredentials: DriverCredentials): Flow<Response<ServiceMessage>> {
         return flow {
-            val response = api.createDriver(driverCredentials)
+            val response = api.createDriver(
+                credentials = Credentials.basic(driverCredentials.cell, driverCredentials.secret),
+                driver = driverCredentials.toDriver()
+            )
             if (response.isSuccessful) {
                 val payload = response.body()!!
                 payload.message
-                if (payload.code.toInt() != 200) {
-                    throw IllegalStateException(
-                            "System doesn't support any other states except code 200, " +
-                                    "but has received ${payload.code}")
+                if (payload.code.toInt() == 200) {
+                    emit(Response.Data(payload.result))
+                } else {
+                    emit(Response.Error.Message("${payload.code}: ${payload.message}"))
                 }
-                emit(Response.Data(payload.result))
             } else {
                 emit(Response.Error.Message(response.message()))
             }
@@ -37,8 +39,10 @@ class Repository @Inject constructor(val api: IApi) {
     }
 
     fun getTrips(locationFrom: String, locationTo: String, time: Long): Flow<Response<List<Trip>>> {
+        Log.d(App.TAG,"[action] get trips - start")
         return flow {
-            val response = api.getTrips(locationFrom, locationTo, time)
+            try {
+                var response = api.getTrips(locationFrom, locationTo, time)
             if (response.isSuccessful) {
                 val payload = response.body()!!
                 if (payload.code.toInt() == 200) {
@@ -50,6 +54,11 @@ class Repository @Inject constructor(val api: IApi) {
             } else {
                 emit(Response.Error.Message(response.message()))
             }
+            } catch (ex: Exception) {
+                Log.e(App.TAG, "Something wend wrong due network request", ex)
+                emit(Response.Error.Exception(ex))
+            }
+            Log.d(App.TAG, "get trips - end")
         }
             .catch { ex ->
                 Response.Error.Exception(ex)
@@ -77,6 +86,7 @@ class Repository @Inject constructor(val api: IApi) {
             }
     }
 
+    @Deprecated("API endpoint used by this methods is disabled")
     fun bookTrip(tripId: String) : Flow<Response<ServiceMessage>> {
         return flow {
             val response = api.bookTrip(tripId)

@@ -117,16 +117,25 @@ class DriverViewModel
                     repo.createDriver(driverCredentials = driverCredentials)
                 }
                 .flatMapConcat { it ->
-                    repo.getDriver(cell = driverCredentials.cell, secret = driverCredentials.secret)
+                    Log.d(App.TAG, "[state] create driver - get an error")
+                    if (it is Response.Error) {
+                        flow {
+                            Log.d(App.TAG, "[state] create driver - emit an error")
+                            emit(it)
+                        }.stateIn(viewModelScope)
+                    } else {
+                        Log.d(App.TAG, "[state] create driver - request driver from server")
+                        repo.getDriver(cell = driverCredentials.cell, secret = driverCredentials.secret)
+                    }
                 }
                 .collect { driverResponse ->
+                    Log.d(App.TAG, "$driverResponse")
                     processDriverResponse(driverResponse)
                 }
         }
     }
 
     fun getDriver() {
-        Log.d(App.TAG, "[action] attempt to get driver")
         viewModelScope.launch {
             driverPreferencesFlow
                 .stateIn(viewModelScope)
@@ -155,7 +164,6 @@ class DriverViewModel
                     }
                 }
                 .collect { it ->
-                    Log.d(App.TAG, "[get driver] collecting the result")
                     processDriverResponse(it)
                 }
         }
@@ -214,13 +222,7 @@ class DriverViewModel
                     state.copy(driver = driverResponse.data)
                 }
             }
-            is Response.Error.Message -> {
-                state.update { state ->
-                    val errors = state.errors + getErrorMessage(driverResponse)
-                    state.copy(errors = errors)
-                }
-            }
-            is Response.Error.Exception -> {
+            is Response.Error -> {
                 state.update { state ->
                     val errors = state.errors + getErrorMessage(driverResponse)
                     state.copy(errors = errors)
