@@ -38,7 +38,6 @@ fun SingleCard(content: @Composable() () -> Unit) {
                 .padding(componentSpace),
             elevation = elevation
         ) {
-            // TODO add compose
             content()
         }
     }

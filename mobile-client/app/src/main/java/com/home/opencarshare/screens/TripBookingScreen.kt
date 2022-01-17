@@ -70,7 +70,7 @@ fun TripBookingContent(state: PassengerTripUiState.TripBookUiState) {
             style = TextStyle(textIndent = TextIndent(firstLine = TextUnit(16F, TextUnitType.Sp))),
             modifier = Modifier
                 .height(componentSpace)
-                .padding(start = baselineGrid)
+                .padding(start = baselineGrid, end = baselineGrid)
                 .fillMaxWidth()
                 .background(color = colorResource(id = R.color.design_default_color_secondary_variant))
         )
@@ -82,17 +82,21 @@ fun TripBookingContent(state: PassengerTripUiState.TripBookUiState) {
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .height(32.dp)
-                .padding(start = baselineGrid)
+                .padding(start = baselineGrid, end = baselineGrid)
                 .fillMaxWidth()
                 .background(color = colorResource(id = R.color.colorPrimaryDark))
         ) {
             Text(
                 text = stringResource(id = R.string.booking_screen_msg),
                 color = colorResource(id = R.color.white),
-                style = TextStyle(textIndent = TextIndent(firstLine = TextUnit(16F, TextUnitType.Sp))),
+                style = TextStyle(
+                    textAlign = TextAlign.Center,
+                ),
                 textAlign = TextAlign.Center
             )
         }
+
+        Spacer(modifier = Modifier.height(mainPadding))
 
         /**
          * Disable book button at current (alfa version), for more details
