@@ -1,7 +1,7 @@
 exports.validateDriverPayload = function(reqBody) {
     return this.validateString(reqBody.name) 
         && this.validateString(reqBody.cell) 
-        && this.validateString(reqBody.secret)
+        // && this.validateString(reqBody.secret)
         && this.validateString(reqBody.tripsCount) 
 }
 

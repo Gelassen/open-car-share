@@ -98,8 +98,8 @@ fun TripBookingContent(state: PassengerTripUiState.TripBookUiState) {
          * Disable book button at current (alfa version), for more details
          * see {@link https://github.com/Gelassen/open-car-share/issues/3}
          * */
-        Button(
-            onClick = { /* no op */ },
+/*        Button(
+            onClick = { *//* no op *//* },
             modifier = Modifier
                 .alpha(0F)
                 .fillMaxWidth()
@@ -115,6 +115,6 @@ fun TripBookingContent(state: PassengerTripUiState.TripBookUiState) {
                 modifier = Modifier.align(Alignment.CenterVertically),
                 fontWeight = FontWeight.Bold
             )
-        }
+        }*/
     }
 }

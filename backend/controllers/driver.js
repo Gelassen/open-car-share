@@ -42,7 +42,7 @@ exports.create = async function(req, res) {
         }
     } else {
         result = JSON.stringify(
-            network.getErrorMessage(400, "Did you forget to add driver as payload?", {})
+            network.getErrorMessage(400, "Did you forget to add driver as a payload?", {})
         )
     }
     console.log("[driver] create - response " + result)

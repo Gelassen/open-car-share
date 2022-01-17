@@ -18,7 +18,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextIndent
+import androidx.compose.ui.unit.ExperimentalUnitApi
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.home.opencarshare.App
 import com.home.opencarshare.R
@@ -101,6 +106,7 @@ fun CreateTripContent(
     }
 }
 
+@OptIn(ExperimentalUnitApi::class)
 @Composable
 fun TripCreateScreenContent(
     driver: DriverCredentials,
@@ -133,9 +139,10 @@ fun TripCreateScreenContent(
         Text(
             text = stringResource(id = R.string.booking_screen_driver),
             color = colorResource(id = R.color.white),
+            style = TextStyle(textIndent = TextIndent(firstLine = TextUnit(16F, TextUnitType.Sp))),
             modifier = Modifier
                 .height(componentSpace)
-                .padding(start = baselineGrid)
+                .padding(start = baselineGrid, end = baselineGrid)
                 .fillMaxWidth()
                 .background(color = colorResource(id = R.color.design_default_color_secondary_variant))
         )
