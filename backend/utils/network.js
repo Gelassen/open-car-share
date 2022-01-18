@@ -24,6 +24,7 @@ exports.getErrorMessage = function(code, message, payload) {
 
 exports.statusSuccess = 1
 exports.statusFailed = 0
-exports.getServiceMessage = function(statusCode) {
-    return {status: statusCode, message: ""}
+
+exports.getServiceMessage = function(statusCode, message) {
+    return {status: statusCode, message: message}
 }

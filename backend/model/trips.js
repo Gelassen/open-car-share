@@ -110,12 +110,12 @@ exports.create = async function(req, res) {
                         console.log("[trip] there is an error")
                         console.log(JSON.stringify(error))
                         var payload = util.getServiceMessage(util.statusFailed, JSON.stringify(error))
-                        var response = util.getErrorMessage(payload)
+                        var response = util.getErrorMessage(500, error.code, payload)
                         console.log("[trip] response: " + JSON.stringify(response))
                         resolve(JSON.stringify(response))
                     } else {
                         console.log("[trip] there is no error")
-                        var payload = util.getServiceMessage(util.statusSuccess)
+                        var payload = util.getServiceMessage(util.statusSuccess, "")
                         var response = util.getPayloadMessage(payload)
                         console.log("[trip] response: " + JSON.stringify(response)) 
                         resolve(JSON.stringify(response))
@@ -167,7 +167,7 @@ exports.delete = async function(req, res, authAsTokens) {
                                             })
                                         } else {
                                             console.log("[trip] delete - prepare and send the response")
-                                            var payload = util.getServiceMessage(util.statusSuccess)
+                                            var payload = util.getServiceMessage(util.statusSuccess, "")
                                             var response = util.getPayloadMessage(payload)
                                             console.log(JSON.stringify(response))
                                             resolve(JSON.stringify(response))
