@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `db_car_share_schema` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+USE `db_car_share_schema`;
 -- MySQL dump 10.13  Distrib 5.7.36, for Linux (x86_64)
 --
 -- Host: localhost    Database: db_car_share_schema
@@ -21,15 +23,17 @@
 
 DROP TABLE IF EXISTS `drivers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `drivers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
   `tripsCount` varchar(45) DEFAULT '0',
   `cell` varchar(45) NOT NULL,
   `secret` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`,`secret`,`cell`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`,`secret`,`cell`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `cell_UNIQUE` (`cell`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,16 +42,17 @@ CREATE TABLE `drivers` (
 
 DROP TABLE IF EXISTS `trips`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `trips` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `locationFrom` varchar(45) DEFAULT NULL,
   `locationTo` varchar(45) DEFAULT NULL,
-  `date` varchar(45) DEFAULT NULL,
+  `date` bigint(20) DEFAULT NULL,
   `availableSeats` varchar(45) DEFAULT NULL,
   `driverId` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`driverId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`,`driverId`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -59,4 +64,4 @@ CREATE TABLE `trips` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-29 19:17:36
+-- Dump completed on 2022-01-18 15:39:22
