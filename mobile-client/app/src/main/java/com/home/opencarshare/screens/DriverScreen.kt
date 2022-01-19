@@ -3,15 +3,15 @@ package com.home.opencarshare.screens
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
@@ -117,11 +117,26 @@ fun ConfirmationDialog(tripId: String, onConfirmClick: (String) -> Unit, onCance
                 ) {
                     Button(
                         modifier = Modifier.padding(baselineGrid),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Blue,
+                            contentColor = Color.White
+                        ),
                         onClick = { onConfirmClick(tripId) }) {
-                        Text(text = stringResource(id = R.string.driver_screen_button_confirm))
+                        Text(
+                            text = stringResource(id = R.string.driver_screen_button_confirm),
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            fontWeight = FontWeight.Bold)
                     }
-                    Button(onClick = { onCancelClick(tripId) }) {
-                        Text(text = stringResource(id = R.string.driver_screen_button_cancel))
+                    Button(
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Blue,
+                            contentColor = Color.White
+                        ),
+                        onClick = { onCancelClick(tripId) }) {
+                        Text(
+                            text = stringResource(id = R.string.driver_screen_button_cancel),
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            fontWeight = FontWeight.Bold)
                     }
                 }
             },
