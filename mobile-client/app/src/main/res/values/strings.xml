@@ -6,6 +6,7 @@
     <string name="search_screen_location_to_hint">Location to</string>
     <string name="search_screen_location_from_hint">Location from</string>
     <string name="search_screen_date">Date</string>
+    <string name="search_screen_date_hint">Date in format 1.01.2020 9:00</string>
     <string name="search_screen_confirm_button">Search</string>
     <string name="list_screen_no_items">No items</string>
     <string name="booking_screen_confirm_button">Book</string>
@@ -21,6 +22,8 @@
 
     <string name="default_error_message">Something went wrong</string>
     <string name="error_message_with_server_response">Something went wrong with server response: \n %1$s</string>
+    <string name="error_mesasge_date_in_wrong_format">Your date and time in not valid format. It should looks like 01.01.2020 8:00</string>
+
     <string name="driver_screen_confirmation_message">Do you want to cancel the trip?</string>
     <string name="driver_screen_button_confirm">Confirm</string>
     <string name="driver_screen_button_cancel">Cancel</string>

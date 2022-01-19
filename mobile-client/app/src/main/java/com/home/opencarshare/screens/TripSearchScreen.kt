@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -70,6 +71,8 @@ fun TripSearchScreen(viewModel: TripsViewModel) {
 
 @Composable
 fun TripSearchContent(onSearchClick: (locationFrom: String, locationTo: String, date: Long) -> Unit) {
+    val provider = TripsProvider()
+    var context = LocalContext.current
     val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
     val mainPadding = dimensionResource(id = R.dimen.main_margin_compact)
     // TODO figure out is there existing composable for date picker and numeric picker
@@ -93,12 +96,16 @@ fun TripSearchContent(onSearchClick: (locationFrom: String, locationTo: String, 
             state = pickUpDate,
             onTextChanged = { it -> pickUpDate = it },
             hint = stringResource(id = R.string.search_screen_date),
-            icon = null
+            label = stringResource(id = R.string.search_screen_date_hint)
         )
         Button(
             onClick = {
-                onSearchClick(locationFromTxt, locationToTxt, TripsProvider().dateTimeAsLong(pickUpDate))
                 Log.d(App.TAG, "On search click ${TripsProvider().dateTimeAsLong(pickUpDate)}")
+                if (provider.validateDate(pickUpDate)) {
+                    onSearchClick(locationFromTxt, locationToTxt, provider.dateTimeAsLong(pickUpDate))
+                } else {
+                    showError(context, "Your date is in invalid format. It should looks like this 01.01.2020 8:00")
+                }
                       },
             modifier = Modifier
                 .fillMaxWidth()

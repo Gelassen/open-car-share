@@ -17,7 +17,7 @@ class TripsProvider {
             result = SimpleDateFormat(dateTimeFormat).parse(input).time
         } catch (ex: ParseException) {
             Log.e(App.TAG, "Failed to process exception", ex)
-            result = System.currentTimeMillis()
+            result = -1L
         }
         return result
     }
@@ -30,9 +30,22 @@ class TripsProvider {
         return !TextUtils.isEmpty(input)
     }
 
+    /**
+     * Method expects date in format 01.01.2020 07:00, but also correctly parse in format 1.01.2020 7:00.
+     *
+     * This is the cause why comparing by date as long is safe instead of by date as string.
+     * */
     fun validateDate(input: String) : Boolean {
-        // TODO complete me
-        return false
+        if (input.isBlank())
+            return false
+
+        val parsedDateTime = dateTimeAsLong(input)
+        if (parsedDateTime == -1L)
+            return false
+
+        val restoredDateTime = dateInUserFormat(parsedDateTime)
+        val parsedAgain = dateTimeAsLong(restoredDateTime)
+        return parsedDateTime.equals(parsedAgain)
     }
 
 }

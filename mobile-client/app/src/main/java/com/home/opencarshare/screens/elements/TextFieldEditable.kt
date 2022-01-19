@@ -12,7 +12,7 @@ import androidx.compose.ui.res.dimensionResource
 import com.home.opencarshare.R
 
 @Composable
-fun TextFieldEditable(state: String, onTextChanged: (String) -> Unit, hint: String, icon: ImageVector? ) {
+fun TextFieldEditable(state: String, onTextChanged: (String) -> Unit, hint: String, icon: ImageVector?) {
     val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
     if (icon == null) {
         TextField(
@@ -34,4 +34,19 @@ fun TextFieldEditable(state: String, onTextChanged: (String) -> Unit, hint: Stri
             leadingIcon = { Icon(imageVector = icon, contentDescription = null) },
         )
     }
+}
+
+@Composable
+fun TextFieldEditable(state: String, onTextChanged: (String) -> Unit, hint: String, label: String) {
+    val baselineGrid = dimensionResource(id = R.dimen.baseline_grid)
+    TextField(
+        value = state,
+        label = { Text(label) },
+        onValueChange = { onTextChanged(it) },
+        modifier = Modifier
+            .padding(baselineGrid)
+            .fillMaxWidth(),
+        placeholder = { Text("$hint") },
+    )
+
 }

@@ -13,6 +13,8 @@
 
     <string name="default_error_message">Что-то пошло не так. Проверьте доступ к интернету. В случае повтора ошибки, напишите разработчику.</string>
     <string name="error_message_with_server_response">Что-то пошло не так. Проверьте доступ к интернету. В случае повтора ошибки, напишите разработчику. Ответ сервера: \n %1$s</string>
+    <string name="error_mesasge_date_in_wrong_format">Ваши дата и время поездки в неправильном формате. Они должны иметь такой формат 01.01.2020 8:00</string>
+
     <string name="create_trip_screen_driver_name">Ваше имя</string>
     <string name="create_trip_screen_driver_cell">Ваш номер</string>
     <string name="create_trip_screen_confirm_button">Подтвердить</string>
@@ -24,4 +26,5 @@
     <string name="driver_screen_button_confirm">Да</string>
     <string name="driver_screen_button_cancel">Нет</string>
     <string name="list_screen_no_items">Нет поездок</string>
+    <string name="search_screen_date_hint">Дата в формате 1.01.2020 9:00</string>
 </resources>
