@@ -478,17 +478,4 @@ class DriverViewModel
         }
     }
 
-    private val _forceRefresh: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val forceRefresh: StateFlow<Boolean> = _forceRefresh
-    /**
-     * It is a hack to overcome lack of understanding how to recompose outer
-     * compose view when ${state} has changed
-     * */
-    fun forceRefresh() {
-        _forceRefresh.value = true
-    }
-
-    fun resetForceRefreshFlag() {
-        _forceRefresh.value = false
-    }
 }

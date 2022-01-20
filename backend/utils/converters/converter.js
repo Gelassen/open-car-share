@@ -72,6 +72,11 @@ exports.dbToBusinessDriverWithTrips = function(rows) {
         }
         let trips = new Array(rows.length)
         for (id = 0; id < rows.length; id++) {
+            if (rows[id].tripId === null) {
+                trips = new Array(0)
+                break // avoid case when driver does not have trips
+            }
+                
             trips[id] = {
                 id: rows[id].tripId, 
                 locationFrom: rows[id].locationFrom,

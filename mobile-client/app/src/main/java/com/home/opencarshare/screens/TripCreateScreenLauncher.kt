@@ -15,12 +15,8 @@ import kotlinx.coroutines.launch
 fun TripCreateScreenLauncher(viewModel: DriverViewModel) {
     val coroutineScope = rememberCoroutineScope()
     val state by viewModel.uiState.collectAsState()
-    val isForceRefresh = viewModel.forceRefresh.collectAsState()
     LaunchedEffect(viewModel) {
         viewModel.getDriverWithTrips()
-    }
-    if (isForceRefresh.value) {
-        Text(text = "isForceRefresh is called")
     }
     if (!state.errors.isEmpty()) {
         ErrorCard(state = state.errors.last(), viewModel = viewModel)

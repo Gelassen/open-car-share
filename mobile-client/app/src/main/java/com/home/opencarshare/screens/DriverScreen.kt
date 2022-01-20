@@ -27,9 +27,7 @@ import com.home.opencarshare.screens.viewmodel.DriverViewModel
 @Composable
 fun DriverScreen(viewModel: DriverViewModel) {
     Log.d(App.TAG, "[screen] DriverScreen")
-//    Toast.makeText(LocalContext.current, "You are on driver screen", Toast.LENGTH_SHORT).show()
     val state by viewModel.uiState.collectAsState()
-    val isForceRefreshed = viewModel.forceRefresh.collectAsState()
     LaunchedEffect(viewModel) {
         Log.d(App.TAG, "[DriverScreen] LaunchedEffect(viewModel) is called")
         viewModel.getDriver()
@@ -51,7 +49,6 @@ fun DriverScreen(viewModel: DriverViewModel) {
             }
             is CreateTripUiState.NewTripUiState -> {
                 Log.d(App.TAG, "[state] NewTripUiState")
-                viewModel.forceRefresh()
             }
             else -> {
                 Log.d(App.TAG, "[state] DriverScreen::otherState $state")
