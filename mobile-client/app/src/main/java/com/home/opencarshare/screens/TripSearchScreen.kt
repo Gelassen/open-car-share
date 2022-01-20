@@ -2,7 +2,6 @@ package com.home.opencarshare.screens
 
 
 import android.util.Log
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.buttonColors
@@ -104,7 +103,7 @@ fun TripSearchContent(onSearchClick: (locationFrom: String, locationTo: String, 
                 if (provider.validateDate(pickUpDate)) {
                     onSearchClick(locationFromTxt, locationToTxt, provider.dateTimeAsLong(pickUpDate))
                 } else {
-                    showError(context, "Your date is in invalid format. It should looks like this 01.01.2020 8:00")
+                    showError(context, context.getString(R.string.error_message_date_in_wrong_format))
                 }
                       },
             modifier = Modifier

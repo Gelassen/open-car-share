@@ -22,7 +22,7 @@
 
     <string name="default_error_message">Something went wrong</string>
     <string name="error_message_with_server_response">Something went wrong with server response: \n %1$s</string>
-    <string name="error_mesasge_date_in_wrong_format">Your date and time in not valid format. It should looks like 01.01.2020 8:00</string>
+    <string name="error_message_date_in_wrong_format">Your date and time in not valid format. It should looks like 01.01.2020 8:00</string>
 
     <string name="driver_screen_confirmation_message">Do you want to cancel the trip?</string>
     <string name="driver_screen_button_confirm">Confirm</string>
