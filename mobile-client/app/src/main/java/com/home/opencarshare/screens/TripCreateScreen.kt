@@ -51,6 +51,7 @@ fun CreateTripContent(
     state: CreateTripUiState.NewTripUiState,
     onCreateClick: (Trip) -> Unit
 ) {
+    val context = LocalContext.current
     if (state.errors.isEmpty()) {
         when(state.tripStatus) {
             TripStatus.NONE -> {
@@ -58,14 +59,18 @@ fun CreateTripContent(
                     TripCreateScreenContent(
                         driver = state.driver,
                         onCreateClick = { locationFromTxt, locationToTxt, pickUpDate ->
-                            onCreateClick(
-                                Trip(
-                                    locationFrom = locationFromTxt,
-                                    locationTo = locationToTxt,
-                                    date = TripsProvider().dateTimeAsLong(pickUpDate),
-                                    driverId = state.driver.id
+                            if (TripsProvider().validateDate(pickUpDate)) {
+                                onCreateClick(
+                                    Trip(
+                                        locationFrom = locationFromTxt,
+                                        locationTo = locationToTxt,
+                                        date = TripsProvider().dateTimeAsLong(pickUpDate),
+                                        driverId = state.driver.id
+                                    )
                                 )
-                            )
+                            } else {
+                                showError(context, context.getString(R.string.error_message_date_in_wrong_format))
+                            }
                         }
                     )
                 })
@@ -134,10 +139,10 @@ fun TripCreateScreenContent(
             state = pickUpDate,
             onTextChanged = { it -> pickUpDate = it },
             hint = stringResource(id = R.string.search_screen_date),
-            icon = null
+            label = stringResource(id = R.string.search_screen_date_hint),
         )
         Text(
-            text = stringResource(id = R.string.booking_screen_driver),
+            text = stringResource(id = R.string.create_trip_driver),
             color = colorResource(id = R.color.white),
             style = TextStyle(textIndent = TextIndent(firstLine = TextUnit(16F, TextUnitType.Sp))),
             modifier = Modifier

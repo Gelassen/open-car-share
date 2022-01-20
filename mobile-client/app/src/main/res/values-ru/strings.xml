@@ -27,4 +27,5 @@
     <string name="driver_screen_button_cancel">Нет</string>
     <string name="list_screen_no_items">Нет поездок</string>
     <string name="search_screen_date_hint">Дата в формате 1.01.2020 9:00</string>
+    <string name="create_trip_driver">"  Водитель"</string>
 </resources>
