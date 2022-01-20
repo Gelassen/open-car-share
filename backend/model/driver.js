@@ -14,7 +14,8 @@ exports.getSpecific = function(req, res, authAsTokens) {
                 [authAsTokens[0], authAsTokens[1]],
                 function(error, rows, fields) {
                     if (error != null) {
-                        resolve(JSON.stringify(util.getErrorMessage()))
+                        var response = util.getErrorMessage(500, JSON.stringify(error), {})
+                        resolve(JSON.stringify(response))
                     } else {
                         console.log("Driver from db: " + JSON.stringify(rows))
                         var response
@@ -48,7 +49,8 @@ exports.create = function(req) {
                 function(error, rows, fields) {
                     if (error != null) {
                         console.log(JSON.stringify(error))
-                        resolve(JSON.stringify(util.getErrorMessage()))
+                        var response = util.getErrorMessage(500, JSON.stringify(error), {})
+                        resolve(JSON.stringify(response))
                     } else {
                         req.body.uid = rows.affectRows == 0 ? -1 : rows.insertId
                         var response = JSON.stringify(util.getPayloadMessage(req.body))
@@ -70,7 +72,9 @@ exports.driverWithTrips = function(req, res, authAsTokens) {
                 [authAsTokens[0], authAsTokens[1]],
                 function(error, rows, fields) {
                     if (error != null) {
-                        resolve(JSON.stringify(util.getErrorMessage()))
+                        console.log(JSON.stringify(error))
+                        var response = util.getErrorMessage(500, JSON.stringify(error), {})
+                        resolve(JSON.stringify(response))
                     } else {
                         console.log("Driver with trips from db: " + JSON.stringify(rows))
                         var payload = converter.dbToBusinessDriverWithTrips(rows)

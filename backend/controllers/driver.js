@@ -37,8 +37,16 @@ exports.create = async function(req, res) {
             result = JSON.stringify(
                 network.getErrorMessage(401, authResult.result, {}))
         } else {
-            req.body.secret = authResult.result.split(":")[1]
-            result = await driver.create(req)
+            let checkDriverResponse = await driver.getSpecific(req, res, authResult.result.split(":"))
+            console.log("Check driver response: " + checkDriverResponse)
+            checkDriverResponse = JSON.parse(checkDriverResponse)
+            if (checkDriverResponse.code === "200") {
+                console.log("Find this driver in db")
+                result = JSON.stringify(checkDriverResponse)
+            } else {
+                req.body.secret = authResult.result.split(":")[1]
+                result = await driver.create(req)
+            }
         }
     } else {
         result = JSON.stringify(

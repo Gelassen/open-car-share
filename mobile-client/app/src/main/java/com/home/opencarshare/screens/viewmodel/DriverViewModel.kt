@@ -219,13 +219,13 @@ class DriverViewModel
         when (driverResponse) {
             is Response.Data -> {
                 state.update { state ->
-                    state.copy(driver = driverResponse.data)
+                    state.copy(driver = driverResponse.data, isLoading = false)
                 }
             }
             is Response.Error -> {
                 state.update { state ->
                     val errors = state.errors + getErrorMessage(driverResponse)
-                    state.copy(errors = errors)
+                    state.copy(errors = errors, isLoading = false)
                 }
             }
             is Response.Loading<*> -> {
@@ -301,9 +301,9 @@ class DriverViewModel
                         }
                         is Response.Loading<*> -> {
                             Log.d(App.TAG, "[action] create trip data as Response.Loading")
-                            state.update { state ->
-                                state.copy(isLoading = true)
-                            }
+//                            state.update { state ->
+//                                state.copy(isLoading = true)
+//                            }
                         }
                     }
                 }
@@ -358,7 +358,8 @@ class DriverViewModel
                                 val noTrips = tripsWithoutOutdated.isEmpty()
                                 state.copy(
                                     tripsByDriver = tripsWithoutOutdated,
-                                    tripStatus = if (noTrips) { TripStatus.NONE } else { TripStatus.SUCCEED }
+                                    tripStatus = if (noTrips) { TripStatus.NONE } else { TripStatus.SUCCEED },
+                                    isLoading = false
                                 )
                             }
                         }
@@ -366,7 +367,7 @@ class DriverViewModel
                             Log.d(App.TAG, "[getTripsByDriver] got data as Response.Error")
                             val errorMessage = getErrorMessage(it)
                             state.update { state ->
-                                state.copy(errors = state.errors + errorMessage)
+                                state.copy(errors = state.errors + errorMessage, isLoading = false)
                             }
                         }
                     }
@@ -414,7 +415,8 @@ class DriverViewModel
                                 Log.d(App.TAG, "$tripsWithoutOutdated")
                                 state.copy(
                                     tripsByDriver = tripsWithoutOutdated,
-                                    tripStatus = if (noTrips) { TripStatus.NONE } else { TripStatus.SUCCEED }
+                                    tripStatus = if (noTrips) { TripStatus.NONE } else { TripStatus.SUCCEED },
+                                    isLoading = false
                                 )
                             }
                         }
@@ -422,7 +424,7 @@ class DriverViewModel
                             Log.d(App.TAG, "[getTripsByDriver] got data as Response.Error")
                             val errorMessage = getErrorMessage(it)
                             state.update { state ->
-                                state.copy(errors = state.errors + errorMessage)
+                                state.copy(errors = state.errors + errorMessage, isLoading = false)
                             }
                         }
                     }
@@ -446,6 +448,11 @@ class DriverViewModel
         viewModelScope.launch {
             repo.cancelTrip(tripId, driver.cell, driver.secret)
                 .stateIn(viewModelScope)
+                .onStart {
+                    state.update { state ->
+                        state.copy(isLoading = true)
+                    }
+                }
                 .collect { it ->
                     when (it) {
                         is Response.Data -> {
@@ -454,13 +461,15 @@ class DriverViewModel
                                 if (newTripsList.isNotEmpty()) {
                                     state.copy(
                                         queueToCancel = state.queueToCancel.minus(tripId),
-                                        tripsByDriver = newTripsList
+                                        tripsByDriver = newTripsList,
+                                        isLoading = false
                                     )
                                 } else {
                                     state.copy(
                                         tripStatus = TripStatus.NONE,
                                         queueToCancel = state.queueToCancel.minus(tripId),
-                                        tripsByDriver = newTripsList
+                                        tripsByDriver = newTripsList,
+                                        isLoading = false
                                     )
                                 }
 
@@ -470,7 +479,7 @@ class DriverViewModel
                         }
                         is Response.Error -> {
                             state.update { state ->
-                                state.copy(errors = state.errors + getErrorMessage(it))
+                                state.copy(errors = state.errors + getErrorMessage(it), isLoading = false)
                             }
                         }
                     }
