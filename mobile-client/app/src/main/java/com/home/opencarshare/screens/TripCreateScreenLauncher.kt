@@ -13,6 +13,10 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun TripCreateScreenLauncher(viewModel: DriverViewModel) {
+    /**
+     * TODO consider to refactor driver story
+     * https://github.com/Gelassen/open-car-share/issues/5
+     * */
     val coroutineScope = rememberCoroutineScope()
     val state by viewModel.uiState.collectAsState()
     LaunchedEffect(viewModel) {

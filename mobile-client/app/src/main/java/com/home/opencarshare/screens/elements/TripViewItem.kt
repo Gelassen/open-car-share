@@ -62,10 +62,10 @@ fun TripViewItem(data: Trip,
                     text = TripsProvider().dateInUserFormat(data.date),
                     modifier = Modifier.padding(textPadding),
                     fontSize = textSize)
-                Text(
+/*                Text(
                     text = "available seats: ${data.availableSeats}",
                     modifier = Modifier.padding(textPadding),
-                    fontSize = textSize)
+                    fontSize = textSize)*/
             }
         }
     }

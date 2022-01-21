@@ -127,13 +127,15 @@ fun TripCreateScreenContent(
             state = locationFromTxt,
             onTextChanged = { it -> locationFromTxt = it },
             hint = stringResource(id = R.string.search_screen_location_to_hint),
-            icon = Icons.Default.LocationOn
+            icon = Icons.Default.LocationOn,
+            isNumeric = false
         )
         TextFieldEditable(
             state = locationToTxt,
             onTextChanged = { it -> locationToTxt = it },
             hint = stringResource(id = R.string.search_screen_location_from_hint),
-            icon = Icons.Default.LocationOn
+            icon = Icons.Default.LocationOn,
+            isNumeric = false
         )
         TextFieldEditable(
             state = pickUpDate,

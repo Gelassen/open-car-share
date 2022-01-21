@@ -42,12 +42,12 @@ fun DriverCardContent(data: Driver) {
             modifier = Modifier.padding(textPadding),
             fontSize = textSize
         )
-        Text(
+/*        Text(
             text = stringResource(id = R.string.booking_screen_passed_trips, data.tripsCount),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(textPadding),
             fontSize = textSize
-        )
+        )*/
         Text(
             text = stringResource(id = R.string.booking_screen_cell, data.cell),
             fontWeight = FontWeight.Bold,
@@ -71,19 +71,22 @@ fun DriverCardContentEditable(onConfirmClick: (driver: DriverCredentials) -> Uni
             state = driverName,
             onTextChanged = { it -> driverName = it },
             hint = stringResource(id = R.string.create_trip_screen_driver_name),
-            icon = null
+            icon = null,
+            isNumeric = false
         )
         TextFieldEditable(
             state = driverCell,
             onTextChanged = { it -> driverCell = it },
             hint = stringResource(id = R.string.create_trip_screen_driver_cell),
-            icon = null
+            icon = null,
+            isNumeric = true
         )
         TextFieldEditable(
                 state = driverSecret,
                 onTextChanged = { it -> driverSecret = it },
                 hint = stringResource(id = R.string.create_trip_screen_driver_secret),
-                icon = null
+                icon = null,
+                isNumeric = false
         )
         Button(
             onClick = { onConfirmClick(DriverCredentials(name = driverName, cell = driverCell, secret = driverSecret)) },
