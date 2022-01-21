@@ -45,8 +45,8 @@ DROP TABLE IF EXISTS `trips`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `trips` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `locationFrom` varchar(45) DEFAULT NULL,
-  `locationTo` varchar(45) DEFAULT NULL,
+  `locationFrom` varchar(245) DEFAULT NULL,
+  `locationTo` varchar(245) DEFAULT NULL,
   `date` bigint(20) DEFAULT NULL,
   `availableSeats` varchar(45) DEFAULT NULL,
   `driverId` int(11) NOT NULL,
