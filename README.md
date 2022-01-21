@@ -14,7 +14,7 @@ As a user I can confirm trip by phone call with driver
 # deployment
 Server
 
-    Setup environment
+1. Setup environment
 
 console: sudo apt-get install nodejs
 
