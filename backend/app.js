@@ -21,44 +21,22 @@ const port = config.WEBSERVICE_PORT;
 // });
 
 // app.use(Sentry.Handlers.requestHandler());
-// app.use(bodyParser.json())
-// app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 app.use(function(req, res, next) {
     console.log("[REQUEST] " + JSON.stringify(req.path) + " at " + new Date().toISOString());
     res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
     res.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
     next()
-})
-
-
-// app.post('/api/v1/authTest', function(req, res, next) {
-//     console.log('Authorization header: ' + req.get('Authorization'))
-//     var authHederValue = req.get('Authorization') 
-//     var result = auth.parse(authHederValue)
-//     if (result.error) {
-//         res.send(network.getErrorMessage(401, result.result))
-//     } else {
-//         res.send(network.getMessage(200, result))
-//     }
-// })
-
-// app.get('test', function())
-
-app.post('/api/v1/test', function(req, res) {
-    console.log(req.body)
-    res.send("complete")
 })
 
 app.get('/api/v1', function(req, res, next) {
     res.send('Hello to open car share server!')
 })
 
-// TODO there is an issue with post body (it is empty), might be the issue is in REST client
 app.post('/api/v1/driver', function(req, res, next) {
-    console.log(req.body)
     pool.status()
     drivers.create(req, res)
 }) 
@@ -100,7 +78,6 @@ app.post('/api/v1/trips/create', function(req, res) {
 })
 
 app.delete('/api/v1/trips', function(req, res) {
-    // TODO process authorization
     pool.status()
     trips.delete(req, res)
 })

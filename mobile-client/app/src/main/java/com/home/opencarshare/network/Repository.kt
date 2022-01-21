@@ -2,14 +2,13 @@ package com.home.opencarshare.network
 
 import android.util.Log
 import com.home.opencarshare.App
-import com.home.opencarshare.model.pojo.Driver
 import com.home.opencarshare.model.pojo.DriverCredentials
 import com.home.opencarshare.model.pojo.ServiceMessage
 import com.home.opencarshare.model.pojo.Trip
+import com.home.opencarshare.utils.AppCredentials
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import okhttp3.Credentials
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -18,7 +17,7 @@ class Repository @Inject constructor(val api: IApi) {
     fun createDriver(driverCredentials: DriverCredentials): Flow<Response<ServiceMessage>> {
         return flow {
             val response = api.createDriver(
-                credentials = Credentials.basic(driverCredentials.cell, driverCredentials.secret),
+                credentials = AppCredentials.basic(driverCredentials.cell, driverCredentials.secret),
                 driver = driverCredentials.toDriver()
             )
             if (response.isSuccessful) {
@@ -125,7 +124,7 @@ class Repository @Inject constructor(val api: IApi) {
     fun getDriver(cell: String, secret: String): Flow<Response<DriverCredentials>> {
         return flow {
             Log.d(App.TAG, "Request driver from server")
-            val response = api.getDriver(credentials = Credentials.basic(cell, secret))
+            val response = api.getDriver(credentials = AppCredentials.basic(cell, secret))
             if (response.isSuccessful) {
                 val payload = response.body()!!
                 if (payload.code.toInt() == 200) {
@@ -142,7 +141,7 @@ class Repository @Inject constructor(val api: IApi) {
     fun getDriverWithTrips(cell: String, secret: String): Flow<Response<DriverCredentials>> {
         return flow {
             Log.d(App.TAG, "Request driver with trips from server")
-            val response = api.getDriverWithTrips(credentials = Credentials.basic(cell, secret))
+            val response = api.getDriverWithTrips(credentials = AppCredentials.basic(cell, secret))
             if (response.isSuccessful) {
                 val payload = response.body()!!
                 if (payload.code.toInt() == 200) {
@@ -158,7 +157,7 @@ class Repository @Inject constructor(val api: IApi) {
 
     fun getTripsByDriver(cell: String, secret: String): Flow<Response<List<Trip>>> {
         return flow {
-            val response = api.getTripByDriver(credentials = Credentials.basic(cell, secret))
+            val response = api.getTripByDriver(credentials = AppCredentials.basic(cell, secret))
             if (response.isSuccessful) {
                 val payload = response.body()!!
                 if (payload.code.toInt() == 200) {
@@ -177,7 +176,7 @@ class Repository @Inject constructor(val api: IApi) {
             throw IllegalArgumentException("Trip id for cancellation is empty. Does your trip have correct one?")
         return flow {
             val response = api.cancelTrip(
-                credentials = Credentials.basic(cell, secret),
+                credentials = AppCredentials.basic(cell, secret),
                 tripId = tripId
             )
             if (response.isSuccessful) {
