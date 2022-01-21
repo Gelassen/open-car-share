@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Садись и поехали!</string>
+
+    <string name="search_screen_location_to_hint">Куда</string>
+    <string name="search_screen_location_from_hint">Откуда</string>
+    <string name="search_screen_date">Введите дату поездки в формате 7.01.2022</string>
+    <string name="search_screen_confirm_button">Найти</string>
+    <string name="booking_screen_confirm_button">Забронировать</string>
+    <string name="booking_screen_driver">"  Ваш водитель"</string>
+    <string name="booking_screen_passed_trips">Поездки: %1$s</string>
+    <string name="booking_screen_cell">Телефон: %1$s</string>
+    <string name="booking_screen_msg">Позвоните и согласуйте вашу поездку</string>
+
+    <string name="default_error_message">Что-то пошло не так. Проверьте доступ к интернету. В случае повтора ошибки, напишите разработчику.</string>
+    <string name="error_message_with_server_response">Что-то пошло не так. Проверьте доступ к интернету. В случае повтора ошибки, напишите разработчику. Ответ сервера: \n %1$s</string>
+    <string name="error_message_date_in_wrong_format">Ваши дата и время поездки в неправильном формате. Они должны иметь такой формат 01.01.2020 8:00</string>
+
+    <string name="create_trip_screen_driver_name">Ваше имя</string>
+    <string name="create_trip_screen_driver_cell">Ваш номер</string>
+    <string name="create_trip_screen_confirm_button">Подтвердить</string>
+    <string name="create_trip_error_msg">Failed to create trip. Please check the the internet connection</string>
+    <string name="start_screen_driver_button">Найти пассажира</string>
+    <string name="start_screen_passenger_button">Найти поездку</string>
+    <string name="create_trip_screen_driver_secret">Ваше секретное слово, необходимое для авторизации на сервере</string>
+    <string name="driver_screen_confirmation_message">Вы хотите отменить поездку?</string>
+    <string name="driver_screen_button_confirm">Да</string>
+    <string name="driver_screen_button_cancel">Нет</string>
+    <string name="list_screen_no_items">Нет поездок</string>
+    <string name="search_screen_date_hint">Дата в формате 1.01.2020 9:00</string>
+    <string name="create_trip_driver">"  Водитель"</string>
+</resources>
